@@ -1,0 +1,34 @@
+html, body {
+  height: 100%;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.large-font {
+  font-size: 25px;
+}
+
+.medium-font {
+  font-size: 15px;
+}
+
+.clear-fix {
+  /* 触发hasLayout */
+  zoom: 1;
+}
+
+.clear-fix:after {
+  /* 添加一个看不见的块来清除浮动 */
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}

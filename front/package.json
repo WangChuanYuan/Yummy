@@ -2,7 +2,7 @@
   "name": "yummy-front",
   "version": "1.0.0",
   "description": "Frontend of the Project Yummy",
-  "author": "161250135 <161250135@smail.nju.edu.cn>",
+  "author": "Trayvon <161250135@smail.nju.edu.cn>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
@@ -11,6 +11,8 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "element-ui": "^2.4.6",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
