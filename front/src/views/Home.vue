@@ -3,7 +3,7 @@
     <!-- 登录注册 -->
     <div id="login">
       <div id="logo">Yummy!</div>
-      <Login style="position: relative; top: 8%"/>
+      <Login style="position: relative; top: 4%"/>
     </div>
     <!-- 背景 -->
     <div class="background">
@@ -87,7 +87,7 @@ export default {
     color: transparent;
     font-size: 40px;
     text-align: center;
-    -webkit-text-stroke: 1px deepskyblue;
+    -webkit-text-stroke: 1px #409eff;
     letter-spacing: 0.04em;
   }
 </style>

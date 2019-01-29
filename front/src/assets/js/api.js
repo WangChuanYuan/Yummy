@@ -6,7 +6,7 @@ let instance = axios.create({
   withCredentials: true
 });
 
-const ajax = (url, params) => {
+const api = (url, params) => {
   return new Promise((resolve, reject) => {
     instance({
       url: url,
@@ -22,4 +22,4 @@ const ajax = (url, params) => {
   });
 };
 
-export default ajax;
+export default api;

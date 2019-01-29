@@ -6,10 +6,12 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/css/normal.css';
 import router from './router';
+import VueCookies from 'vue-cookies';
 
 Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
+Vue.use(VueCookies);
 
 /* eslint-disable no-new */
 new Vue({
