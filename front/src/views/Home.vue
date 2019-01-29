@@ -87,7 +87,7 @@ export default {
     color: transparent;
     font-size: 40px;
     text-align: center;
-    -webkit-text-stroke: 1px #409eff;
+    -webkit-text-stroke: 2px #409eff;
     letter-spacing: 0.04em;
   }
 </style>
