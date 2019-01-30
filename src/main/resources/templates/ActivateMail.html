@@ -4,8 +4,17 @@
     <meta charset="UTF-8">
     <title>Activate Mail</title>
 </head>
+<script type="text/javascript">
+    function copy() {
+        var target = document.getElementById("verifyCode");
+        target.select(); // 选择对象
+        document.execCommand("Copy"); // 执行浏览器复制命令
+    }
+</script>
 <body>
 <h3>尊敬的用户您好！感谢您选择<a href="http://localhost:8080/">Yummy!</a>。以下是您的注册验证码，验证码将在页面关闭后失效。</h3>
-<p th:text="${code}">code</p>
+<!--/*@thymesVar id="verifyCode" type="java.lang.String"*/-->
+<input id="verifyCode" value="verifyCode" th:value="${verifyCode}" readonly="readonly">
+<input type="button" onClick="copy()" value="复制"/>
 </body>
 </html>

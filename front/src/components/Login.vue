@@ -65,11 +65,13 @@ export default {
         this.rememberMe = true;
       }
     },
-    login (formName) {
+    login: function (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.rememberMe === true) {
-            this.$cookies.set('email', this.loginForm.email, 30 * 24 * 60 * 60);
+            if (!this.$cookies.isKey('email') || !(this.$cookies.get('email') === this.loginForm.email)) {
+              this.$cookies.set('email', this.loginForm.email, 30 * 24 * 60 * 60);
+            }
           } else {
             this.$cookies.remove('email');
           }
@@ -77,7 +79,15 @@ export default {
             'email': this.loginForm.email,
             'password': this.loginForm.password
           }).then((data) => {
-            // todo
+            if (data.code === 'SUCCESS') {
+              if (sessionStorage.getItem('email') !== this.loginForm.email) {
+                sessionStorage.clear();
+                sessionStorage.setItem('email', this.loginForm.email);
+              }
+              this.$router.push('/memberCenter');
+            } else {
+              this.$message.warning(data.msg);
+            }
           });
         }
       });

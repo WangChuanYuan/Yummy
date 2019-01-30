@@ -1,6 +1,8 @@
 package org.casual.yummy.service;
 
+import org.casual.yummy.utils.ResultMsg;
+
 public interface MailService {
 
-    int sendRegisterMail(String email);
+    ResultMsg sendRegisterMail(String email);
 }

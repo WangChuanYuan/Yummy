@@ -1,8 +1,11 @@
 package org.casual.yummy.utils;
 
-public class Code {
+public enum Code {
 
-    public static final int SUCCESS = 200;
+    SUCCESS,
+    FAILURE,
+    INVALID_EMAIL,
+    CANCELED_EMAIL,
+    WRONG_PASS;
 
-    public static final int FAILURE = 201;
 }

@@ -11,7 +11,12 @@ public class ResultMsg {
 
     private String msg;
 
-    private int code;
+    private Code code;
+
+    public ResultMsg(Code code) {
+        this.msg = code.toString();
+        this.code = code;
+    }
 
     @Override
     public boolean equals(Object o) {
