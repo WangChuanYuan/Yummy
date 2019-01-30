@@ -5,13 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class ResultMsg {
 
     private String msg;
 
     private Code code;
+
+    public ResultMsg() {}
 
     public ResultMsg(Code code) {
         this.msg = code.toString();

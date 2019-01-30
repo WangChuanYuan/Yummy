@@ -2,7 +2,7 @@
   <div>
     <!-- 登录注册 -->
     <div id="login">
-      <div id="logo">Yummy!</div>
+      <Logo style="margin-top: 5%"/>
       <Login style="position: relative; top: 4%"/>
     </div>
     <!-- 背景 -->
@@ -17,10 +17,11 @@
 
 <script>
 import Login from '../components/Login';
+import Logo from '../components/Logo';
 
 export default {
   name: 'Home',
-  components: {Login}
+  components: {Logo, Login}
 };
 </script>
 
@@ -80,14 +81,5 @@ export default {
     filter: alpha(opacity:85);
     /* 边框 */
     box-shadow: 10px 10px 5px #888;
-  }
-
-  #logo {
-    margin-top: 5%;
-    color: transparent;
-    font-size: 40px;
-    text-align: center;
-    -webkit-text-stroke: 2px #409eff;
-    letter-spacing: 0.04em;
   }
 </style>

@@ -1,5 +1,6 @@
 package org.casual.yummy.config;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -10,7 +11,7 @@ import org.springframework.web.filter.CorsFilter;
 public class GlobalCorsConfig {
 
     @Bean
-    public CorsFilter corsFilter() {
+    public FilterRegistrationBean corsFilter() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("*");
         configuration.setAllowCredentials(true);
@@ -20,6 +21,9 @@ public class GlobalCorsConfig {
         UrlBasedCorsConfigurationSource configSource = new UrlBasedCorsConfigurationSource();
         configSource.registerCorsConfiguration("/**", configuration);
 
-        return new CorsFilter(configSource);
+        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(configSource));
+        bean.setOrder(0);
+
+        return bean;
     }
 }

@@ -53,8 +53,37 @@ public class UserController {
     }
 
     @RequestMapping("/send_register_mail")
-    public ResultMsg sendRegisterMail(@RequestBody Map param) {
+    public ResultMsg sendRegisterMail(@RequestBody Map param, HttpServletRequest request) {
+        HttpSession session = request.getSession(true);
+
         String email = param.get("email").toString();
-        return mailService.sendRegisterMail(email);
+        String verifyCode = mailService.sendRegisterMail(email);
+        if (null != verifyCode) {
+            session.setAttribute("verifyCode", verifyCode);
+            System.out.println(session.getId());
+            return new ResultMsg("邮件发送成功", Code.SUCCESS);
+        } else return new ResultMsg("邮件发送失败", Code.SUCCESS);
+    }
+
+    @RequestMapping("/register")
+    public ResultMsg register(@RequestBody Map param, HttpServletRequest request) {
+        HttpSession session = request.getSession(true);
+        System.out.println(session.getId());
+        String verifyCode = (String) session.getAttribute("verifyCode");
+
+        String email = (String) param.get("email");
+        String password = (String) param.get("password");
+        String codeToCheck = (String) param.get("verifyCode");
+
+        if (null != verifyCode && verifyCode.equals(codeToCheck)) {
+            ResultMsg msg = userService.register(email, password);
+            if (msg.getCode() == Code.SUCCESS) {
+                session.invalidate();
+                session = request.getSession(true);
+                session.setAttribute("email", email);
+            }
+            return msg;
+        }
+        else return new ResultMsg("验证码错误或已失效", Code.FAILURE);
     }
 }

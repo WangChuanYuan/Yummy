@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(email).setPassword(password).setRole(Role.MEMBER).setAccountState(AccountState.VALID);
         try {
             userDAO.saveAndFlush(user);
-            return new ResultMsg(Code.SUCCESS);
+            return new ResultMsg("注册成功", Code.SUCCESS);
         } catch (Exception e) {
             return new ResultMsg("注册失败", Code.FAILURE);
         }

@@ -68,7 +68,7 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public ResultMsg sendRegisterMail(String email) {
+    public String sendRegisterMail(String email) {
         String verifyCode = verifyCode(15);
 
         Context context = new Context();
@@ -76,7 +76,7 @@ public class MailServiceImpl implements MailService {
         String emailContent = templateEngine.process("ActivateMail", context);
 
         if (sendHtmlMail(email, "Yummy!注册验证码", emailContent).getCode() == Code.SUCCESS)
-            return new ResultMsg(verifyCode, Code.SUCCESS);
-        else return new ResultMsg("邮件发送失败，请稍后重试", Code.FAILURE);
+            return verifyCode;
+        else return null;
     }
 }

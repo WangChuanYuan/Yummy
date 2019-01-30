@@ -2,7 +2,7 @@ import axios from 'axios';
 
 let instance = axios.create({
   baseURL: 'http://localhost:8081/yummy',
-  timeout: 1000,
+  timeout: 100000, /* 时间长一些，后端邮件发送时间过短会导致无法响应而取消，影响session的初次设置 */
   withCredentials: true
 });
 
