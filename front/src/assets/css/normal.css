@@ -14,14 +14,6 @@ html, body {
   margin-right: auto;
 }
 
-.footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-  background-color: var(--theme-grey);
-}
-
 .clear-fix {
   /* 触发hasLayout */
   zoom: 1;

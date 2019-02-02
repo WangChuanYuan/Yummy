@@ -21,10 +21,7 @@
       </el-form>
     </el-main>
     <el-footer style="padding: 0">
-      <div class="footer">
-        <h3>Yummy!</h3>
-        <p>Copyright © 161250135@smail.nju.edu.cn</p>
-      </div>
+      <Footer/>
     </el-footer>
   </el-container>
 </template>
@@ -32,10 +29,11 @@
 <script>
 import Api from '../assets/js/api';
 import Logo from '../components/Logo';
+import Footer from '../components/Footer';
 
 export default {
   name: 'Register',
-  components: {Logo},
+  components: {Footer, Logo},
   data () {
     return {
       codeButton: {

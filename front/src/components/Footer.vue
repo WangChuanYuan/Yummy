@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">
+  <div class="footer" style="border-top: 1px solid #c0c0c0">
     <div class="clear-fix">
       <div class="footer-block" style="margin-left: 38%">
         <h4>关于</h4>
@@ -28,6 +28,14 @@ export default {
 </script>
 
 <style scoped>
+  .footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: var(--theme-grey);
+  }
+
   .footer-block {
     float: left;
     margin-left: 5%;
