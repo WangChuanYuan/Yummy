@@ -135,6 +135,6 @@ export default {
     bottom: 0;
     width: 100%;
     text-align: center;
-    background-color: #f2f6fc;
+    background-color: var(--theme-grey);
   }
 </style>

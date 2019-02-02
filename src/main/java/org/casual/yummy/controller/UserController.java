@@ -52,6 +52,18 @@ public class UserController {
         return new ResultMsg(Code.SUCCESS);
     }
 
+    @RequestMapping("/evict")
+    public ResultMsg evict(@RequestBody Map param, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        String email = null;
+        if (null != session)
+            email = (String) session.getAttribute("email");
+
+        if (null == session || null == email)
+            return new ResultMsg("注销失败", Code.FAILURE);
+        else return userService.evict(email);
+    }
+
     @RequestMapping("/send_register_mail")
     public ResultMsg sendRegisterMail(@RequestBody Map param, HttpServletRequest request) {
         HttpSession session = request.getSession(true);

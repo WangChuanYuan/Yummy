@@ -1,10 +1,15 @@
 <template>
-  <div></div>
+  <div>
+    <Navigation/>
+  </div>
 </template>
 
 <script>
+import Navigation from '../components/Navigation';
+
 export default {
-  name: 'MemberCenter'
+  name: 'MemberCenter',
+  components: {Navigation}
 };
 </script>
 

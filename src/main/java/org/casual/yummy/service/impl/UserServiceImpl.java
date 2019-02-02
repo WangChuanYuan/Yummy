@@ -44,4 +44,15 @@ public class UserServiceImpl implements UserService {
             return new ResultMsg("注册失败", Code.FAILURE);
         }
     }
+
+    @Override
+    @Transactional
+    public ResultMsg evict(String email) {
+        User user = userDAO.findByEmail(email);
+        if (null != user) {
+            user.setAccountState(AccountState.CANCELED);
+            userDAO.flush();
+            return new ResultMsg("注销成功", Code.SUCCESS);
+        } else return new ResultMsg("注销失败", Code.FAILURE);
+    }
 }

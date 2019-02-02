@@ -20,7 +20,7 @@ export default new Router({
     },
     {
       path: '/memberCenter',
-      name: '/memberCenter',
+      name: 'memberCenter',
       component: MemberCenter
     }
   ]

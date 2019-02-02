@@ -1,5 +1,12 @@
+:root {
+  --theme-blue: #409eff;
+  --theme-golden: #ffd04b;
+  --theme-grey: #f2f6fc;
+}
+
 html, body {
   height: 100%;
+  margin: 0;
 }
 
 .full-height {
