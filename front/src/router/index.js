@@ -21,7 +21,33 @@ export default new Router({
     {
       path: '/memberCenter',
       name: 'memberCenter',
-      component: MemberCenter
+      component: MemberCenter,
+      children: [
+        {
+          path: '',
+          name: 'member'
+        },
+        {
+          path: 'info',
+          name: 'member-info'
+        },
+        {
+          path: 'address',
+          name: 'member-address'
+        },
+        {
+          path: 'info',
+          name: 'memberCenter-info'
+        },
+        {
+          path: 'orders',
+          name: 'member-orders'
+        },
+        {
+          path: 'statistics',
+          name: 'member-statistics'
+        }
+      ]
     }
   ]
 });

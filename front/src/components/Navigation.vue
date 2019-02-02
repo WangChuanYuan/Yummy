@@ -1,5 +1,5 @@
 <template>
-  <el-menu class="clear-fix" :default-active="this.$route.name" @select="navigation" mode="horizontal" background-color="#409eff" text-color="#ffffff" active-text-color="#ffd04b">
+  <el-menu class="clear-fix" :default-active="this.$route.name" @select="navigation" mode="horizontal" background-color="var(--theme-blue)" text-color="#ffffff" active-text-color="var(--theme-golden)">
     <el-menu-item index="logo" style="margin-left: 10%; margin-right: 10%">
       <Logo style="-webkit-text-stroke: 1px #ffffff; font-size: 25px;"/>
     </el-menu-item>

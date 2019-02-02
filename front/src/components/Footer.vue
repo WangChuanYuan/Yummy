@@ -2,21 +2,21 @@
   <div class="footer" style="border-top: 1px solid #c0c0c0">
     <div class="clear-fix">
       <div class="footer-block" style="margin-left: 38%">
-        <h4>关于</h4>
+        <a>关于</a>
       </div>
       <div class="footer-block">
-        <h4>博客</h4>
+        <a href="https://wangchuanyuan.github.io">博客</a>
       </div>
       <div class="footer-block">
-        <h4>网站</h4>
+        <a href="http://software.nju.edu.cn">网站</a>
       </div>
       <div class="footer-block">
-        <h4>GitHub</h4>
+        <a href="https://github.com/WangChuanYuan">GitHub</a>
       </div>
     </div>
     <div>
-      <h3 style="margin: 0">Yummy!</h3>
-      <small>Copyright © 161250135@smail.nju.edu.cn</small>
+      <h3 style="margin: 0 0 5px 0">Yummy!</h3>
+      <b><small>Copyright © 161250135@smail.nju.edu.cn</small></b>
     </div>
   </div>
 </template>
@@ -38,6 +38,19 @@ export default {
 
   .footer-block {
     float: left;
+    margin-top: 1%;
+    margin-bottom: 1%;
     margin-left: 5%;
+  }
+
+  a {
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  a:link, a:visited, a:hover, a:active{
+    color: #2e3f51;
+    text-decoration: none;
   }
 </style>
