@@ -9,21 +9,17 @@ html, body {
   margin: 0;
 }
 
-.full-height {
-  height: 100%;
-}
-
 .center {
   margin-left: auto;
   margin-right: auto;
 }
 
-.large-font {
-  font-size: 25px;
-}
-
-.medium-font {
-  font-size: 15px;
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  background-color: var(--theme-grey);
 }
 
 .clear-fix {
