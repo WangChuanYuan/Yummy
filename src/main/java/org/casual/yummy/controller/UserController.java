@@ -72,7 +72,6 @@ public class UserController {
         String verifyCode = mailService.sendRegisterMail(email);
         if (null != verifyCode) {
             session.setAttribute("verifyCode", verifyCode);
-            System.out.println(session.getId());
             return new ResultMsg("邮件发送成功", Code.SUCCESS);
         } else return new ResultMsg("邮件发送失败", Code.SUCCESS);
     }
@@ -80,7 +79,6 @@ public class UserController {
     @RequestMapping("/register")
     public ResultMsg register(@RequestBody Map param, HttpServletRequest request) {
         HttpSession session = request.getSession(true);
-        System.out.println(session.getId());
         String verifyCode = (String) session.getAttribute("verifyCode");
 
         String email = (String) param.get("email");
