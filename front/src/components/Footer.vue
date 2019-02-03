@@ -50,7 +50,7 @@ export default {
   }
 
   a:link, a:visited, a:hover, a:active{
-    color: #2e3f51;
+    color: var(--theme-black);
     text-decoration: none;
   }
 </style>

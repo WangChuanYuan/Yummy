@@ -47,7 +47,7 @@ export default {
     top: 0;
     right: 0;
     height: 60%;
-    width: 40%;
+    width: 44%;
     background: url("../assets/image/coffee.jpg") no-repeat #000 top right;
   }
 

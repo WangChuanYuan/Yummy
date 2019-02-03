@@ -3,7 +3,8 @@
     <Navigation/>
     <el-container style="background-color: var(--theme-grey); height: 100%">
       <el-aside width="20%">
-        <el-menu :default-active="this.$route.path" :router="true" background-color="var(--theme-grey)" active-text-color="var(--theme-blue)">
+        <el-menu :default-active="this.$route.path" :router="true" background-color="var(--theme-grey)"
+                 active-text-color="var(--theme-blue)">
           <el-menu-item index="/memberCenter">
             <i class="el-icon-info"></i>
             个人中心
@@ -27,7 +28,7 @@
         </el-menu>
       </el-aside>
       <el-main>
-        <router-view/>
+        <router-view id="main"/>
       </el-main>
     </el-container>
     <Footer/>
@@ -45,5 +46,11 @@ export default {
 </script>
 
 <style scoped>
-
+  #main {
+    text-align: left;
+    padding: 5px 5px 5px 20px;
+    height: 75%;
+    width: 80%;
+    background-color: white;
+  }
 </style>
