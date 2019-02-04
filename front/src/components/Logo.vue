@@ -1,5 +1,5 @@
 <template>
-    <div class="logo" v-on:click="toHome">Yummy!</div>
+    <div class="logo" @click="toHome">Yummy!</div>
 </template>
 
 <script>

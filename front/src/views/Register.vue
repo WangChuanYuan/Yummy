@@ -30,6 +30,7 @@
 import Api from '../assets/js/api';
 import Logo from '../components/Logo';
 import Footer from '../components/Footer';
+import {Code} from '../assets/js/util';
 
 export default {
   name: 'Register',
@@ -94,7 +95,7 @@ export default {
         Api('/send_register_mail', {
           'email': this.registerForm.email
         }).then((data) => {
-          if (data.code === 'FAILURE') {
+          if (data.code === Code.FAILURE) {
             this.$message.warning(data.msg);
           }
         });
@@ -110,7 +111,7 @@ export default {
             'password': this.registerForm.password,
             'verifyCode': this.registerForm.verifyCode
           }).then((data) => {
-            if (data.code === 'SUCCESS') {
+            if (data.code === Code.SUCCESS) {
               if (sessionStorage.getItem('email') !== this.registerForm.email) {
                 sessionStorage.clear();
                 sessionStorage.setItem('email', this.registerForm.email);

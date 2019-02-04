@@ -1,0 +1,12 @@
+export const Sex = {
+  MAN: 'MAN',
+  WOMAN: 'WOMAN'
+};
+
+export const Code = {
+  SUCCESS: 'SUCCESS',
+  FAILURE: 'FAILURE',
+  INVALID_EMAIL: 'INVALID_EMAIL',
+  CANCELED_EMAIL: 'CANCELED_EMAIL',
+  WRONG_PASS: 'WRONG_PASS'
+};

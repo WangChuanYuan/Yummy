@@ -22,6 +22,7 @@
 
 <script>
 import Api from '../assets/js/api';
+import {Code} from '../assets/js/util';
 
 export default {
   name: 'Login',
@@ -79,7 +80,7 @@ export default {
             'email': this.loginForm.email,
             'password': this.loginForm.password
           }).then((data) => {
-            if (data.code === 'SUCCESS') {
+            if (data.code === Code.SUCCESS) {
               if (sessionStorage.getItem('email') !== this.loginForm.email) {
                 sessionStorage.clear();
                 sessionStorage.setItem('email', this.loginForm.email);
