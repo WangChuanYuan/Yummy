@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 
-@Service
-public class FileUploadServiceImpl implements FileUploadService{
+@Service(value = "qiniuService")
+public class QiniuUploadServiceImpl implements FileUploadService{
 
     @Autowired
     private Auth auth;
@@ -30,7 +30,7 @@ public class FileUploadServiceImpl implements FileUploadService{
     }
 
     @Override
-    public String upload(InputStream inputStream) {
+    public String upload(InputStream inputStream, String fileType) {
         try {
             Response response = this.uploadManager.put(inputStream, null, getUplaodToken(), null, null);
             DefaultPutRet ret = JsonUtil.json2pojo(response.bodyString(), DefaultPutRet.class);
