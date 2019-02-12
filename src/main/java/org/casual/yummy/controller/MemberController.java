@@ -22,46 +22,16 @@ public class MemberController {
     @Autowired
     private MailService mailService;
 
-    @RequestMapping("/login")
-    public ResultMsg login(@RequestBody Map param, HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-
-        String email = param.get("email").toString();
-        String password = param.get("password").toString();
-        ResultMsg resultMsg = memberService.login(email, password);
-
-        if (null == session || null == session.getAttribute("email")) {
-            if (resultMsg.getCode() == Code.SUCCESS) {
-                session = request.getSession(true);
-                session.setAttribute("email", email);
-            }
-        } else if (!session.getAttribute("email").equals(email) && resultMsg.getCode() == Code.SUCCESS) {
-            session.invalidate();
-            session = request.getSession(true);
-            session.setAttribute("email", email);
-        }
-
-        return resultMsg;
-    }
-
-    @RequestMapping("/logout")
-    public ResultMsg logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (null != session)
-            session.invalidate();
-        return new ResultMsg(Code.SUCCESS);
-    }
-
     @RequestMapping("/evict")
-    public ResultMsg evict(@RequestBody Map param, HttpServletRequest request) {
+    public ResultMsg evict(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        String email = null;
+        String id = null;
         if (null != session)
-            email = (String) session.getAttribute("email");
+            id = (String) session.getAttribute("id");
 
-        if (null == session || null == email)
+        if (null == session || null == id)
             return new ResultMsg("注销失败", Code.FAILURE);
-        else return memberService.evict(email);
+        else return memberService.evict(id);
     }
 
     @RequestMapping("/send_register_mail")
@@ -81,16 +51,16 @@ public class MemberController {
         HttpSession session = request.getSession(true);
         String verifyCode = (String) session.getAttribute("verifyCode");
 
-        String email = (String) param.get("email");
+        String id = (String) param.get("id");
         String password = (String) param.get("password");
         String codeToCheck = (String) param.get("verifyCode");
 
         if (null != verifyCode && verifyCode.equals(codeToCheck)) {
-            ResultMsg msg = memberService.register(email, password);
+            ResultMsg msg = memberService.register(id, password);
             if (msg.getCode() == Code.SUCCESS) {
                 session.invalidate();
                 session = request.getSession(true);
-                session.setAttribute("email", email);
+                session.setAttribute("id", id);
             }
             return msg;
         }

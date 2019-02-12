@@ -3,8 +3,8 @@
     <el-main>
       <el-form :model="registerForm" :rules="registerRules" ref="registerForm" class="center" style="width: 23%; margin-top: 5%">
         <Logo/>
-        <el-form-item prop="email" label="用户邮箱">
-          <el-input v-model="registerForm.email" type="email" placeholder="邮箱">
+        <el-form-item prop="id" label="用户邮箱">
+          <el-input v-model="registerForm.id" type="email" placeholder="邮箱">
             <el-button :disabled="codeButton.isDisabled" slot="append" @click="sendRegisterMail">{{codeButton.name}}
             </el-button>
           </el-input>
@@ -30,7 +30,7 @@
 import Api from '../assets/js/api';
 import Logo from '../components/Logo';
 import Footer from '../components/Footer';
-import {Code} from '../assets/js/util';
+import {Code, Role} from '../assets/js/util';
 
 export default {
   name: 'Register',
@@ -43,12 +43,12 @@ export default {
         time: 10
       },
       registerForm: {
-        email: null,
+        id: null,
         password: null,
         verifyCode: null
       },
       registerRules: {
-        email: [
+        id: [
           {
             required: true,
             message: '请输入用户邮箱',
@@ -79,7 +79,7 @@ export default {
   },
   methods: {
     sendRegisterMail () {
-      if (/^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/.test(this.registerForm.email)) {
+      if (/^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/.test(this.registerForm.id)) {
         let _this = this;
         _this.codeButton.isDisabled = true;
         let interval = window.setInterval(function () {
@@ -93,7 +93,7 @@ export default {
           }
         }, 1000);
         Api('/send_register_mail', {
-          'email': this.registerForm.email
+          'email': this.registerForm.id
         }).then((data) => {
           if (data.code === Code.FAILURE) {
             this.$message.warning(data.msg);
@@ -107,16 +107,22 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           Api('/register', {
-            'email': this.registerForm.email,
+            'id': this.registerForm.id,
             'password': this.registerForm.password,
             'verifyCode': this.registerForm.verifyCode
           }).then((data) => {
             if (data.code === Code.SUCCESS) {
-              if (sessionStorage.getItem('email') !== this.registerForm.email) {
+              let user = data.value;
+              if (sessionStorage.getItem('id') !== user.id) {
                 sessionStorage.clear();
-                sessionStorage.setItem('email', this.registerForm.email);
+                sessionStorage.setItem('id', user.id);
+                sessionStorage.setItem('user', JSON.stringify(user));
               }
-              this.$router.push('/memberCenter');
+              if (user.role === Role.MEMBER) {
+                this.$router.push('/memberCenter');
+              } else {
+                // todo with restaurant
+              }
             } else {
               this.$message.warning(data.msg);
             }

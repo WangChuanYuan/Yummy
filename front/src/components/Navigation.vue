@@ -6,8 +6,8 @@
     <el-menu-item index="bookCenter">订餐中心</el-menu-item>
     <el-menu-item index="memberCenter">会员中心</el-menu-item>
     <el-menu-item index="register">我要开店</el-menu-item>
-    <el-submenu index="member" v-if="email">
-      <template slot="title">{{email}}</template>
+    <el-submenu index="member" v-if="id">
+      <template slot="title">{{id}}</template>
       <el-menu-item index="member-info">
         <i class="el-icon-info"></i>
         个人信息
@@ -46,7 +46,7 @@ export default {
   components: {Logo},
   data () {
     return {
-      email: sessionStorage.getItem('email')
+      id: sessionStorage.getItem('id')
     };
   },
   methods: {

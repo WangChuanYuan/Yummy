@@ -10,7 +10,7 @@
       </el-upload>
     </el-form-item>
     <el-form-item label="邮箱">
-      {{memberInfo.email}}
+      {{memberInfo.id}}
     </el-form-item>
     <el-form-item label="等级">
       {{memberInfo.level}}
@@ -23,18 +23,21 @@ export default {
   name: 'MemberInfo',
   data () {
     return {
+      avatarRaw: null,
       memberInfo: {
         avatar: require('@/assets/image/avatar.jpg'),
-        avatarRaw: null,
-        email: '161250135@smail.nju.edu.cn',
+        id: '161250135@smail.nju.edu.cn',
         level: 0
       }
     };
   },
+  mounted () {
+    // todo get member info
+  },
   methods: {
     uploadAvatar (file) {
       this.memberInfo.avatar = URL.createObjectURL(file.raw);
-      this.memberInfo.avatarRaw = file.raw;
+      this.avatarRaw = file.raw;
     }
   }
 };

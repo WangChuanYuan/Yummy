@@ -116,7 +116,7 @@ export default {
           }
           Api(url, {
             'address': this.addressForm,
-            'email': sessionStorage.getItem('email')
+            'id': sessionStorage.getItem('id')
           }).then((data) => {
             if (data.code === Code.SUCCESS) {
               this.$emit(callback, data.value);

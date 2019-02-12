@@ -5,9 +5,9 @@ import org.casual.yummy.utils.ResultMsg;
 
 public interface MemberService {
 
-    ResultMsg login(String email, String password);
+    ResultMsg<Member> login(String id, String password);
 
-    ResultMsg<Member> register(String email, String password);
+    ResultMsg<Member> register(String id, String password);
 
-    ResultMsg<Member> evict(String email);
+    ResultMsg<Member> evict(String id);
 }

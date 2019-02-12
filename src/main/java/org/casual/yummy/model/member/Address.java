@@ -32,7 +32,7 @@ public class Address {
     private String phone;
 
     @ManyToOne
-    @JoinColumn(name = "member", referencedColumnName = "email")
+    @JoinColumn(name = "member", referencedColumnName = "id")
     @JsonBackReference
     @JsonManagedReference
     private Member member;

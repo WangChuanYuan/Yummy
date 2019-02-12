@@ -20,22 +20,22 @@ public class AddressController {
 
     @RequestMapping("/get_addresses")
     public List<Address> getAddresses(@RequestBody Map param) {
-        String email = (String) param.get("email");
-        return addressService.getAddresses(email);
+        String id = (String) param.get("id");
+        return addressService.getAddresses(id);
     }
 
     @RequestMapping("/add_address")
     public ResultMsg addAddress(@RequestBody Map param) {
-        String email = (String) param.get("email");
+        String id = (String) param.get("id");
         Address address = JsonUtil.obj2pojo(param.get("address"), Address.class);
-        return addressService.addAddress(email, address);
+        return addressService.addAddress(id, address);
     }
 
     @RequestMapping("/modify_address")
     public ResultMsg modifyAddress(@RequestBody Map param) {
-        String email = (String) param.get("email");
+        String id = (String) param.get("id");
         Address address = JsonUtil.obj2pojo(param.get("address"), Address.class);
-        return addressService.modifyAddress(email, address);
+        return addressService.modifyAddress(id, address);
     }
 
     @RequestMapping("/delete_address")

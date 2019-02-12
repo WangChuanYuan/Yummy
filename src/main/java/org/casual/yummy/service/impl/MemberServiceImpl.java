@@ -19,27 +19,27 @@ public class MemberServiceImpl implements MemberService {
     private MemberDAO memberDAO;
 
     @Override
-    public ResultMsg login(String email, String password) {
-        Member member = memberDAO.findByEmail(email);
+    public ResultMsg<Member> login(String id, String password) {
+        Member member = memberDAO.findById(id).orElse(null);
         if (null == member)
-            return new ResultMsg("邮箱未注册", Code.INVALID_EMAIL);
+            return new ResultMsg<>("邮箱未注册", Code.INVALID_EMAIL);
         else
             if (member.getAccountState() == AccountState.CANCELED)
-                return new ResultMsg("邮箱已注销", Code.CANCELED_EMAIL);
+                return new ResultMsg<>("邮箱已注销", Code.CANCELED_EMAIL);
         else
             if (!member.getPassword().equals(password))
-                return new ResultMsg("密码错误", Code.WRONG_PASS);
+                return new ResultMsg<>("密码错误", Code.WRONG_PASS);
         else
-            return new ResultMsg("登录成功", Code.SUCCESS);
+            return new ResultMsg<>("登录成功", Code.SUCCESS, member);
     }
 
     @Override
     @Transactional
-    public ResultMsg<Member> register(String email, String password) {
-        if (null != memberDAO.findByEmail(email))
+    public ResultMsg<Member> register(String id, String password) {
+        if (null != memberDAO.findById(id).orElse(null))
             return new ResultMsg<>("邮箱已被注册", Code.FAILURE);
         Member member = new Member();
-        member.setEmail(email).setPassword(password).setRole(Role.MEMBER).setAccountState(AccountState.VALID);
+        member.setId(id).setPassword(password).setRole(Role.MEMBER).setAccountState(AccountState.VALID);
         try {
             Member savedMember = memberDAO.saveAndFlush(member);
             return new ResultMsg<>("注册成功", Code.SUCCESS, savedMember);
@@ -50,8 +50,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public ResultMsg<Member> evict(String email) {
-        Member member = memberDAO.findByEmail(email);
+    public ResultMsg<Member> evict(String id) {
+        Member member = memberDAO.findById(id).orElse(null);
         if (null != member) {
             member.setAccountState(AccountState.CANCELED);
             memberDAO.flush();

@@ -31,7 +31,7 @@ export default {
   },
   mounted () {
     Api('/get_addresses', {
-      'email': sessionStorage.getItem('email')
+      'id': sessionStorage.getItem('id')
     }).then((data) => {
       this.addresses = data;
     }).catch(() => {

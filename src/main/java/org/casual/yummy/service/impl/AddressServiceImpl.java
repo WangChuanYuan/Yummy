@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,15 +25,18 @@ public class AddressServiceImpl implements AddressService {
     private AddressDAO addressDAO;
 
     @Override
-    public List<Address> getAddresses(String email) {
-        return memberDAO.findByEmail(email).getAddresses();
+    public List<Address> getAddresses(String id) {
+        Member member = memberDAO.findById(id).orElse(null);
+        if (null != member)
+            return member.getAddresses();
+        else return new ArrayList<>();
     }
 
     @Override
-    public ResultMsg<Address> addAddress(String email, Address address) {
-        Member member = memberDAO.findByEmail(email);
-        address.setMember(member);
+    public ResultMsg<Address> addAddress(String id, Address address) {
         try {
+            Member member = memberDAO.findById(id).get();
+            address.setMember(member);
             Address savedAddress = addressDAO.saveAndFlush(address);
             return new ResultMsg<>("新增地址成功", Code.SUCCESS, savedAddress);
         } catch (Exception e) {
@@ -42,7 +46,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public ResultMsg<Address> modifyAddress(String email, Address address) {
+    public ResultMsg<Address> modifyAddress(String id, Address address) {
         try {
             Address modifiedAddress = addressDAO.saveAndFlush(address);
             return new ResultMsg<>("修改地址成功", Code.SUCCESS, modifiedAddress);

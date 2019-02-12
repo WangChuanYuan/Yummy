@@ -10,3 +10,9 @@ export const Code = {
   CANCELED_EMAIL: 'CANCELED_EMAIL',
   WRONG_PASS: 'WRONG_PASS'
 };
+
+export const Role = {
+  MEMBER: 'MEMBER',
+  RESTAURANT: 'RESTAURANT',
+  MANAGEMENT: 'MANAGEMENT'
+};
