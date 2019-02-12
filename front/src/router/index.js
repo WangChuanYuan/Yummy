@@ -5,8 +5,8 @@ import Home from '@/views/Home';
 import Register from '@/views/Register';
 import MemberCenter from '@/views/MemberCenter';
 
-import MemberInfo from '@/components/MemberInfo';
-import MemberAddress from '@/components/MemberAddress';
+import MemberInfo from '@/components/member/MemberInfo';
+import MemberAddress from '@/components/member/MemberAddress';
 
 Vue.use(Router);
 

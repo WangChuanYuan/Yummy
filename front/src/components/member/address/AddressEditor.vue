@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import Api from '../assets/js/api';
-import {Code, Sex} from '../assets/js/util';
+import Api from '../../../assets/js/api';
+import {Code, Sex} from '../../../assets/js/util';
 
 const phoneRule = (rule, value, callback) => {
   if (!value) {

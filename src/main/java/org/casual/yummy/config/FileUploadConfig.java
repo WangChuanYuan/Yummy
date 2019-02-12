@@ -43,8 +43,8 @@ public class FileUploadConfig {
     @Bean
     @ConditionalOnMissingBean(MultipartResolver.class)
     public StandardServletMultipartResolver multipartResolver() {
-        StandardServletMultipartResolver multipartProperties = new StandardServletMultipartResolver();
-        multipartResolver().setResolveLazily(this.multipartProperties.isResolveLazily());
+        StandardServletMultipartResolver multipartResolver = new StandardServletMultipartResolver();
+        multipartResolver.setResolveLazily(this.multipartProperties.isResolveLazily());
         return multipartResolver();
     }
 

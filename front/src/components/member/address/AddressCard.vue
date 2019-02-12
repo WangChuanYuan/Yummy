@@ -23,8 +23,8 @@
 
 <script>
 import AddressEditor from './AddressEditor';
-import Api from '../assets/js/api';
-import {Code, Sex} from '../assets/js/util';
+import Api from '../../../assets/js/api';
+import {Code, Sex} from '../../../assets/js/util';
 
 export default {
   name: 'AddressCard',

@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import AddressCard from './AddressCard';
-import AddressEditor from './AddressEditor';
+import AddressCard from './address/AddressCard';
+import AddressEditor from './address/AddressEditor';
 
 export default {
   name: 'MemberAddress',

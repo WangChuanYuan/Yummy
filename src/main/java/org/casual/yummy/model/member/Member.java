@@ -1,14 +1,14 @@
-package org.casual.yummy.model;
+package org.casual.yummy.model.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.casual.yummy.model.AccountState;
+import org.casual.yummy.model.Role;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Accessors(chain = true)
@@ -21,6 +21,11 @@ public class Member {
     private String email;
 
     private String password;
+
+    private int level;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Address> addresses;
 
     @Enumerated(EnumType.STRING)
     private Role role;

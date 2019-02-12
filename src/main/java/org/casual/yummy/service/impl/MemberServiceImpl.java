@@ -2,7 +2,7 @@ package org.casual.yummy.service.impl;
 
 import org.casual.yummy.dao.MemberDAO;
 import org.casual.yummy.model.AccountState;
-import org.casual.yummy.model.Member;
+import org.casual.yummy.model.member.Member;
 import org.casual.yummy.model.Role;
 import org.casual.yummy.service.MemberService;
 import org.casual.yummy.utils.Code;
