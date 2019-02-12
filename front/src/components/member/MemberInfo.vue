@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import Api from '../../assets/js/api';
+
 export default {
   name: 'MemberInfo',
   data () {
@@ -26,13 +28,18 @@ export default {
       avatarRaw: null,
       memberInfo: {
         avatar: require('@/assets/image/avatar.jpg'),
-        id: '161250135@smail.nju.edu.cn',
+        id: '',
         level: 0
       }
     };
   },
   mounted () {
-    // todo get member info
+    Api('/get_member', {
+      'id': sessionStorage.getItem('id')
+    }).then((data) => {
+      if (data) this.memberInfo = data;
+    }).catch(() => {
+    });
   },
   methods: {
     uploadAvatar (file) {

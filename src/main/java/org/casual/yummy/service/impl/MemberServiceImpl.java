@@ -49,6 +49,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Member getMemberById(String id) {
+        return memberDAO.findById(id).orElse(null);
+    }
+
+    @Override
     @Transactional
     public ResultMsg<Member> evict(String id) {
         Member member = memberDAO.findById(id).orElse(null);

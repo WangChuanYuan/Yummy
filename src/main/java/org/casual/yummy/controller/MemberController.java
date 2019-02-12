@@ -1,5 +1,6 @@
 package org.casual.yummy.controller;
 
+import org.casual.yummy.model.member.Member;
 import org.casual.yummy.service.MailService;
 import org.casual.yummy.service.MemberService;
 import org.casual.yummy.utils.Code;
@@ -21,6 +22,12 @@ public class MemberController {
 
     @Autowired
     private MailService mailService;
+
+    @RequestMapping("/get_member")
+    public Member getMember(@RequestBody Map param) {
+        String id = (String) param.get("id");
+        return memberService.getMemberById(id);
+    }
 
     @RequestMapping("/evict")
     public ResultMsg evict(HttpServletRequest request) {

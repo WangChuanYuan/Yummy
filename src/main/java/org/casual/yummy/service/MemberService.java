@@ -9,5 +9,7 @@ public interface MemberService {
 
     ResultMsg<Member> register(String id, String password);
 
+    Member getMemberById(String id);
+
     ResultMsg<Member> evict(String id);
 }
