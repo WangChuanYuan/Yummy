@@ -18,6 +18,7 @@
 <script>
 import AddressCard from './address/AddressCard';
 import AddressEditor from './address/AddressEditor';
+import Api from '../../assets/js/api';
 
 export default {
   name: 'MemberAddress',
@@ -27,6 +28,15 @@ export default {
       addresses: [],
       editing: false
     };
+  },
+  mounted () {
+    Api('/get_addresses', {
+      'email': sessionStorage.getItem('email')
+    }).then((data) => {
+      this.addresses = data;
+    }).catch(() => {
+      this.addresses = [];
+    });
   },
   methods: {
     closeEditor () {

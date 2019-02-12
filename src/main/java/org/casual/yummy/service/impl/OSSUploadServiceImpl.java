@@ -76,10 +76,10 @@ public class OSSUploadServiceImpl implements FileUploadService {
             String fileName = ossProperties.getBucketDir() + "/" +
                     UUID.randomUUID().toString().toUpperCase().replace("-", "") +
                     "." + fileType;
-            PutObjectRequest request = new PutObjectRequest(ossProperties.getBucketName(), fileName,inputStream, meta); //创建上传请求
+            PutObjectRequest request = new PutObjectRequest(ossProperties.getBucketName(), fileName,inputStream, meta); // 创建上传请求
             ossClient.putObject(request);
             Date expiration = new Date(new Date().getTime() + 3600L * 1000 * 24 * 365 * 10); // 设置URL过期时间为10年 3600L*1000*24*365*10
-            //oss空间为私有，生成签名url进行访问
+            // oss空间为私有，生成签名url进行访问
             url = ossClient.generatePresignedUrl(ossProperties.getBucketName(), fileName, expiration)
                     .toString();
         } catch (OSSException | ClientException oe) {

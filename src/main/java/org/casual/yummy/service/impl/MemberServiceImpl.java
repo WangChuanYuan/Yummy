@@ -23,36 +23,39 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberDAO.findByEmail(email);
         if (null == member)
             return new ResultMsg("邮箱未注册", Code.INVALID_EMAIL);
-        else if (member.getAccountState() == AccountState.CANCELED)
-            return new ResultMsg("邮箱已注销", Code.CANCELED_EMAIL);
-        else if (!member.getPassword().equals(password))
-            return new ResultMsg("密码错误", Code.WRONG_PASS);
-        else return new ResultMsg("登录成功", Code.SUCCESS);
+        else
+            if (member.getAccountState() == AccountState.CANCELED)
+                return new ResultMsg("邮箱已注销", Code.CANCELED_EMAIL);
+        else
+            if (!member.getPassword().equals(password))
+                return new ResultMsg("密码错误", Code.WRONG_PASS);
+        else
+            return new ResultMsg("登录成功", Code.SUCCESS);
     }
 
     @Override
     @Transactional
-    public ResultMsg register(String email, String password) {
+    public ResultMsg<Member> register(String email, String password) {
         if (null != memberDAO.findByEmail(email))
-            return new ResultMsg("邮箱已被注册", Code.FAILURE);
+            return new ResultMsg<>("邮箱已被注册", Code.FAILURE);
         Member member = new Member();
         member.setEmail(email).setPassword(password).setRole(Role.MEMBER).setAccountState(AccountState.VALID);
         try {
-            memberDAO.saveAndFlush(member);
-            return new ResultMsg("注册成功", Code.SUCCESS);
+            Member savedMember = memberDAO.saveAndFlush(member);
+            return new ResultMsg<>("注册成功", Code.SUCCESS, savedMember);
         } catch (Exception e) {
-            return new ResultMsg("注册失败", Code.FAILURE);
+            return new ResultMsg<>("注册失败", Code.FAILURE);
         }
     }
 
     @Override
     @Transactional
-    public ResultMsg evict(String email) {
+    public ResultMsg<Member> evict(String email) {
         Member member = memberDAO.findByEmail(email);
         if (null != member) {
             member.setAccountState(AccountState.CANCELED);
             memberDAO.flush();
-            return new ResultMsg("注销成功", Code.SUCCESS);
-        } else return new ResultMsg("注销失败", Code.FAILURE);
+            return new ResultMsg<>("注销成功", Code.SUCCESS, member);
+        } else return new ResultMsg<>("注销失败", Code.FAILURE);
     }
 }

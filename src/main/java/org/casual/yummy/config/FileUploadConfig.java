@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
+import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.Servlet;
@@ -40,12 +41,12 @@ public class FileUploadConfig {
         return this.multipartProperties.createMultipartConfig();
     }
 
-    @Bean
+    @Bean(name = DispatcherServlet.MULTIPART_RESOLVER_BEAN_NAME)
     @ConditionalOnMissingBean(MultipartResolver.class)
     public StandardServletMultipartResolver multipartResolver() {
         StandardServletMultipartResolver multipartResolver = new StandardServletMultipartResolver();
         multipartResolver.setResolveLazily(this.multipartProperties.isResolveLazily());
-        return multipartResolver();
+        return multipartResolver;
     }
 
     /* 七牛云配置 */

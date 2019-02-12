@@ -66,8 +66,7 @@ export default {
         type: 'warning'
       }).then(() => {
         Api('delete_Address', {
-          'address': this.inAddress,
-          'email': sessionStorage.getItem('email')
+          'aid': this.inAddress.aid
         }).then((data) => {
           if (data.code === Code.SUCCESS) {
             this.$emit('deleteAddress');
