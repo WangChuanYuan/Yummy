@@ -2,7 +2,7 @@ package org.casual.yummy.service;
 
 import org.casual.yummy.utils.ResultMsg;
 
-public interface UserService {
+public interface MemberService {
 
     ResultMsg login(String email, String password);
 

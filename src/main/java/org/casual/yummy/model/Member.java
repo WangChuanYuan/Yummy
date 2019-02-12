@@ -15,7 +15,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class User {
+public class Member {
 
     @Id
     private String email;

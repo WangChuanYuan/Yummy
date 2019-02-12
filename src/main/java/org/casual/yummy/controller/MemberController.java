@@ -1,7 +1,7 @@
 package org.casual.yummy.controller;
 
 import org.casual.yummy.service.MailService;
-import org.casual.yummy.service.UserService;
+import org.casual.yummy.service.MemberService;
 import org.casual.yummy.utils.Code;
 import org.casual.yummy.utils.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +14,10 @@ import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @RestController
-public class UserController {
+public class MemberController {
 
     @Autowired
-    private UserService userService;
+    private MemberService memberService;
 
     @Autowired
     private MailService mailService;
@@ -28,7 +28,7 @@ public class UserController {
 
         String email = param.get("email").toString();
         String password = param.get("password").toString();
-        ResultMsg resultMsg = userService.login(email, password);
+        ResultMsg resultMsg = memberService.login(email, password);
 
         if (null == session || null == session.getAttribute("email")) {
             if (resultMsg.getCode() == Code.SUCCESS) {
@@ -61,7 +61,7 @@ public class UserController {
 
         if (null == session || null == email)
             return new ResultMsg("注销失败", Code.FAILURE);
-        else return userService.evict(email);
+        else return memberService.evict(email);
     }
 
     @RequestMapping("/send_register_mail")
@@ -73,7 +73,7 @@ public class UserController {
         if (null != verifyCode) {
             session.setAttribute("verifyCode", verifyCode);
             return new ResultMsg("邮件发送成功", Code.SUCCESS);
-        } else return new ResultMsg("邮件发送失败", Code.SUCCESS);
+        } else return new ResultMsg("邮件发送失败", Code.FAILURE);
     }
 
     @RequestMapping("/register")
@@ -86,7 +86,7 @@ public class UserController {
         String codeToCheck = (String) param.get("verifyCode");
 
         if (null != verifyCode && verifyCode.equals(codeToCheck)) {
-            ResultMsg msg = userService.register(email, password);
+            ResultMsg msg = memberService.register(email, password);
             if (msg.getCode() == Code.SUCCESS) {
                 session.invalidate();
                 session = request.getSession(true);
