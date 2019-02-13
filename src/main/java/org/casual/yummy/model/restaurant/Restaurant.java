@@ -15,6 +15,10 @@ import javax.persistence.Entity;
 @Entity
 public class Restaurant extends User {
 
+    private String name;
+
+    private RestaurantType type;
+
     private String location;
 
     private String detailLocation;

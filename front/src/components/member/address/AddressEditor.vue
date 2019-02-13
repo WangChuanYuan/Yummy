@@ -8,7 +8,9 @@
       <el-radio v-model="addressForm.sex" label="WOMAN">女士</el-radio>
     </el-form-item>
     <el-form-item prop="location" label="位置">
-      <el-input v-model="addressForm.location" placeholder="位置"></el-input>
+      <el-input v-model="addressForm.location" placeholder="位置" readonly="true">
+        <v-region slot="append" :ui="true" @values="locationChange"></v-region>
+      </el-input>
     </el-form-item>
     <el-form-item prop="detailLocation" label="详细地址">
       <el-input v-model="addressForm.detailLocation" placeholder="详细地址"></el-input>
@@ -25,7 +27,7 @@
 
 <script>
 import Api from '../../../assets/js/api';
-import {Code, Sex} from '../../../assets/js/util';
+import {Code, Sex} from '../../../assets/js/attrib';
 
 const phoneRule = (rule, value, callback) => {
   if (!value) {
@@ -101,6 +103,22 @@ export default {
   methods: {
     closeEditor () {
       this.$emit('closeEditor');
+    },
+    locationChange (val) {
+      let location = '';
+      if (val.province) {
+        location += val.province.value;
+      }
+      if (val.city) {
+        location += val.city.value;
+      }
+      if (val.area) {
+        location += val.area.value;
+      }
+      if (val.town) {
+        location += val.town.value;
+      }
+      this.addressForm.location = location;
     },
     reset (formName) {
       this.$refs[formName].resetFields();

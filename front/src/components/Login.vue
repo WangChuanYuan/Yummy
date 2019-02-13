@@ -24,7 +24,7 @@
 
 <script>
 import Api from '../assets/js/api';
-import {Code, Role} from '../assets/js/util';
+import {Code, Role} from '../assets/js/attrib';
 
 const emailRule = [
   {

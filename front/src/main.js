@@ -7,11 +7,13 @@ import 'element-ui/lib/theme-chalk/index.css';
 import './assets/css/normal.css';
 import router from './router';
 import VueCookies from 'vue-cookies';
+import vRegion from 'v-region';
 
 Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
 Vue.use(VueCookies);
+Vue.use(vRegion);
 
 /* eslint-disable no-new */
 new Vue({

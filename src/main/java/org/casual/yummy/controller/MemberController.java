@@ -41,7 +41,7 @@ public class MemberController {
         else return memberService.evict(id);
     }
 
-    @RequestMapping("/send_register_mail")
+    @RequestMapping("/send_verify_mail")
     public ResultMsg sendRegisterMail(@RequestBody Map param, HttpServletRequest request) {
         HttpSession session = request.getSession(true);
 
@@ -53,7 +53,7 @@ public class MemberController {
         } else return new ResultMsg("邮件发送失败", Code.FAILURE);
     }
 
-    @RequestMapping("/register")
+    @RequestMapping("/member_register")
     public ResultMsg register(@RequestBody Map param, HttpServletRequest request) {
         HttpSession session = request.getSession(true);
         String verifyCode = (String) session.getAttribute("verifyCode");
