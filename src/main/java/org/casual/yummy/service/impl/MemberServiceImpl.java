@@ -2,8 +2,8 @@ package org.casual.yummy.service.impl;
 
 import org.casual.yummy.dao.MemberDAO;
 import org.casual.yummy.model.AccountState;
-import org.casual.yummy.model.member.Member;
 import org.casual.yummy.model.Role;
+import org.casual.yummy.model.member.Member;
 import org.casual.yummy.service.MemberService;
 import org.casual.yummy.utils.Code;
 import org.casual.yummy.utils.ResultMsg;
@@ -23,12 +23,10 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberDAO.findById(id).orElse(null);
         if (null == member)
             return new ResultMsg<>("邮箱未注册", Code.INVALID_EMAIL);
-        else
-            if (member.getAccountState() == AccountState.CANCELED)
-                return new ResultMsg<>("邮箱已注销", Code.CANCELED_EMAIL);
-        else
-            if (!member.getPassword().equals(password))
-                return new ResultMsg<>("密码错误", Code.WRONG_PASS);
+        else if (member.getAccountState() == AccountState.CANCELED)
+            return new ResultMsg<>("邮箱已注销", Code.CANCELED_EMAIL);
+        else if (!member.getPassword().equals(password))
+            return new ResultMsg<>("密码错误", Code.WRONG_PASS);
         else
             return new ResultMsg<>("登录成功", Code.SUCCESS, member);
     }

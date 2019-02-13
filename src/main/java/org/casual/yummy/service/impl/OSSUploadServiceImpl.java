@@ -28,35 +28,46 @@ public class OSSUploadServiceImpl implements FileUploadService {
                 new ClientConfiguration());
     }
 
-    private String contentType(String fileType){
+    private String contentType(String fileType) {
         fileType = fileType.toLowerCase();
         String contentType = "";
         switch (fileType) {
-            case "bmp":	contentType = "image/bmp";
+            case "bmp":
+                contentType = "image/bmp";
                 break;
-            case "gif":	contentType = "image/gif";
+            case "gif":
+                contentType = "image/gif";
                 break;
             case "png":
             case "jpeg":
-            case "jpg":	contentType = "image/jpeg";
+            case "jpg":
+                contentType = "image/jpeg";
                 break;
-            case "html":contentType = "text/html";
+            case "html":
+                contentType = "text/html";
                 break;
-            case "txt":	contentType = "text/plain";
+            case "txt":
+                contentType = "text/plain";
                 break;
-            case "vsd":	contentType = "application/vnd.visio";
+            case "vsd":
+                contentType = "application/vnd.visio";
                 break;
             case "ppt":
-            case "pptx":contentType = "application/vnd.ms-powerpoint";
+            case "pptx":
+                contentType = "application/vnd.ms-powerpoint";
                 break;
             case "doc":
-            case "docx":contentType = "application/msword";
+            case "docx":
+                contentType = "application/msword";
                 break;
-            case "xml":contentType = "text/xml";
+            case "xml":
+                contentType = "text/xml";
                 break;
-            case "mp4":contentType = "video/mp4";
+            case "mp4":
+                contentType = "video/mp4";
                 break;
-            default: contentType = "application/octet-stream";
+            default:
+                contentType = "application/octet-stream";
                 break;
         }
         return contentType;
@@ -70,13 +81,13 @@ public class OSSUploadServiceImpl implements FileUploadService {
             ossClient = ossClient();
 
             ObjectMetadata meta = new ObjectMetadata(); // 创建上传Object的Metadata
-            meta.setContentType(contentType(fileType));	// 设置上传内容类型
+            meta.setContentType(contentType(fileType));    // 设置上传内容类型
             meta.setCacheControl("no-cache"); // 被下载时网页的缓存行为
 
             String fileName = ossProperties.getBucketDir() + "/" +
                     UUID.randomUUID().toString().toUpperCase().replace("-", "") +
                     "." + fileType;
-            PutObjectRequest request = new PutObjectRequest(ossProperties.getBucketName(), fileName,inputStream, meta); // 创建上传请求
+            PutObjectRequest request = new PutObjectRequest(ossProperties.getBucketName(), fileName, inputStream, meta); // 创建上传请求
             ossClient.putObject(request);
             Date expiration = new Date(new Date().getTime() + 3600L * 1000 * 24 * 365 * 10); // 设置URL过期时间为10年 3600L*1000*24*365*10
             // oss空间为私有，生成签名url进行访问

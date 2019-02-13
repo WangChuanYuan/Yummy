@@ -2,7 +2,6 @@ package org.casual.yummy.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -14,7 +13,8 @@ public class ResultMsg<T> {
 
     private T value;
 
-    public ResultMsg() {}
+    public ResultMsg() {
+    }
 
     public ResultMsg(Code code) {
         this.msg = code.toString();

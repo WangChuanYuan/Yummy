@@ -1,7 +1,6 @@
 package org.casual.yummy.controller;
 
 import org.casual.yummy.model.member.Member;
-import org.casual.yummy.service.MailService;
 import org.casual.yummy.service.MemberService;
 import org.casual.yummy.utils.Code;
 import org.casual.yummy.utils.ResultMsg;
@@ -19,9 +18,6 @@ public class MemberController {
 
     @Autowired
     private MemberService memberService;
-
-    @Autowired
-    private MailService mailService;
 
     @RequestMapping("/get_member")
     public Member getMember(@RequestBody Map param) {
@@ -41,18 +37,6 @@ public class MemberController {
         else return memberService.evict(id);
     }
 
-    @RequestMapping("/send_verify_mail")
-    public ResultMsg sendRegisterMail(@RequestBody Map param, HttpServletRequest request) {
-        HttpSession session = request.getSession(true);
-
-        String email = param.get("email").toString();
-        String verifyCode = mailService.sendRegisterMail(email);
-        if (null != verifyCode) {
-            session.setAttribute("verifyCode", verifyCode);
-            return new ResultMsg("邮件发送成功", Code.SUCCESS);
-        } else return new ResultMsg("邮件发送失败", Code.FAILURE);
-    }
-
     @RequestMapping("/member_register")
     public ResultMsg register(@RequestBody Map param, HttpServletRequest request) {
         HttpSession session = request.getSession(true);
@@ -70,7 +54,6 @@ public class MemberController {
                 session.setAttribute("id", id);
             }
             return msg;
-        }
-        else return new ResultMsg("验证码错误或已失效", Code.FAILURE);
+        } else return new ResultMsg("验证码错误或已失效", Code.FAILURE);
     }
 }

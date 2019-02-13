@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.casual.yummy.model.User;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 @Data

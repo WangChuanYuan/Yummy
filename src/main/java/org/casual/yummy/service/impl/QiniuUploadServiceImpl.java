@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.io.InputStream;
 
 @Service(value = "qiniuService")
-public class QiniuUploadServiceImpl implements FileUploadService{
+public class QiniuUploadServiceImpl implements FileUploadService {
 
     @Autowired
     private Auth auth;
