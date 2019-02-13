@@ -95,7 +95,7 @@ export default {
     register (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          Api('/member_register', {
+          Api('/register_member', {
             'id': this.registerForm.id,
             'password': this.registerForm.password,
             'verifyCode': this.registerForm.verifyCode

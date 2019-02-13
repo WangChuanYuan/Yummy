@@ -3,18 +3,21 @@
     <el-form-item prop="name" label="门店名称">
       <el-input v-model="restaurantInfo.name" placeholder="门店名称"></el-input>
     </el-form-item>
+    <el-form-item prop="password" label="密码" v-show="aim === 'add'">
+      <el-input v-model="restaurantInfo.password" placeholder="密码"></el-input>
+    </el-form-item>
     <el-form-item prop="type" label="门店分类">
-      <el-select v-model="restaurantInfo.type" placeholder="请选择" style="width: 100%" :value="types.DELICACY.value">
+      <el-select v-model="restaurantInfo.registerInfo.type" placeholder="请选择" style="width: 100%" :value="types.DELICACY.value">
         <el-option v-for="type in types" :key="type.value" :value="type.value" :label="type.label"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item prop="location" label="位置">
-      <el-input v-model="restaurantInfo.location" placeholder="位置" readonly="true">
+      <el-input v-model="restaurantInfo.registerInfo.location" placeholder="位置" readonly="true">
         <v-region slot="append" :ui="true" @values="locationChange"></v-region>
       </el-input>
     </el-form-item>
     <el-form-item prop="detailLocation" label="详细地址">
-      <el-input v-model="restaurantInfo.detailLocation" placeholder="详细地址"></el-input>
+      <el-input v-model="restaurantInfo.registerInfo.detailLocation" placeholder="详细地址"></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submit('restaurantInfo')" style="width: 100%">提交</el-button>
@@ -23,7 +26,7 @@
 </template>
 
 <script>
-import {RestaurantType} from '../../assets/js/attrib';
+import {Code, RestaurantType} from '../../assets/js/attrib';
 import Api from '../../assets/js/api';
 
 export default {
@@ -38,16 +41,27 @@ export default {
     return {
       types: RestaurantType,
       restaurantInfo: {
-        name: '',
-        type: RestaurantType.DELICACY.value,
-        location: '',
-        detailLocation: ''
+        id: '',
+        password: '',
+        registerInfo: {
+          name: '',
+          type: RestaurantType.DELICACY.value,
+          location: '',
+          detailLocation: ''
+        }
       },
       infoRules: {
         name: [
           {
             required: true,
             message: '请输入门店名称',
+            trigger: 'blur'
+          }
+        ],
+        password: [
+          {
+            required: true,
+            message: '请输入密码',
             trigger: 'blur'
           }
         ],
@@ -77,12 +91,7 @@ export default {
   },
   mounted () {
     if (this.aim !== 'add') {
-      Api('/get_restaurant', {
-        'id': sessionStorage.getItem('id')
-      }).then((data) => {
-        if (data) this.restaurantInfo = data;
-      }).catch(() => {
-      });
+      this.init();
     }
   },
   methods: {
@@ -100,14 +109,43 @@ export default {
       if (val.town) {
         location += val.town.value;
       }
-      this.infoForm.location = location;
+      this.restaurantInfo.registerInfo.location = location;
+    },
+    init () {
+      Api('/get_restaurant', {
+        'id': sessionStorage.getItem('id')
+      }).then((data) => {
+        if (data) this.restaurantInfo = data;
+      }).catch(() => {
+      });
     },
     submit (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          let url = '/register_restaurant';
           if (this.aim === 'add') {
-            // todo register restaurant
+            url = '/modify_restaurant';
           }
+          Api(url, this.restaurantInfo).then((data) => {
+            if (data.code === Code.SUCCESS) {
+              if (this.aim === 'add') {
+                let msg = '注册成功！请记住您的注册码:' + data.value.id;
+                this.$alert(msg, '注册餐厅成功', {
+                  confirmButtonText: '确定',
+                  callback: action => {
+                    this.$router.push('/');
+                  }
+                });
+              } else if (this.aim === 'modify') {
+                this.$alert('提交成功，经理审核通过后即可完成信息修改', '提交成功', {
+                  confirmButtonText: '确定',
+                  callback: action => {
+                    this.init();
+                  }
+                });
+              }
+            } else this.$message.warning(data.msg);
+          }).catch(() => {});
         }
       });
     }

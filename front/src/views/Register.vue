@@ -1,17 +1,13 @@
 <template>
-  <el-container>
-    <el-header style="margin-top: 5%">
-      <Logo/>
-    </el-header>
-    <el-main>
+  <div style="height: 100%">
+    <div class="section">
+      <Logo :class="[isRestaurant ? 'logoA' : 'logoB']"/>
       <RestaurantInfo v-if="isRestaurant"/>
       <MemberRegister v-else/>
       <el-checkbox v-model="isRestaurant">我要开店</el-checkbox>
-    </el-main>
-    <el-footer style="padding: 0">
-      <Footer/>
-    </el-footer>
-  </el-container>
+    </div>
+    <Footer/>
+  </div>
 </template>
 
 <script>
@@ -32,5 +28,11 @@ export default {
 </script>
 
 <style scoped>
+  .logoA {
+    padding-top: 2%;
+  }
 
+  .logoB {
+    padding-top: 5%;
+  }
 </style>

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.casual.yummy.model.User;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 
 @Data
@@ -15,13 +16,8 @@ import javax.persistence.Entity;
 @Entity
 public class Restaurant extends User {
 
-    private String name;
-
-    private RestaurantType type;
-
-    private String location;
-
-    private String detailLocation;
+    @Embedded
+    private RegisterInfo registerInfo;
 
     private String phone;
 }

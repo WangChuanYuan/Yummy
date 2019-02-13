@@ -37,7 +37,7 @@ public class MemberController {
         else return memberService.evict(id);
     }
 
-    @RequestMapping("/member_register")
+    @RequestMapping("/register_member")
     public ResultMsg register(@RequestBody Map param, HttpServletRequest request) {
         HttpSession session = request.getSession(true);
         String verifyCode = (String) session.getAttribute("verifyCode");
