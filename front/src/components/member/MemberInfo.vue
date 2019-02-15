@@ -3,11 +3,7 @@
     <h3>个人资料</h3>
     <hr/>
     <el-form-item label="头像" style="padding-top: 3%">
-      <el-upload class="avatar-uploader" action="mock" :multiple="false" :auto-upload="false"
-                 :on-change="uploadAvatar" :accept="'image/*'">
-        <img v-if="memberInfo.avatar" :src="memberInfo.avatar" class="avatar">
-        <i v-else class="el-icon-plus avatar-uploader-table"></i>
-      </el-upload>
+      <AvatarUploader :avatar="memberInfo.avatar" @upload="uploadAvatar"/>
     </el-form-item>
     <el-form-item label="邮箱">
       {{memberInfo.id}}
@@ -20,9 +16,11 @@
 
 <script>
 import Api from '../../assets/js/api';
+import AvatarUploader from '../AvatarUploader';
 
 export default {
   name: 'MemberInfo',
+  components: {AvatarUploader},
   data () {
     return {
       avatarRaw: null,
@@ -42,9 +40,9 @@ export default {
     });
   },
   methods: {
-    uploadAvatar (file) {
-      this.memberInfo.avatar = URL.createObjectURL(file.raw);
-      this.avatarRaw = file.raw;
+    uploadAvatar (avatar) {
+      this.memberInfo.avatar = avatar.url;
+      this.avatarRaw = avatar.raw;
     }
   }
 };

@@ -23,7 +23,7 @@ import Api from '../../assets/js/api';
 import {Code} from '../../assets/js/attrib';
 
 export default {
-  name: 'MemberRegister',
+  name: 'RegisterForm',
   data () {
     return {
       codeButton: {

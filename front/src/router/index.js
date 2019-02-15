@@ -4,9 +4,12 @@ import Router from 'vue-router';
 import Home from '@/views/Home';
 import Register from '@/views/Register';
 import MemberCenter from '@/views/MemberCenter';
+import RestaurantCenter from '@/views/RestaurantCenter';
 
 import MemberInfo from '@/components/member/MemberInfo';
 import MemberAddress from '@/components/member/MemberAddress';
+import RegisterInfo from '@/components/restaurant/RegisterInfo';
+import MarketInfo from '@/components/restaurant/MarketInfo';
 
 Vue.use(Router);
 
@@ -48,6 +51,27 @@ export default new Router({
         {
           path: 'statistics',
           name: 'member-statistics'
+        }
+      ]
+    },
+    {
+      path: '/restaurantCenter',
+      name: 'restaurantCenter',
+      component: RestaurantCenter,
+      children: [
+        {
+          path: '',
+          name: 'restaurant'
+        },
+        {
+          path: 'registerInfo',
+          name: 'registerInfo',
+          component: RegisterInfo
+        },
+        {
+          path: 'marketInfo',
+          name: 'marketInfo',
+          component: MarketInfo
         }
       ]
     }

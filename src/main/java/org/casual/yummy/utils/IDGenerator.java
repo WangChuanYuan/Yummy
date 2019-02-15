@@ -49,7 +49,7 @@ public class IDGenerator {
         // 长度过长则截取, 不足指定长度则随机补全
         int len = result.length();
         if (len > CODE_LEN)
-            result = result.substring(result.length() - CODE_LEN, result.length());
+            result = result.substring(0, CODE_LEN);
         else if (len < CODE_LEN) {
             StringBuilder sb = new StringBuilder();
             sb.append(SUFFIX_CHAR);
@@ -81,19 +81,15 @@ public class IDGenerator {
                     break;
                 }
             }
-
             if (charArray[i] == SUFFIX_CHAR) {
                 break;
             }
-
             if (i > 0) {
                 result = result * BIN_LEN + index;
             } else {
                 result = index;
             }
         }
-
         return result;
-
     }
 }

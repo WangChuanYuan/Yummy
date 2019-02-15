@@ -1,5 +1,8 @@
 <template>
   <el-form :model="restaurantInfo" :rules="infoRules" ref="restaurantInfo" class="center" style="width: 30%">
+    <el-form-item prop="id" label="注册码" v-show="aim !== 'add'">
+      <el-input v-model="restaurantInfo.name" :readonly="true"></el-input>
+    </el-form-item>
     <el-form-item prop="name" label="门店名称">
       <el-input v-model="restaurantInfo.name" placeholder="门店名称"></el-input>
     </el-form-item>
@@ -12,7 +15,7 @@
       </el-select>
     </el-form-item>
     <el-form-item prop="location" label="位置">
-      <el-input v-model="restaurantInfo.registerInfo.location" placeholder="位置" readonly="true">
+      <el-input v-model="restaurantInfo.registerInfo.location" placeholder="位置">
         <v-region slot="append" :ui="true" @values="locationChange"></v-region>
       </el-input>
     </el-form-item>
@@ -30,7 +33,7 @@ import {Code, RestaurantType} from '../../assets/js/attrib';
 import Api from '../../assets/js/api';
 
 export default {
-  name: 'RestaurantInfo',
+  name: 'RegisterForm',
   props: {
     'aim': {
       type: String,

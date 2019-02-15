@@ -120,10 +120,10 @@ export default {
                 sessionStorage.setItem('id', user.id);
                 sessionStorage.setItem('user', JSON.stringify(user));
               }
-              if (user.role === Role.MEMBER) {
+              if (this.role === Role.MEMBER) {
                 this.$router.push('/memberCenter');
-              } else {
-                // todo with restaurant
+              } else if (this.role === Role.RESTAURANT) {
+                this.$router.push('/restaurantCenter');
               }
             } else {
               this.$message.warning(data.msg);

@@ -1,12 +1,18 @@
 <template>
-  <el-menu class="clear-fix" :default-active="this.$route.name" @select="navigation" mode="horizontal" background-color="var(--theme-blue)" text-color="#ffffff" active-text-color="var(--theme-golden)">
+  <el-menu class="clear-fix"
+           :default-active="this.$route.name"
+           @select="navigation"
+           mode="horizontal"
+           background-color="var(--theme-blue)"
+           text-color="#ffffff"
+           active-text-color="var(--theme-golden)">
     <el-menu-item index="logo" style="margin-left: 10%; margin-right: 10%">
       <Logo style="-webkit-text-stroke: 1px #ffffff; font-size: 25px;"/>
     </el-menu-item>
     <el-menu-item index="bookCenter">订餐中心</el-menu-item>
     <el-menu-item index="memberCenter">会员中心</el-menu-item>
     <el-menu-item index="register">我要开店</el-menu-item>
-    <el-submenu index="member" v-if="id">
+    <el-submenu index="member" v-if="id" style="float: right">
       <template slot="title">{{id}}</template>
       <el-menu-item index="member-info">
         <i class="el-icon-info"></i>
@@ -38,11 +44,11 @@
 </template>
 
 <script>
-import Logo from './Logo';
-import Api from '../assets/js/api';
+import Logo from '../Logo';
+import Api from '../../assets/js/api';
 
 export default {
-  name: 'Navigation',
+  name: 'MemberNav',
   components: {Logo},
   data () {
     return {

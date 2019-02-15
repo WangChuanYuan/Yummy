@@ -2,7 +2,7 @@
   <div style="height: 100%">
     <div class="section">
       <Logo :class="[isRestaurant ? 'logoA' : 'logoB']"/>
-      <RestaurantInfo v-if="isRestaurant"/>
+      <RestaurantRegister v-if="isRestaurant"/>
       <MemberRegister v-else/>
       <el-checkbox v-model="isRestaurant">我要开店</el-checkbox>
     </div>
@@ -13,12 +13,12 @@
 <script>
 import Logo from '../components/Logo';
 import Footer from '../components/Footer';
-import RestaurantInfo from '../components/restaurant/RestaurantInfo';
-import MemberRegister from '../components/member/MemberRegister';
+import RestaurantRegister from '../components/restaurant/RegisterForm';
+import MemberRegister from '../components/member/RegisterForm';
 
 export default {
   name: 'Register',
-  components: {MemberRegister, RestaurantInfo, Footer, Logo},
+  components: {MemberRegister, RestaurantRegister, Footer, Logo},
   data () {
     return {
       isRestaurant: false

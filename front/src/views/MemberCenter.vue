@@ -2,15 +2,17 @@
   <div style="height: 100%">
     <el-container class="section" style="background-color: var(--theme-grey)">
       <el-header style="padding: 0">
-        <Navigation/>
+        <MemberNav/>
       </el-header>
       <el-container>
         <el-aside>
-          <el-menu :default-active="this.$route.path" :router="true" background-color="var(--theme-grey)"
+          <el-menu :default-active="this.$route.path"
+                   :router="true"
+                   background-color="var(--theme-grey)"
                    active-text-color="var(--theme-blue)">
             <el-menu-item index="/memberCenter">
               <i class="el-icon-info"></i>
-              个人中心
+              <span>个人中心</span>
             </el-menu-item>
             <el-submenu index="/memberCenter">
               <template slot="title">
@@ -22,11 +24,11 @@
             </el-submenu>
             <el-menu-item index="/memberCenter/orders">
               <i class="el-icon-tickets"></i>
-              我的订单
+              <span>我的订单</span>
             </el-menu-item>
             <el-menu-item index="/memberCenter/statistics">
               <i class="el-icon-news"></i>
-              统计信息
+              <span>统计信息</span>
             </el-menu-item>
           </el-menu>
         </el-aside>
@@ -40,12 +42,12 @@
 </template>
 
 <script>
-import Navigation from '../components/Navigation';
+import MemberNav from '../components/member/MemberNav';
 import Footer from '../components/Footer';
 
 export default {
   name: 'MemberCenter',
-  components: {Footer, Navigation}
+  components: {Footer, MemberNav}
 };
 </script>
 
