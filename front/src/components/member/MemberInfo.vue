@@ -3,7 +3,7 @@
     <h3>个人资料</h3>
     <hr/>
     <el-form-item label="头像" style="padding-top: 3%">
-      <AvatarUploader :avatar="memberInfo.avatar" @upload="uploadAvatar"/>
+      <AvatarUploader :avatar="avatar" @upload="uploadAvatar"/>
     </el-form-item>
     <el-form-item label="邮箱">
       {{memberInfo.id}}
@@ -23,9 +23,9 @@ export default {
   components: {AvatarUploader},
   data () {
     return {
+      avatar: sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user').avatar) : require('@/assets/image/avatar.jpg'),
       avatarRaw: null,
       memberInfo: {
-        avatar: require('@/assets/image/avatar.jpg'),
         id: '',
         level: 0
       }
@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     uploadAvatar (avatar) {
-      this.memberInfo.avatar = avatar.url;
+      this.avatar = avatar.url;
       this.avatarRaw = avatar.raw;
     }
   }
@@ -49,35 +49,6 @@ export default {
 </script>
 
 <style scoped>
-  .avatar-uploader {
-    border: 1px dashed #d9d9d9;
-    width: 120px;
-    height: 120px;
-    border-radius: 120px;
-    cursor: pointer;
-    overflow: hidden;
-  }
-
-  .avatar-uploader:hover {
-    border-color: var(--theme-blue);
-  }
-
-  .avatar-uploader-table {
-    font-size: 20px;
-    color: #8c939d;
-    width: 120px;
-    height: 120px;
-    line-height: 120px;
-    text-align: center;
-  }
-
-  .avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 120px;
-    display: block;
-  }
-
   .el-form-item {
     padding-left: 5%;
   }
