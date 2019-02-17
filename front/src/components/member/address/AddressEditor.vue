@@ -19,25 +19,14 @@
       <el-input v-model="addressForm.phone" placeholder="手机号"></el-input>
     </el-form-item>
     <div style="margin-left: 30%">
-      <el-button type="primary" @click="saveAddress('addressForm')">保存</el-button>
+      <el-button type="primary" @click="submit('addressForm')">保存</el-button>
       <el-button type="plain" @click="reset('addressForm')">重置</el-button>
     </div>
   </el-form>
 </template>
 
 <script>
-import Api from '../../../assets/js/api';
-import {Code, Sex} from '../../../assets/js/attrib';
-
-const phoneRule = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('请输入手机号'));
-  } else if (!/^1[3|4|5|7|8][0-9]\d{8}$/.test(value)) {
-    callback(new Error('请输入正确的11位手机号'));
-  } else {
-    callback();
-  }
-};
+import {Sex} from '../../../assets/js/attrib';
 
 export default {
   name: 'AddressEditor',
@@ -88,8 +77,13 @@ export default {
         phone: [
           {
             required: true,
-            trigger: 'blur',
-            validator: phoneRule
+            message: '请输入手机号',
+            trigger: 'blur'
+          },
+          {
+            pattern: /^1[3|4|5|7|8][0-9]\d{8}$/,
+            message: '请输入正确的11位手机号',
+            trigger: 'blur'
           }
         ]
       }
@@ -101,9 +95,6 @@ export default {
     }
   },
   methods: {
-    closeEditor () {
-      this.$emit('closeEditor');
-    },
     locationChange (val) {
       let location = '';
       if (val.province) {
@@ -123,28 +114,14 @@ export default {
     reset (formName) {
       this.$refs[formName].resetFields();
     },
-    saveAddress (formName) {
+    submit (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let url = '/add_address';
-          let callback = 'addAddress';
+          let callback = 'add';
           if (this.aim === 'modify') {
-            url = '/modify_address';
-            callback = 'modifyAddress';
+            callback = 'modify';
           }
-          Api(url, {
-            'address': this.addressForm,
-            'id': sessionStorage.getItem('id')
-          }).then((data) => {
-            if (data.code === Code.SUCCESS) {
-              this.$emit(callback, data.value);
-            } else {
-              this.$message.warning(data.msg);
-            }
-            this.closeEditor();
-          }).catch(() => {
-            this.closeEditor();
-          });
+          this.$emit(callback, this.addressForm);
         }
       });
     }

@@ -21,6 +21,4 @@ public class Restaurant extends User {
 
     @Embedded
     private MarketInfo marketInfo;
-
-    private String phone;
 }

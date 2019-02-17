@@ -9,6 +9,9 @@
       <el-form-item prop="balance" label="资金">
         <el-input v-model="marketInfo.balance" :readonly="true"></el-input>
       </el-form-item>
+      <el-form-item prop="phone" label="联系方式">
+        <el-input v-model="marketInfo.phone"></el-input>
+      </el-form-item>
       <el-form-item prop="leastExp" label="起送费">
         <el-input v-model="marketInfo.leastExp" type="number"></el-input>
       </el-form-item>
@@ -46,11 +49,24 @@ export default {
       avatarRaw: null,
       marketInfo: {
         balance: 0,
+        phone: '',
         leastExp: 0,
         deliveryExp: 0,
         hours: ['08:00:00', '22:00:00']
       },
       infoRules: {
+        phone: [
+          {
+            required: true,
+            message: '请输入联系方式',
+            trigger: 'blur'
+          },
+          {
+            pattern: /^1[3|4|5|7|8][0-9]\d{8}$/,
+            message: '请输入正确的11位手机号',
+            trigger: 'blur'
+          }
+        ],
         leastExp: [
           {
             required: true,
@@ -58,8 +74,8 @@ export default {
             trigger: 'blur'
           },
           {
-            min: 0,
-            message: '起送费不低于0',
+            pattern: /^\d+(\.\d+)?$/,
+            message: '配送费不低于0',
             trigger: 'blur'
           }
         ],
@@ -70,7 +86,7 @@ export default {
             trigger: 'blur'
           },
           {
-            min: 0,
+            pattern: /^\d+(\.\d+)?$/,
             message: '配送费不低于0',
             trigger: 'blur'
           }

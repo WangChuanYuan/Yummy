@@ -17,6 +17,8 @@ public class MarketInfo {
 
     private double balance;
 
+    private String phone;
+
     private double leastExp;
 
     private double deliveryExp;

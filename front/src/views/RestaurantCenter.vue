@@ -24,11 +24,11 @@
         <el-submenu index="goods">
           <template slot="title">
             <i class="el-icon-goods"></i>
-            <span>商品管理</span>
+            <span>菜单管理</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="marketGoods">经营商品</el-menu-item>
-            <el-menu-item index="sellingGoods">在售商品</el-menu-item>
+            <el-menu-item index="single">单品管理</el-menu-item>
+            <el-menu-item index="combo">套餐管理</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
         <el-menu-item index="orders">
@@ -40,12 +40,12 @@
           <span>统计信息</span>
         </el-menu-item>
         <el-menu-item index="logout">
-          <i class="el-icon-close"></i>
+          <i class="el-icon-circle-close-outline"></i>
           <span>退出登录</span>
         </el-menu-item>
       </el-menu>
     </el-aside>
-    <el-main>
+    <el-main style="padding: 0; background-color: var(--theme-grey)">
       <router-view></router-view>
     </el-main>
   </el-container>
@@ -73,9 +73,10 @@ export default {
         case 'marketInfo':
           this.$router.push('/restaurantCenter/marketInfo');
           break;
-        case 'marketGoods':
+        case 'single':
+          this.$router.push('/restaurantCenter/single');
           break;
-        case 'sellingGoods':
+        case 'combo':
           break;
         case 'orders':
           break;

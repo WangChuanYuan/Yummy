@@ -16,7 +16,7 @@
     </el-card>
     <!-- 修改地址 -->
     <el-dialog title="修改地址" :visible.sync="editing" width="30%">
-      <AddressEditor :address="inAddress" aim="modify" @closeEditor="closeEditor" @modifyAddress="modifyAddress"/>
+      <AddressEditor :address="inAddress" aim="modify" @modify="modifyAddress"/>
     </el-dialog>
   </div>
 </template>
@@ -60,25 +60,22 @@ export default {
       this.editing = false;
     },
     deleteAddress () {
-      this.$confirm('确认删除该地址？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        Api('delete_Address', {
-          'aid': this.inAddress.aid
-        }).then((data) => {
-          if (data.code === Code.SUCCESS) {
-            this.$emit('deleteAddress');
-          } else {
-            this.$message.warning(data.msg);
-          }
-        });
-      }).catch(() => {
-      });
+      this.$emit('delete');
     },
     modifyAddress (address) {
-      this.inAddress = address;
+      Api('/modify_address', {
+        'address': address,
+        'id': sessionStorage.getItem('id')
+      }).then((data) => {
+        if (data.code === Code.SUCCESS) {
+          this.inAddress = data.value;
+        } else {
+          this.$message.warning(data.msg);
+        }
+        this.closeEditor();
+      }).catch(() => {
+        this.closeEditor();
+      });
     }
   }
 };

@@ -10,6 +10,7 @@ import MemberInfo from '@/components/member/MemberInfo';
 import MemberAddress from '@/components/member/MemberAddress';
 import RegisterInfo from '@/components/restaurant/RegisterInfo';
 import MarketInfo from '@/components/restaurant/MarketInfo';
+import GoodsManager from '@/components/restaurant/GoodsManager';
 
 Vue.use(Router);
 
@@ -72,6 +73,11 @@ export default new Router({
           path: 'marketInfo',
           name: 'marketInfo',
           component: MarketInfo
+        },
+        {
+          path: 'single',
+          name: 'single',
+          component: GoodsManager
         }
       ]
     }

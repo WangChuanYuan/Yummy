@@ -27,11 +27,11 @@
         我的地址
       </el-menu-item>
       <el-menu-item index="member-logout">
-        <i class="el-icon-close"></i>
+        <i class="el-icon-circle-close-outline"></i>
         登出
       </el-menu-item>
       <el-menu-item index="member-evict">
-        <i class="el-icon-close"></i>
+        <i class="el-icon-circle-close"></i>
         注销
       </el-menu-item>
     </el-submenu>
