@@ -45,6 +45,7 @@ export default {
       }
     },
     'aim': {
+      // add || modify
       type: String,
       default: 'add'
     }

@@ -1,8 +1,8 @@
 <template>
   <el-upload class="avatar-uploader" action="mock" :multiple="false" :auto-upload="false"
              :on-change="uploadAvatar" :accept="'image/*'">
-    <img v-if="url" :src="url" class="avatar">
-    <i v-else class="el-icon-plus avatar-uploader-table"></i>
+    <img v-if="url" :src="url">
+    <i v-else class="el-icon-plus"></i>
   </el-upload>
 </template>
 
@@ -50,19 +50,19 @@ export default {
     border-color: var(--theme-blue);
   }
 
-  .avatar-uploader-table {
+  .avatar-uploader img {
+    width: 120px;
+    height: 120px;
+    border-radius: 120px;
+    display: block;
+  }
+
+  .avatar-uploader i {
     font-size: 20px;
     color: #8c939d;
     width: 120px;
     height: 120px;
     line-height: 120px;
     text-align: center;
-  }
-
-  .avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 120px;
-    display: block;
   }
 </style>

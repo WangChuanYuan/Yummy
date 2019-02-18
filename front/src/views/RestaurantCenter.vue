@@ -1,5 +1,5 @@
 <template>
-  <el-container style="min-height: 100%">
+  <el-container style="min-height: 100%; background-color: var(--theme-grey)">
     <el-aside style="background-color: var(--theme-deep-grey)">
       <el-menu :default-active="this.$route.name"
                @select="navigation"
@@ -27,7 +27,7 @@
             <span>菜单管理</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="single">单品管理</el-menu-item>
+            <el-menu-item index="goods">单品管理</el-menu-item>
             <el-menu-item index="combo">套餐管理</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
@@ -45,8 +45,8 @@
         </el-menu-item>
       </el-menu>
     </el-aside>
-    <el-main style="padding: 0; background-color: var(--theme-grey)">
-      <router-view></router-view>
+    <el-main>
+      <router-view id="main"></router-view>
     </el-main>
   </el-container>
 </template>
@@ -73,8 +73,8 @@ export default {
         case 'marketInfo':
           this.$router.push('/restaurantCenter/marketInfo');
           break;
-        case 'single':
-          this.$router.push('/restaurantCenter/single');
+        case 'goods':
+          this.$router.push('/restaurantCenter/goods');
           break;
         case 'combo':
           break;
@@ -102,5 +102,10 @@ export default {
 </script>
 
 <style scoped>
-
+  #main {
+    margin: 3% auto 0 auto;
+    min-height: 90%;
+    width: 80%;
+    background-color: white;
+  }
 </style>

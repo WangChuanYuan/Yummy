@@ -55,7 +55,7 @@ export default {
   #main {
     text-align: left;
     padding: 5px 5px 5px 20px;
-    height: 90%;
+    min-height: 90%;
     width: 80%;
     background-color: white;
   }

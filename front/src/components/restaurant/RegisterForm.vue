@@ -36,6 +36,7 @@ export default {
   name: 'RegisterForm',
   props: {
     'aim': {
+      // add || modify
       type: String,
       default: 'add'
     }

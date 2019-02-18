@@ -8,6 +8,7 @@ import './assets/css/normal.css';
 import router from './router';
 import VueCookies from 'vue-cookies';
 import vRegion from 'v-region';
+import './assets/js/extend';
 
 Vue.config.productionTip = false;
 

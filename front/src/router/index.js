@@ -11,6 +11,7 @@ import MemberAddress from '@/components/member/MemberAddress';
 import RegisterInfo from '@/components/restaurant/RegisterInfo';
 import MarketInfo from '@/components/restaurant/MarketInfo';
 import GoodsManager from '@/components/restaurant/GoodsManager';
+import GoodsEditor from '@/components/restaurant/GoodsEditor';
 
 Vue.use(Router);
 
@@ -75,9 +76,16 @@ export default new Router({
           component: MarketInfo
         },
         {
-          path: 'single',
-          name: 'single',
+          path: 'goods',
+          name: 'goods',
           component: GoodsManager
+        },
+        {
+          path: 'editGoods',
+          name: 'editGoods',
+          component: GoodsEditor,
+          props: true
+          // props: (route) => ({gid: route.query.gid, aim: route.query.aim})
         }
       ]
     }
