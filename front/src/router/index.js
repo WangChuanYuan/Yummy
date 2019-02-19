@@ -12,6 +12,8 @@ import RegisterInfo from '@/components/restaurant/RegisterInfo';
 import MarketInfo from '@/components/restaurant/MarketInfo';
 import GoodsManager from '@/components/restaurant/GoodsManager';
 import GoodsEditor from '@/components/restaurant/GoodsEditor';
+import ComboManager from '@/components/restaurant/ComboManager';
+import ComboEditor from '@/components/restaurant/ComboEditor';
 
 Vue.use(Router);
 
@@ -84,6 +86,18 @@ export default new Router({
           path: 'editGoods',
           name: 'editGoods',
           component: GoodsEditor,
+          props: true
+          // props: (route) => ({gid: route.query.gid, aim: route.query.aim})
+        },
+        {
+          path: 'combo',
+          name: 'combo',
+          component: ComboManager
+        },
+        {
+          path: 'editCombo',
+          name: 'editCombo',
+          component: ComboEditor,
           props: true
           // props: (route) => ({gid: route.query.gid, aim: route.query.aim})
         }

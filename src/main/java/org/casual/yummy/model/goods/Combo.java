@@ -22,9 +22,6 @@ public class Combo {
     @Embedded
     private SaleInfo saleInfo;
 
-    @ManyToMany
-    @JoinTable(name = "combo_goods",
-            joinColumns = {@JoinColumn(name = "combo", referencedColumnName = "cid")},
-            inverseJoinColumns = {@JoinColumn(name = "goods", referencedColumnName = "gid")})
-    private List<Goods> goods;
+    @OneToMany(mappedBy = "combo", cascade = CascadeType.ALL)
+    private List<ComboItem> items;
 }

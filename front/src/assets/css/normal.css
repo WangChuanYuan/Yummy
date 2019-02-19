@@ -52,3 +52,10 @@ html, body {
   clear: both;
   visibility: hidden;
 }
+
+/** 文字省略 **/
+.omission {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

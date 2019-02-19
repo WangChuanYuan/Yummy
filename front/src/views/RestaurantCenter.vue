@@ -77,6 +77,7 @@ export default {
           this.$router.push('/restaurantCenter/goods');
           break;
         case 'combo':
+          this.$router.push('/restaurantCenter/combo');
           break;
         case 'orders':
           break;
@@ -105,7 +106,7 @@ export default {
   #main {
     margin: 3% auto 0 auto;
     min-height: 90%;
-    width: 80%;
+    min-width: 80%;
     background-color: white;
   }
 </style>
