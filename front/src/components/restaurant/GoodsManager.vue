@@ -35,14 +35,7 @@ export default {
   components: {GoodsCard},
   data () {
     return {
-      goods: [
-        {},
-        {},
-        {},
-        {},
-        {},
-        {}
-      ]
+      goods: []
     };
   },
   mounted () {

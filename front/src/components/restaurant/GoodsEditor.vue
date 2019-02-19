@@ -36,12 +36,12 @@
         </el-row>
         <el-row>
           <el-form-item prop="dates" label="供应日期">
-            <el-col :span="6">
+            <el-col :span="8">
               <el-radio v-model="supplyPeriod" label="short">短期</el-radio>
               <el-radio v-model="supplyPeriod" label="medium">中期</el-radio>
               <el-radio v-model="supplyPeriod" label="long">长期</el-radio>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="6">
               <el-date-picker
                 v-model="goodsForm.dates"
                 type="daterange"
@@ -76,7 +76,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="5" :offset="4">
+          <el-col :span="6" :offset="4">
             <el-button type="primary" @click="submit('goodsForm')">保存</el-button>
             <el-button type="plain" @click="reset('goodsForm')">重置</el-button>
           </el-col>
@@ -128,6 +128,7 @@ export default {
     return {
       avatarRaw: null,
       supplyPeriod: '',
+      /** form */
       goodsForm: {
         avatar: '',
         name: '',

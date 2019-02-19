@@ -34,28 +34,26 @@
 
 <script>
 export default {
-  name: 'ComboTable',
+  name: 'GoodsTable',
   props: {
-    cid: {
-      type: Number,
-      default: 0
+    goods: {
+      type: Array,
+      default: function () {
+        return [];
+      }
     },
     height: {
       type: String,
       default: '300px'
     }
   },
-  mounted () {
-    // TODO FETCH GOODS
-  },
   data () {
     return {
-      items: []
+      items: JSON.parse(JSON.stringify(this.goods))
     };
   }
 };
 </script>
 
 <style scoped>
-
 </style>

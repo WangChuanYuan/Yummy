@@ -8,51 +8,54 @@
         <el-breadcrumb-item :to="{path: '/restaurantCenter/combo'}">套餐管理</el-breadcrumb-item>
         <el-breadcrumb-item>套餐编辑</el-breadcrumb-item>
       </el-breadcrumb>
-      <el-container>
-        <!-- 可选商品 -->
-        <el-aside width="30%">
-          <el-table :data="goods" stripe height="500px" @selection-change="selectItem">
-            <el-table-column type="selection"/>
-            <el-table-column prop="name" label="单品名"/>
-            <el-table-column prop="avatar" label="图像">
-              <template slot-scope="scope">
-                <img :src="scope.row.avatar" style="height: 40px; width: 40px"/>
-              </template>
-            </el-table-column>
-            <el-table-column prop="num" label="包含数量" width="200px">
-              <template slot-scope="scope">
-                <el-input-number v-model="scope.row.num" :min="0" :precision="0" size="mini"></el-input-number>
-              </template>
-            </el-table-column>
-            <el-table-column fixed type="expand">
-              <template slot-scope="scope">
-                <el-form label-position="left" inline>
-                  <el-form-item label="单价">
-                    <span>{{scope.row.price}}</span>
-                  </el-form-item>
-                  <el-form-item label="库存">
-                    <span>{{scope.row.stock}}</span>
-                  </el-form-item>
-                  <el-form-item label="日供应">
-                    <span>{{scope.row.dailySupply}}</span>
-                  </el-form-item>
-                  <el-form-item label="起始日期">
-                    <span>{{scope.row.startDate}}</span>
-                  </el-form-item>
-                  <el-form-item label="结束日期">
-                    <span>{{scope.row.endDate}}</span>
-                  </el-form-item>
-                  <el-form-item label="描述">
-                    <span>{{scope.row.description}}</span>
-                  </el-form-item>
-                </el-form>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-aside>
-        <el-main>
-          <!-- 套餐表单 -->
-          <el-form :model="comboForm" :rules="comboRules" ref="comboForm" style="padding-left: 50px">
+      <el-form :model="comboForm" :rules="comboRules" ref="comboForm">
+        <el-container>
+          <!-- 可选商品 -->
+          <el-aside style="padding-left: 10px; padding-right: 50px; width: 30%">
+            <el-form-item prop="items" label="套餐项">
+              <el-checkbox-group v-model="comboForm.items" style="display: none"></el-checkbox-group>
+            </el-form-item>
+            <el-table :data="goods" stripe height="500px" @selection-change="selectItem">
+              <el-table-column type="selection" v-show="aim === 'add'"/>
+              <el-table-column prop="name" label="单品名"/>
+              <el-table-column prop="avatar" label="图像">
+                <template slot-scope="scope">
+                  <img :src="scope.row.avatar" style="height: 40px; width: 40px"/>
+                </template>
+              </el-table-column>
+              <el-table-column prop="num" label="数量" width="200px">
+                <template slot-scope="scope">
+                  <el-input-number v-model="scope.row.num" :min="0" :precision="0" size="mini"></el-input-number>
+                </template>
+              </el-table-column>
+              <el-table-column fixed type="expand">
+                <template slot-scope="scope">
+                  <el-form label-position="left" inline>
+                    <el-form-item label="单价">
+                      <span>{{scope.row.price}}</span>
+                    </el-form-item>
+                    <el-form-item label="库存">
+                      <span>{{scope.row.stock}}</span>
+                    </el-form-item>
+                    <el-form-item label="日供应">
+                      <span>{{scope.row.dailySupply}}</span>
+                    </el-form-item>
+                    <el-form-item label="起始日期">
+                      <span>{{scope.row.startDate}}</span>
+                    </el-form-item>
+                    <el-form-item label="结束日期">
+                      <span>{{scope.row.endDate}}</span>
+                    </el-form-item>
+                    <el-form-item label="描述">
+                      <span>{{scope.row.description}}</span>
+                    </el-form-item>
+                  </el-form>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-aside>
+          <el-main>
+            <!-- 套餐信息 -->
             <el-row>
               <el-col>
                 <el-form-item prop="avatar" label="图像">
@@ -72,7 +75,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="6" :offset="2">
-                <el-form-item prop="price" label="单价">
+                <el-form-item prop="price" label="套餐价">
                   <el-input-number v-model="comboForm.price" :min="0" size="medium"
                                    controls-position="right"></el-input-number>
                 </el-form-item>
@@ -80,12 +83,12 @@
             </el-row>
             <el-row>
               <el-form-item prop="dates" label="供应日期">
-                <el-col :span="7">
+                <el-col :span="8">
                   <el-radio v-model="supplyPeriod" label="short">短期</el-radio>
                   <el-radio v-model="supplyPeriod" label="medium">中期</el-radio>
                   <el-radio v-model="supplyPeriod" label="long">长期</el-radio>
                 </el-col>
-                <el-col :span="5">
+                <el-col :span="6">
                   <el-date-picker
                     v-model="comboForm.dates"
                     type="daterange"
@@ -125,9 +128,9 @@
                 <el-button type="plain" @click="reset('comboForm')">重置</el-button>
               </el-col>
             </el-row>
-          </el-form>
-        </el-main>
-      </el-container>
+          </el-main>
+        </el-container>
+      </el-form>
     </el-main>
   </el-container>
 </template>
@@ -147,17 +150,17 @@ export default {
     }
   },
   watch: {
-    supplyPeriod (val) {
+    supplyPeriod (choice) {
       let dates = [];
       let today = new Date();
       dates[0] = today.format('yyyy-MM-dd');
-      if (val === 'short') {
+      if (choice === 'short') {
         today.setDate(today.getDate() + 7);
         dates[1] = today.format('yyyy-MM-dd');
-      } else if (val === 'medium') {
+      } else if (choice === 'medium') {
         today.setDate(today.getDate() + 30);
         dates[1] = today.format('yyyy-MM-dd');
-      } else if (val === 'long') {
+      } else if (choice === 'long') {
         today.setDate(today.getDate() + 365);
         dates[1] = today.format('yyyy-MM-dd');
       }
@@ -172,9 +175,9 @@ export default {
   data () {
     return {
       goods: [],
-      selectedItem: [],
       avatarRaw: null,
       supplyPeriod: '',
+      /** form */
       comboForm: {
         avatar: '',
         name: '',
@@ -182,41 +185,42 @@ export default {
         price: 0,
         dailySupply: 0,
         stock: 0,
-        dates: []
+        dates: [],
+        items: []
       },
       comboRules: {
         avatar: [
           {
             required: true,
-            message: '请上传商品图片',
+            message: '请上传套餐图片',
             trigger: 'change'
           }
         ],
         name: [
           {
             required: true,
-            message: '请输入商品名称',
+            message: '请输入套餐名称',
             trigger: 'blur'
           }
         ],
         price: [
           {
             required: true,
-            message: '请输入商品单价',
+            message: '请输入套餐价',
             trigger: 'blur'
           }
         ],
         stock: [
           {
             required: true,
-            message: '请输入商品库存',
+            message: '请输入套餐库存',
             trigger: 'blur'
           }
         ],
         dailySupply: [
           {
             required: true,
-            message: '请输入商品日供量',
+            message: '请输入套餐日供量',
             trigger: 'blur'
           }
         ],
@@ -224,6 +228,13 @@ export default {
           {
             required: true,
             message: '请选择供应日期',
+            trigger: 'blur'
+          }
+        ],
+        items: [
+          {
+            required: true,
+            message: '请选择套餐项',
             trigger: 'blur'
           }
         ]
@@ -238,11 +249,16 @@ export default {
       if (this.$refs[formName].validate()) {
       }
     },
-    selectItem (val) {
-      this.selectItem = val;
+    selectItem (items) {
+      let totalPrice = 0;
+      for (let index in items) {
+        totalPrice += items[index].num * items[index].price;
+      }
+      this.comboForm.price = totalPrice;
+      this.comboForm.items = items;
     },
     uploadAvatar (avatar) {
-      this.goodsForm.avatar = URL.createObjectURL(avatar.raw);
+      this.comboForm.avatar = URL.createObjectURL(avatar.raw);
       this.avatarRaw = avatar.raw;
     }
   }

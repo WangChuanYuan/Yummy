@@ -9,7 +9,7 @@
           <span style="font-size: 20px; font-weight: bold">{{inCombo.saleInfo.name}}</span>
         </div>
         <el-popover placement="right" trigger="click">
-          <ComboTable :cid="inCombo.cid"/>
+          <GoodsTable :goods="getComboItems(inCombo.cid)"/>
           <el-button slot="reference" type="text">详情</el-button>
         </el-popover>
         <br/>
@@ -39,11 +39,11 @@
 </template>
 
 <script>
-import ComboTable from './ComboTable';
+import GoodsTable from './GoodsTable';
 
 export default {
   name: 'ComboCard',
-  components: {ComboTable},
+  components: {GoodsTable},
   props: {
     'aim': {
       // manage || purchase
@@ -88,6 +88,9 @@ export default {
           aim: 'modify'
         }
       });
+    },
+    getComboItems (cid) {
+      // TODO FETCH GOODS
     }
   }
 };
