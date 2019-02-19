@@ -6,6 +6,7 @@ import org.casual.yummy.service.LoginService;
 import org.casual.yummy.utils.Code;
 import org.casual.yummy.utils.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,7 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-    @RequestMapping("/login")
+    @PostMapping("/login")
     public ResultMsg login(@RequestBody Map param, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
 
@@ -44,7 +45,7 @@ public class LoginController {
         return resultMsg;
     }
 
-    @RequestMapping("/logout")
+    @PostMapping("/logout")
     public ResultMsg logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (null != session)

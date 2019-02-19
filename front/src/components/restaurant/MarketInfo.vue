@@ -106,7 +106,7 @@ export default {
   },
   methods: {
     init () {
-      Api('/get_restaurant', {
+      Api.get('/get_restaurant', {
         'id': sessionStorage.getItem('id')
       }).then((data) => {
         if (data) {

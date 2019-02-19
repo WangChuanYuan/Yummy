@@ -88,7 +88,7 @@ export default {
       }
     },
     logout () {
-      Api('/logout').then((data) => {
+      Api.post('/logout').then((data) => {
         if (data.code === 'SUCCESS') {
           sessionStorage.clear();
           this.$router.push('/');
@@ -102,7 +102,7 @@ export default {
         type: 'warning'
       }).then(() => {
         let _this = this;
-        Api('/evict').then((data) => {
+        Api.post('/evict').then((data) => {
           if (data.code === 'SUCCESS') {
             sessionStorage.clear();
             _this.$message.success('注销成功');

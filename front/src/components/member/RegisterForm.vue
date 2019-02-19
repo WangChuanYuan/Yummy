@@ -81,7 +81,7 @@ export default {
             window.clearInterval(interval);
           }
         }, 1000);
-        Api('/send_verify_mail', {
+        Api.post('/send_verify_mail', {
           'email': this.registerForm.id
         }).then((data) => {
           if (data.code === Code.FAILURE) {
@@ -95,7 +95,7 @@ export default {
     register (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          Api('/register_member', {
+          Api.post('/register_member', {
             'id': this.registerForm.id,
             'password': this.registerForm.password,
             'verifyCode': this.registerForm.verifyCode

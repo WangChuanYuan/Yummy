@@ -5,9 +5,7 @@ import org.casual.yummy.service.MemberService;
 import org.casual.yummy.utils.Code;
 import org.casual.yummy.utils.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,13 +17,12 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    @RequestMapping("/get_member")
-    public Member getMember(@RequestBody Map param) {
-        String id = (String) param.get("id");
+    @GetMapping("/get_member")
+    public Member getMember(@RequestParam String id) {
         return memberService.getMemberById(id);
     }
 
-    @RequestMapping("/evict")
+    @PostMapping("/evict")
     public ResultMsg evict(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         String id = null;
@@ -37,7 +34,7 @@ public class MemberController {
         else return memberService.evict(id);
     }
 
-    @RequestMapping("/register_member")
+    @PostMapping("/register_member")
     public ResultMsg register(@RequestBody Map param, HttpServletRequest request) {
         HttpSession session = request.getSession(true);
         String verifyCode = (String) session.getAttribute("verifyCode");

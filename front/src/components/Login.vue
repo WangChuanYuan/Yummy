@@ -108,7 +108,7 @@ export default {
           } else {
             this.$cookies.remove('id');
           }
-          Api('/login', {
+          Api.post('/login', {
             'id': this.loginForm.id,
             'password': this.loginForm.password,
             'role': this.role

@@ -9,9 +9,7 @@ import org.casual.yummy.service.RestaurantService;
 import org.casual.yummy.utils.JsonUtil;
 import org.casual.yummy.utils.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -21,13 +19,12 @@ public class RestaurantController {
     @Autowired
     private RestaurantService restaurantService;
 
-    @RequestMapping("/get_restaurant")
-    public Restaurant getRestaurant(@RequestBody Map param) {
-        String id = (String) param.get("id");
+    @GetMapping("/get_restaurant")
+    public Restaurant getRestaurant(@RequestParam String id) {
         return restaurantService.getRestaurantById(id);
     }
 
-    @RequestMapping("/register_restaurant")
+    @PostMapping("/register_restaurant")
     public ResultMsg register(@RequestBody Map param) {
         String password = (String) param.get("password");
         RegisterInfo registerInfo = JsonUtil.obj2pojo(param.get("registerInfo"), RegisterInfo.class);

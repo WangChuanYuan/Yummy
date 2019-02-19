@@ -32,7 +32,7 @@ export default {
     };
   },
   mounted () {
-    Api('/get_member', {
+    Api.get('/get_member', {
       'id': sessionStorage.getItem('id')
     }).then((data) => {
       if (data) this.memberInfo = data;

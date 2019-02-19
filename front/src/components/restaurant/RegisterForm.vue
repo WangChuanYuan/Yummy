@@ -116,7 +116,7 @@ export default {
       this.restaurantInfo.registerInfo.location = location;
     },
     init () {
-      Api('/get_restaurant', {
+      Api.post('/get_restaurant', {
         'id': sessionStorage.getItem('id')
       }).then((data) => {
         if (data) this.restaurantInfo = data;
@@ -130,7 +130,7 @@ export default {
           if (this.aim === 'add') {
             url = '/modify_restaurant';
           }
-          Api(url, this.restaurantInfo).then((data) => {
+          Api.post(url, this.restaurantInfo).then((data) => {
             if (data.code === Code.SUCCESS) {
               if (this.aim === 'add') {
                 let msg = '注册成功！请记住您的注册码:' + data.value.id;

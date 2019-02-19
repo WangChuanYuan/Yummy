@@ -63,7 +63,7 @@ export default {
       this.$emit('delete');
     },
     modifyAddress (address) {
-      Api('/modify_address', {
+      Api.post('/modify_address', {
         'address': address,
         'id': sessionStorage.getItem('id')
       }).then((data) => {

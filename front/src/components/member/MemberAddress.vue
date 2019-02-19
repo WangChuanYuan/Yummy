@@ -31,7 +31,7 @@ export default {
     };
   },
   mounted () {
-    Api('/get_addresses', {
+    Api.get('/get_addresses', {
       'id': sessionStorage.getItem('id')
     }).then((data) => {
       this.addresses = data;
@@ -44,7 +44,7 @@ export default {
       this.editing = false;
     },
     addAddress (address) {
-      Api('/add_address', {
+      Api.post('/add_address', {
         'address': address,
         'id': sessionStorage.getItem('id')
       }).then((data) => {
@@ -64,7 +64,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        Api('delete_Address', {
+        Api.post('delete_Address', {
           'aid': this.addresses[index].aid
         }).then((data) => {
           if (data.code === Code.SUCCESS) {
