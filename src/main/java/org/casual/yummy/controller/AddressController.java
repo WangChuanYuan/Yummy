@@ -30,9 +30,8 @@ public class AddressController {
 
     @PostMapping("/modify_address")
     public ResultMsg modifyAddress(@RequestBody Map param) {
-        String id = (String) param.get("id");
         Address address = JsonUtil.obj2pojo(param.get("address"), Address.class);
-        return addressService.modifyAddress(id, address);
+        return addressService.modifyAddress(address);
     }
 
     @PostMapping("/delete_address")

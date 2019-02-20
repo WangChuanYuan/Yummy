@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface AddressService {
 
-    List<Address> getAddresses(String id);
+    List<Address> getAddresses(String mid);
 
-    ResultMsg<Address> addAddress(String id, Address address);
+    ResultMsg<Address> addAddress(String mid, Address address);
 
-    ResultMsg<Address> modifyAddress(String id, Address address);
+    ResultMsg<Address> modifyAddress(Address address);
 
     ResultMsg deleteAddress(Long aid);
 }

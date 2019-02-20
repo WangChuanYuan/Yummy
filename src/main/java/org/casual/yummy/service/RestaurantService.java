@@ -5,9 +5,9 @@ import org.casual.yummy.utils.ResultMsg;
 
 public interface RestaurantService {
 
-    ResultMsg<Restaurant> login(String id, String password);
+    ResultMsg<Restaurant> login(String rid, String password);
 
     ResultMsg<Restaurant> register(Restaurant restaurant);
 
-    Restaurant getRestaurantById(String id);
+    Restaurant getRestaurantById(String rid);
 }

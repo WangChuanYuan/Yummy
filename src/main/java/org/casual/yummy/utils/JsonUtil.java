@@ -13,6 +13,11 @@ public class JsonUtil {
 
     private static ObjectMapper mapper = new ObjectMapper();
 
+    static {
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+    }
+
     public static <T> T obj2pojo(Object obj, Class<T> clazz) {
         return mapper.convertValue(obj, clazz);
     }
@@ -27,7 +32,6 @@ public class JsonUtil {
     }
 
     public static <T> T json2pojo(String jsonStr, Class<T> clazz) {
-        mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
         try {
             return mapper.readValue(jsonStr, clazz);
         } catch (IOException e) {

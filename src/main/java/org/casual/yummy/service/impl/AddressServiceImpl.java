@@ -25,17 +25,17 @@ public class AddressServiceImpl implements AddressService {
     private AddressDAO addressDAO;
 
     @Override
-    public List<Address> getAddresses(String id) {
-        Member member = memberDAO.findById(id).orElse(null);
+    public List<Address> getAddresses(String mid) {
+        Member member = memberDAO.findById(mid).orElse(null);
         if (null != member)
             return member.getAddresses();
         else return new ArrayList<>();
     }
 
     @Override
-    public ResultMsg<Address> addAddress(String id, Address address) {
+    public ResultMsg<Address> addAddress(String mid, Address address) {
         try {
-            Member member = memberDAO.findById(id).get();
+            Member member = memberDAO.findById(mid).get();
             address.setMember(member);
             Address savedAddress = addressDAO.saveAndFlush(address);
             return new ResultMsg<>("新增地址成功", Code.SUCCESS, savedAddress);
@@ -46,7 +46,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public ResultMsg<Address> modifyAddress(String id, Address address) {
+    public ResultMsg<Address> modifyAddress(Address address) {
         try {
             Address modifiedAddress = addressDAO.saveAndFlush(address);
             return new ResultMsg<>("修改地址成功", Code.SUCCESS, modifiedAddress);

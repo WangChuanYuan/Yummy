@@ -19,8 +19,8 @@ public class MemberServiceImpl implements MemberService {
     private MemberDAO memberDAO;
 
     @Override
-    public ResultMsg<Member> login(String id, String password) {
-        Member member = memberDAO.findById(id).orElse(null);
+    public ResultMsg<Member> login(String mid, String password) {
+        Member member = memberDAO.findById(mid).orElse(null);
         if (null == member)
             return new ResultMsg<>("邮箱未注册", Code.INVALID_EMAIL);
         else if (member.getAccountState() == AccountState.CANCELED)
@@ -33,11 +33,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public ResultMsg<Member> register(String id, String password) {
-        if (null != memberDAO.findById(id).orElse(null))
+    public ResultMsg<Member> register(String mid, String password) {
+        if (null != memberDAO.findById(mid).orElse(null))
             return new ResultMsg<>("邮箱已被注册", Code.FAILURE);
         Member member = new Member();
-        member.setId(id).setPassword(password).setRole(Role.MEMBER).setAccountState(AccountState.VALID);
+        member.setId(mid).setPassword(password).setRole(Role.MEMBER).setAccountState(AccountState.VALID);
         try {
             Member savedMember = memberDAO.saveAndFlush(member);
             return new ResultMsg<>("注册成功", Code.SUCCESS, savedMember);
@@ -47,14 +47,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member getMemberById(String id) {
-        return memberDAO.findById(id).orElse(null);
+    public Member getMemberById(String mid) {
+        return memberDAO.findById(mid).orElse(null);
     }
 
     @Override
     @Transactional
-    public ResultMsg<Member> evict(String id) {
-        Member member = memberDAO.findById(id).orElse(null);
+    public ResultMsg<Member> evict(String mid) {
+        Member member = memberDAO.findById(mid).orElse(null);
         if (null != member) {
             member.setAccountState(AccountState.CANCELED);
             memberDAO.flush();

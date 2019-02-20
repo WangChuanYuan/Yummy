@@ -40,4 +40,24 @@ api.get = (url, params) => {
   });
 };
 
+/** 使用post即可，当data为formData时，会自动识别为multipart/form-data */
+// api.multipart = (url, formData) => {
+//   return new Promise((resolve, reject) => {
+//     instance({
+//       url: url,
+//       method: 'post',
+//       data: formData,
+//       headers: {
+//         'content-type': `multipart/form-data; boundary=${formData._boundary}`
+//       }
+//     }).then(res => {
+//       console.log(res);
+//       resolve(res.data);
+//     }).catch(err => {
+//       console.error(err);
+//       reject(err);
+//     });
+//   });
+// };
+
 export default api;

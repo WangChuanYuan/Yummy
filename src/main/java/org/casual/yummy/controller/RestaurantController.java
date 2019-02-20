@@ -27,7 +27,7 @@ public class RestaurantController {
     @PostMapping("/register_restaurant")
     public ResultMsg register(@RequestBody Map param) {
         String password = (String) param.get("password");
-        RegisterInfo registerInfo = JsonUtil.obj2pojo(param.get("registerInfo"), RegisterInfo.class);
+        RegisterInfo registerInfo = JsonUtil.obj2pojo(param, RegisterInfo.class);
         Restaurant restaurant = new Restaurant(registerInfo, new MarketInfo());
         restaurant.setPassword(password).setAccountState(AccountState.VALID).setRole(Role.RESTAURANT);
         return restaurantService.register(restaurant);

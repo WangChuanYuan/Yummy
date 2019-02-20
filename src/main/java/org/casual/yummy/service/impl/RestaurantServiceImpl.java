@@ -17,8 +17,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     private RestaurantDAO restaurantDAO;
 
     @Override
-    public ResultMsg<Restaurant> login(String id, String password) {
-        Restaurant restaurant = restaurantDAO.findById(id).orElse(null);
+    public ResultMsg<Restaurant> login(String rid, String password) {
+        Restaurant restaurant = restaurantDAO.findById(rid).orElse(null);
         if (null == restaurant)
             return new ResultMsg<>("注册码不存在", Code.FAILURE);
         else if (!restaurant.getPassword().equals(password))
@@ -42,7 +42,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public Restaurant getRestaurantById(String id) {
-        return restaurantDAO.findById(id).orElse(null);
+    public Restaurant getRestaurantById(String rid) {
+        return restaurantDAO.findById(rid).orElse(null);
     }
 }

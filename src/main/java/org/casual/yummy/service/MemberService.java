@@ -5,11 +5,11 @@ import org.casual.yummy.utils.ResultMsg;
 
 public interface MemberService {
 
-    ResultMsg<Member> login(String id, String password);
+    ResultMsg<Member> login(String mid, String password);
 
-    ResultMsg<Member> register(String id, String password);
+    ResultMsg<Member> register(String mid, String password);
 
-    Member getMemberById(String id);
+    Member getMemberById(String mid);
 
-    ResultMsg<Member> evict(String id);
+    ResultMsg<Member> evict(String mid);
 }

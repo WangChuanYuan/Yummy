@@ -87,6 +87,7 @@
 </template>
 
 <script>
+import Api from '../../assets/js/api';
 
 export default {
   name: 'GoodsEditor',
@@ -189,8 +190,22 @@ export default {
       this.$refs[formName].resetFields();
     },
     submit (formName) {
-      if (this.$refs[formName].validate()) {
-      }
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          let formData = new FormData();
+          formData.append('avatar', this.avatarRaw);
+          formData.append('name', this.goodsForm.name);
+          formData.append('description', this.goodsForm.description);
+          formData.append('price', this.goodsForm.price);
+          formData.append('stock', this.goodsForm.stock);
+          formData.append('dailySupply', this.goodsForm.dailySupply);
+          formData.append('startDate', this.goodsForm.dates[0]);
+          formData.append('endDate', this.goodsForm.dates[1]);
+          formData.append('restaurant', sessionStorage.getItem('id'));
+          Api.post('/add_goods', formData).then((data) => {
+          }).catch(() => {});
+        }
+      });
     },
     uploadAvatar (avatar) {
       this.goodsForm.avatar = URL.createObjectURL(avatar.raw);
