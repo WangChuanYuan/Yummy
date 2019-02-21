@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
 public class AddressServiceImpl implements AddressService {
 
     @Autowired
@@ -25,6 +24,7 @@ public class AddressServiceImpl implements AddressService {
     private AddressDAO addressDAO;
 
     @Override
+    @Transactional
     public List<Address> getAddresses(String mid) {
         Member member = memberDAO.findById(mid).orElse(null);
         if (null != member)
@@ -33,6 +33,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @Transactional
     public ResultMsg<Address> addAddress(String mid, Address address) {
         try {
             Member member = memberDAO.findById(mid).get();
@@ -46,6 +47,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @Transactional
     public ResultMsg<Address> modifyAddress(Address address) {
         try {
             Address modifiedAddress = addressDAO.saveAndFlush(address);
@@ -57,6 +59,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @Transactional
     public ResultMsg deleteAddress(Long aid) {
         try {
             Address address = addressDAO.findById(aid).get();

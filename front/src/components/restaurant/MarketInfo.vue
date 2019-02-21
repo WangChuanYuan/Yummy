@@ -45,7 +45,7 @@ export default {
   components: {AvatarUploader},
   data () {
     return {
-      avatar: sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user').avatar) : require('@/assets/image/avatar.jpg'),
+      avatar: require('@/assets/image/avatar.jpg'),
       avatarRaw: null,
       marketInfo: {
         balance: 0,
@@ -110,11 +110,13 @@ export default {
         'id': sessionStorage.getItem('id')
       }).then((data) => {
         if (data) {
+          if (data.avatar) this.avatar = data.avatar;
           let info = data.marketInfo;
           this.marketInfo.balance = info.balance;
           this.marketInfo.leastExp = info.leastExp;
           this.marketInfo.deliveryExp = info.deliveryExp;
-          this.marketInfo.hours = [info.startHour, info.endHour];
+          if (info.phone) this.marketInfo.phone = info.phone;
+          if (info.startHour && info.endHour) this.marketInfo.hours = [info.startHour, info.endHour];
         }
       }).catch(() => {
       });

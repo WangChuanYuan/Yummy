@@ -11,7 +11,9 @@ import org.casual.yummy.config.properties.OSSProperties;
 import org.casual.yummy.service.FileUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.UUID;
@@ -74,7 +76,20 @@ public class OSSUploadServiceImpl implements FileUploadService {
     }
 
     @Override
-    public String upload(InputStream inputStream, String fileType) {
+    public String upload(MultipartFile multipartFile) {
+        String url = null;
+        try {
+            InputStream avatarStream = multipartFile.getInputStream();
+            String avatarName = multipartFile.getOriginalFilename();
+            String avatarType = avatarName.substring(avatarName.lastIndexOf('.') + 1);
+            url = upload(avatarStream, avatarType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
+    private String upload(InputStream inputStream, String fileType) {
         String url = null;
         OSSClient ossClient = null;
         try {

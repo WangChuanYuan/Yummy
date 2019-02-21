@@ -10,7 +10,9 @@ import org.casual.yummy.service.FileUploadService;
 import org.casual.yummy.utils.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 @Service(value = "qiniuService")
@@ -30,7 +32,18 @@ public class QiniuUploadServiceImpl implements FileUploadService {
     }
 
     @Override
-    public String upload(InputStream inputStream, String fileType) {
+    public String upload(MultipartFile multipartFile) {
+        String url = null;
+        try {
+            InputStream avatarStream = multipartFile.getInputStream();
+            url = upload(avatarStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
+    private String upload(InputStream inputStream) {
         try {
             Response response = this.uploadManager.put(inputStream, null, getUplaodToken(), null, null);
             DefaultPutRet ret = JsonUtil.json2pojo(response.bodyString(), DefaultPutRet.class);

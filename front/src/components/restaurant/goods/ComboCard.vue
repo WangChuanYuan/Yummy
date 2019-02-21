@@ -9,7 +9,7 @@
           <span style="font-size: 20px; font-weight: bold">{{inCombo.saleInfo.name}}</span>
         </div>
         <el-popover placement="right" trigger="click">
-          <GoodsTable :goods="getComboItems(inCombo.cid)"/>
+          <GoodsTable :goods="comboGoods"/>
           <el-button slot="reference" type="text">详情</el-button>
         </el-popover>
         <br/>
@@ -17,7 +17,6 @@
           <span>价格:</span>
           <span>{{inCombo.saleInfo.price}}</span>
         </div>
-        <br/>
         <div class="omission" style="font-size: 13px">
           <span>今日剩余:</span>
           <span>{{inCombo.saleInfo.dLeft}}</span>
@@ -28,8 +27,8 @@
       </div>
     </div>
     <div class="combo-op" v-show="aim === 'manage'">
-      <el-button type="text" @click="modify">修改</el-button>
-      <el-button type="text">下架</el-button>
+      <el-button type="text" @click="modifyCombo">修改</el-button>
+      <el-button type="text" @click="deleteCombo">下架</el-button>
     </div>
     <div class="combo-op" v-show="aim === 'purchase'">
       <el-input-number :min="0" :precision="0" size="mini"></el-input-number>
@@ -40,6 +39,7 @@
 
 <script>
 import GoodsTable from './GoodsTable';
+import Api from '../../../assets/js/api';
 
 export default {
   name: 'ComboCard',
@@ -71,8 +71,12 @@ export default {
   },
   data () {
     return {
-      inCombo: JSON.parse(JSON.stringify(this.combo))
+      inCombo: JSON.parse(JSON.stringify(this.combo)),
+      comboGoods: []
     };
+  },
+  mounted () {
+    this.getComboGoods(this.combo.cid);
   },
   watch: {
     combo (val) {
@@ -80,7 +84,7 @@ export default {
     }
   },
   methods: {
-    modify () {
+    modifyCombo () {
       this.$router.push({
         name: 'editCombo',
         params: {
@@ -89,8 +93,13 @@ export default {
         }
       });
     },
-    getComboItems (cid) {
-      // TODO FETCH GOODS
+    deleteCombo () {
+      this.$emit('delete');
+    },
+    getComboGoods (cid) {
+      Api.get('/get_combo_goods', {cid: cid}).then((data) => {
+        this.comboGoods = data;
+      }).catch(() => {});
     }
   }
 };

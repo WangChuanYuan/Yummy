@@ -1,5 +1,6 @@
 package org.casual.yummy.controller;
 
+import org.casual.yummy.dto.GoodsDTO;
 import org.casual.yummy.model.goods.Goods;
 import org.casual.yummy.model.goods.SaleInfo;
 import org.casual.yummy.service.FileUploadService;
@@ -9,14 +10,13 @@ import org.casual.yummy.utils.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class GoodsController {
@@ -32,26 +32,60 @@ public class GoodsController {
     public ResultMsg addGoods(@RequestParam MultipartFile avatar, @RequestParam String name, @RequestParam String description,
                               @RequestParam Double price, @RequestParam Long dailySupply, @RequestParam Long stock,
                               @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-                              @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate endDate,
+                              @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
                               @RequestParam String restaurant){
-        try {
-            InputStream avatarStream = avatar.getInputStream();
-            String avatarName = avatar.getOriginalFilename();
-            String avatarType = avatarName.substring(avatarName.lastIndexOf('.') + 1);
-            String url = uploadService.upload(avatarStream, avatarType);
+        String url = uploadService.upload(avatar);
+        if (null == url)
+            return new ResultMsg("上传商品图像失败", Code.FAILURE);
 
-            SaleInfo saleInfo = new SaleInfo();
-            saleInfo.setAvatar(url).setName(name).setDescription(description)
-                    .setPrice(price).setDailySupply(dailySupply).setStock(stock)
-                    .setStartDate(startDate).setEndDate(endDate);
+        SaleInfo saleInfo = new SaleInfo();
+        saleInfo.setAvatar(url).setName(name).setDescription(description)
+                .setPrice(price).setDailySupply(dailySupply).setStock(stock)
+                .setStartDate(startDate).setEndDate(endDate);
+        Goods goods = new Goods();
+        goods.setSaleInfo(saleInfo);
+        return goodsService.addGoods(restaurant, goods);
+    }
 
-            Goods goods = new Goods();
-            goods.setSaleInfo(saleInfo);
+    @PostMapping("/modify_goods")
+    public ResultMsg modifyGoods(@RequestParam(required = false) MultipartFile avatar, @RequestParam String name, @RequestParam String description,
+                              @RequestParam Double price, @RequestParam Long dailySupply, @RequestParam Long stock,
+                              @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                              @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+                              @RequestParam Long gid){
+        Goods goods = goodsService.getGoodsById(gid);
+        if (null == goods)
+            return new ResultMsg("商品不存在", Code.FAILURE);
 
-            return goodsService.addGoods(restaurant, goods);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ResultMsg<>("添加商品失败", Code.FAILURE);
+        SaleInfo saleInfo = goods.getSaleInfo();
+        if (null != avatar) {
+            String url = uploadService.upload(avatar);
+            if (null == url)
+                return new ResultMsg("上传商品图像失败", Code.FAILURE);
+            else saleInfo.setAvatar(url);
         }
+
+        saleInfo.setName(name).setDescription(description)
+                .setPrice(price).setDailySupply(dailySupply).setStock(stock)
+                .setStartDate(startDate).setEndDate(endDate);
+        return goodsService.modifyGoods(goods);
+    }
+
+    @PostMapping("/delete_goods")
+    public ResultMsg deleteGoods(@RequestBody Map param) {
+        Long gid = Long.parseLong((String) param.get("gid"));
+        return goodsService.deleteGoods(gid);
+    }
+
+    @GetMapping("/get_goods")
+    public GoodsDTO getGoods(@RequestParam Long gid) {
+        return new GoodsDTO(goodsService.getGoodsById(gid));
+    }
+
+    @GetMapping("/get_selling_goods")
+    public List<GoodsDTO> getSellingGoods(@RequestParam String rid) {
+        List<GoodsDTO> res = new ArrayList<>();
+        goodsService.getSellingGoods(rid).parallelStream().forEach(goods -> {res.add(new GoodsDTO(goods));});
+        return res;
     }
 }

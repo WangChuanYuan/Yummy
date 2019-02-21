@@ -47,6 +47,11 @@ export default {
       default: '300px'
     }
   },
+  watch: {
+    goods (val) {
+      this.items = JSON.parse(JSON.stringify(val));
+    }
+  },
   data () {
     return {
       items: JSON.parse(JSON.stringify(this.goods))

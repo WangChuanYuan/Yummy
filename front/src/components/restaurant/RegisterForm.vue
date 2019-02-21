@@ -93,7 +93,7 @@ export default {
     };
   },
   mounted () {
-    if (this.aim !== 'add') {
+    if (this.aim === 'modify') {
       this.init();
     }
   },
@@ -115,7 +115,7 @@ export default {
       this.registerInfo.location = location;
     },
     init () {
-      Api.post('/get_restaurant', {
+      Api.get('/get_restaurant', {
         'id': sessionStorage.getItem('id')
       }).then((data) => {
         if (data) {

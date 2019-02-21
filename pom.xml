@@ -51,6 +51,21 @@
 			<version>3.4.0</version>
 		</dependency>
 
+		<!-- jackson真的垃圾，我为什么要放弃fastjson -->
+		<!-- jackson hibernate5插件 解决懒加载代理的序列化问题 -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-hibernate5</artifactId>
+			<version>2.9.8</version>
+		</dependency>
+
+		<!-- jackson 对java8时间类的支持 -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>2.9.3</version>
+		</dependency>
+
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>

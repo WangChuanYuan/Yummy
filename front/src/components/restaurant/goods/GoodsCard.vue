@@ -2,29 +2,29 @@
   <el-card class="box-card clear-fix" :body-style="{ padding: '0px' }">
     <div class="clear-fix">
       <div class="avatar">
-        <img :src="inGoods.saleInfo.avatar">
+        <img :src="inGoods.avatar">
       </div>
       <div class="info">
-        <span style="font-size: 20px; font-weight: bold">{{inGoods.saleInfo.name}}</span>
+        <span style="font-size: 20px; font-weight: bold">{{inGoods.name}}</span>
         <br/>
         <br/>
         <div style="font-size: 13px">
           <span>价格:</span>
-          <span>{{inGoods.saleInfo.price}}</span>
+          <span>{{inGoods.price}}</span>
         </div>
         <br/>
         <div class="omission" style="font-size: 13px">
           <span>今日剩余:</span>
-          <span>{{inGoods.saleInfo.dLeft}}</span>
+          <span>{{inGoods.dLeft}}</span>
           <br/>
           <span>库存总量:</span>
-          <span>{{inGoods.saleInfo.stock}}</span>
+          <span>{{inGoods.stock}}</span>
         </div>
       </div>
     </div>
     <div class="goods-op" v-show="aim === 'manage'">
-      <el-button type="text" @click="modify">修改</el-button>
-      <el-button type="text">下架</el-button>
+      <el-button type="text" @click="modifyGoods">修改</el-button>
+      <el-button type="text" @click="deleteGoods">下架</el-button>
     </div>
     <div class="goods-op" v-show="aim === 'purchase'">
       <el-input-number :min="0" :precision="0" size="mini"></el-input-number>
@@ -47,16 +47,14 @@ export default {
       default: function () {
         return {
           gid: 0,
-          saleInfo: {
-            avatar: require('../../../assets/image/oil.jpg'),
-            name: '',
-            description: '',
-            price: 0,
-            dLeft: 0,
-            stock: 0,
-            startDate: '',
-            endDate: ''
-          }
+          avatar: require('../../../assets/image/oil.jpg'),
+          name: '',
+          description: '',
+          price: 0,
+          dLeft: 0,
+          stock: 0,
+          startDate: '',
+          endDate: ''
         };
       }
     }
@@ -72,7 +70,7 @@ export default {
     }
   },
   methods: {
-    modify () {
+    modifyGoods () {
       this.$router.push({
         name: 'editGoods',
         params: {
@@ -80,6 +78,9 @@ export default {
           aim: 'modify'
         }
       });
+    },
+    deleteGoods () {
+      this.$emit('delete');
     }
   }
 };

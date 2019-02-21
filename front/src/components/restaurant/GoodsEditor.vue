@@ -4,7 +4,7 @@
       <h3>商品编辑</h3>
       <hr/>
       <el-breadcrumb separator-class="el-icon-arrow-right" style="padding: 10px 0 50px 30px">
-        <el-breadcrumb-item :to="{ path: '/restaurantCenter' }">店家中心</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{path: '/restaurantCenter'}">店家中心</el-breadcrumb-item>
         <el-breadcrumb-item :to="{path: '/restaurantCenter/goods'}">单品管理</el-breadcrumb-item>
         <el-breadcrumb-item>商品编辑</el-breadcrumb-item>
       </el-breadcrumb>
@@ -88,6 +88,7 @@
 
 <script>
 import Api from '../../assets/js/api';
+import {Code} from '../../assets/js/attrib';
 
 export default {
   name: 'GoodsEditor',
@@ -122,7 +123,20 @@ export default {
   },
   mounted () {
     if (this.aim === 'modify') {
-      // TODO
+      Api.get('/get_goods', {gid: this.gid}).then((data) => {
+        if (data) {
+          this.goodsForm.avatar = data.avatar;
+          this.goodsForm.name = data.name;
+          this.goodsForm.description = data.description;
+          this.goodsForm.price = data.price;
+          this.goodsForm.dailySupply = data.dailySupply;
+          this.goodsForm.stock = data.stock;
+          let dates = [];
+          dates[0] = data.startDate;
+          dates[1] = data.endDate;
+          this.goodsForm.dates = dates;
+        }
+      }).catch(() => {});
     }
   },
   data () {
@@ -193,7 +207,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let formData = new FormData();
-          formData.append('avatar', this.avatarRaw);
+          if (this.avatarRaw) formData.append('avatar', this.avatarRaw);
           formData.append('name', this.goodsForm.name);
           formData.append('description', this.goodsForm.description);
           formData.append('price', this.goodsForm.price);
@@ -201,8 +215,19 @@ export default {
           formData.append('dailySupply', this.goodsForm.dailySupply);
           formData.append('startDate', this.goodsForm.dates[0]);
           formData.append('endDate', this.goodsForm.dates[1]);
-          formData.append('restaurant', sessionStorage.getItem('id'));
-          Api.post('/add_goods', formData).then((data) => {
+
+          let url = '/add_goods';
+          if (this.aim === 'add') {
+            formData.append('restaurant', sessionStorage.getItem('id'));
+          } else if (this.aim === 'modify') {
+            url = '/modify_goods';
+            formData.append('gid', this.gid);
+          }
+          Api.post(url, formData).then((data) => {
+            if (data.code === Code.SUCCESS) {
+              this.$message.success(data.msg);
+              this.$router.push('/restaurantCenter/goods');
+            } else this.$message.warning(data.msg);
           }).catch(() => {});
         }
       });

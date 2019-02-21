@@ -4,7 +4,7 @@
       <h3>套餐编辑</h3>
       <hr/>
       <el-breadcrumb separator-class="el-icon-arrow-right" style="padding: 10px 0 50px 30px">
-        <el-breadcrumb-item :to="{ path: '/restaurantCenter' }">店家中心</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{path: '/restaurantCenter'}">店家中心</el-breadcrumb-item>
         <el-breadcrumb-item :to="{path: '/restaurantCenter/combo'}">套餐管理</el-breadcrumb-item>
         <el-breadcrumb-item>套餐编辑</el-breadcrumb-item>
       </el-breadcrumb>
@@ -15,7 +15,7 @@
             <el-form-item prop="items" label="套餐项">
               <el-checkbox-group v-model="comboForm.items" style="display: none"></el-checkbox-group>
             </el-form-item>
-            <el-table :data="goods" stripe height="500px" @selection-change="selectItem">
+            <el-table ref="goodsTable" :data="goods" stripe height="500px" @selection-change="selectItem">
               <el-table-column type="selection" v-show="aim === 'add'"/>
               <el-table-column prop="name" label="单品名"/>
               <el-table-column prop="avatar" label="图像">
@@ -62,7 +62,7 @@
                   <el-input v-model="comboForm.avatar" style="display: none"></el-input>
                   <el-upload class="avatar-uploader" action="mock" :multiple="false" :auto-upload="false"
                              :on-change="uploadAvatar" :accept="'image/*'">
-                    <img v-if="comboForm.avatar" :src="goodsForm.avatar">
+                    <img v-if="comboForm.avatar" :src="comboForm.avatar">
                     <i v-else class="el-icon-plus"></i>
                   </el-upload>
                 </el-form-item>
@@ -136,6 +136,9 @@
 </template>
 
 <script>
+import Api from '../../assets/js/api';
+import {Code} from '../../assets/js/attrib';
+
 export default {
   name: 'ComboEditor',
   props: {
@@ -168,8 +171,33 @@ export default {
     }
   },
   mounted () {
-    if (this.aim === 'modify') {
-      // TODO
+    if (this.aim === 'add') {
+      Api.get('/get_selling_goods', {'rid': sessionStorage.getItem('id')}).then((data) => {
+        this.goods = data;
+      }).catch(() => {});
+    } else if (this.aim === 'modify') {
+      Api.get('/get_combo', {'cid': this.cid}).then((data) => {
+        if (data) {
+          let saleInfo = data.saleInfo;
+          this.comboForm.avatar = saleInfo.avatar;
+          this.comboForm.name = saleInfo.name;
+          this.comboForm.description = saleInfo.description;
+          this.comboForm.price = saleInfo.price;
+          this.comboForm.dailySupply = saleInfo.dailySupply;
+          this.comboForm.stock = saleInfo.stock;
+          let dates = [];
+          dates[0] = saleInfo.startDate;
+          dates[1] = saleInfo.endDate;
+          this.comboForm.dates = dates;
+        }
+      }).catch(() => {});
+      Api.get('/get_combo_goods', {'cid': this.cid}).then((data) => {
+        if (data) {
+          this.goods = data;
+          this.comboForm.items = data;
+          this.$refs.goodsTable.toggleAllSelection();
+        }
+      }).catch(() => {});
     }
   },
   data () {
@@ -246,8 +274,34 @@ export default {
       this.$refs[formName].resetFields();
     },
     submit (formName) {
-      if (this.$refs[formName].validate()) {
-      }
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          let formData = new FormData();
+          if (this.avatarRaw) formData.append('avatar', this.avatarRaw);
+          formData.append('name', this.comboForm.name);
+          formData.append('description', this.comboForm.description);
+          formData.append('price', this.comboForm.price);
+          formData.append('stock', this.comboForm.stock);
+          formData.append('dailySupply', this.comboForm.dailySupply);
+          formData.append('startDate', this.comboForm.dates[0]);
+          formData.append('endDate', this.comboForm.dates[1]);
+          formData.append('itemsJson', JSON.stringify(this.comboForm.items));
+
+          let url = '/add_combo';
+          if (this.aim === 'add') {
+            formData.append('restaurant', sessionStorage.getItem('id'));
+          } else if (this.aim === 'modify') {
+            url = '/modify_combo';
+            formData.append('cid', this.cid);
+          }
+          Api.post(url, formData).then((data) => {
+            if (data.code === Code.SUCCESS) {
+              this.$message.success(data.msg);
+              this.$router.push('/restaurantCenter/combo');
+            } else this.$message.warning(data.msg);
+          }).catch(() => {});
+        }
+      });
     },
     selectItem (items) {
       let totalPrice = 0;

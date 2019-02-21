@@ -6,12 +6,12 @@
       <el-main>
         <el-row>
           <el-col :span="8" :offset="2">
-            <el-button type="text" @click="add" style="float: left">新增单品</el-button>
+            <el-button type="text" @click="addGoods" style="float: left">新增单品</el-button>
           </el-col>
         </el-row>
         <el-row>
           <el-col v-for="(item, index) in goods" :key="index" :span="9" :offset="2">
-            <GoodsCard/>
+            <GoodsCard :goods="item" @delete="deleteGoods(index)"/>
           </el-col>
         </el-row>
         <el-pagination
@@ -29,6 +29,8 @@
 
 <script>
 import GoodsCard from './goods/GoodsCard';
+import Api from '../../assets/js/api';
+import {Code} from '../../assets/js/attrib';
 
 export default {
   name: 'GoodsManager',
@@ -39,11 +41,30 @@ export default {
     };
   },
   mounted () {
-    // TODO
+    Api.get('/get_selling_goods', {rid: sessionStorage.getItem('id')}).then((data) => {
+      if (data) this.goods = data;
+    }).catch(() => {});
   },
   methods: {
-    add () {
+    addGoods () {
       this.$router.push('/restaurantCenter/editGoods');
+    },
+    deleteGoods (index) {
+      this.$confirm('确认下架该商品？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        Api.post('/delete_goods', {
+          'gid': this.goods[index].gid
+        }).then((data) => {
+          if (data.code === Code.SUCCESS) {
+            this.goods.splice(index, 1);
+          } else {
+            this.$message.warning(data.msg);
+          }
+        });
+      }).catch(() => {});
     }
   }
 };

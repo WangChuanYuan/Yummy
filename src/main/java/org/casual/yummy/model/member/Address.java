@@ -31,7 +31,7 @@ public class Address {
 
     private String phone;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member", referencedColumnName = "id")
     @JsonBackReference
     @JsonManagedReference

@@ -1,8 +1,8 @@
 package org.casual.yummy.service;
 
-import java.io.InputStream;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface FileUploadService {
 
-    String upload(InputStream inputStream, String fileType);
+    String upload(MultipartFile multipartFile);
 }
