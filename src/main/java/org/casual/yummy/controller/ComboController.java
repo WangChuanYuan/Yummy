@@ -10,6 +10,8 @@ import org.casual.yummy.utils.JsonUtil;
 import org.casual.yummy.utils.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -86,8 +88,11 @@ public class ComboController {
     }
 
     @GetMapping("/get_selling_combos")
-    public List<Combo> getCombos(@RequestParam String rid) {
-        return comboService.getSellingCombos(rid);
+    public List<Combo> getCombos(@RequestParam String rid, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+        if (null != page && null != size) {
+            Pageable pageable = PageRequest.of(page - 1, size);
+            return comboService.getSellingCombos(rid, pageable);
+        } else return comboService.getSellingCombos(rid);
     }
 
     @GetMapping("/get_combo_goods")

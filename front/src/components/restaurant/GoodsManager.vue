@@ -17,9 +17,11 @@
         <el-pagination
           background
           layout="prev, pager, next"
-          :page-size="8"
-          :total="100"
-          style="padding-top: 10px">
+          :page-size="pageSize"
+          :total="total"
+          style="padding-top: 10px"
+          :current-page="currentPage"
+          @current-change="pageChange">
         </el-pagination>
       </el-main>
       <el-aside></el-aside>
@@ -37,15 +39,25 @@ export default {
   components: {GoodsCard},
   data () {
     return {
-      goods: []
+      goods: [],
+      currentPage: 1,
+      pageSize: 6,
+      total: 100
     };
   },
   mounted () {
-    Api.get('/get_selling_goods', {rid: sessionStorage.getItem('id')}).then((data) => {
-      if (data) this.goods = data;
-    }).catch(() => {});
+    this.getGoodsInPage(this.currentPage, this.pageSize);
   },
   methods: {
+    getGoodsInPage (page, size) {
+      Api.get('/get_selling_goods', {
+        rid: sessionStorage.getItem('id'),
+        page: page,
+        size: size
+      }).then((data) => {
+        if (data) this.goods = data;
+      }).catch(() => {});
+    },
     addGoods () {
       this.$router.push('/restaurantCenter/editGoods');
     },
@@ -65,6 +77,10 @@ export default {
           }
         });
       }).catch(() => {});
+    },
+    pageChange (page) {
+      this.currentPage = page;
+      this.getGoodsInPage(this.currentPage, this.pageSize);
     }
   }
 };

@@ -2,6 +2,7 @@ package org.casual.yummy.service;
 
 import org.casual.yummy.model.goods.Goods;
 import org.casual.yummy.utils.ResultMsg;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface GoodsService {
     Goods getGoodsById(Long gid);
 
     List<Goods> getSellingGoods(String rid);
+
+    List<Goods> getSellingGoods(String rid, Pageable page);
 }

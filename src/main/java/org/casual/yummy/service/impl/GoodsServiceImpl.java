@@ -12,6 +12,7 @@ import org.casual.yummy.service.GoodsService;
 import org.casual.yummy.utils.Code;
 import org.casual.yummy.utils.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,5 +89,10 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<Goods> getSellingGoods(String rid) {
         return goodsDAO.findSellingGoods(rid);
+    }
+
+    @Override
+    public List<Goods> getSellingGoods(String rid, Pageable page) {
+        return goodsDAO.findSellingGoods(rid, page);
     }
 }

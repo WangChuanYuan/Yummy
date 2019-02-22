@@ -12,6 +12,8 @@ import org.casual.yummy.utils.JsonUtil;
 import org.casual.yummy.utils.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -95,11 +97,16 @@ public class GoodsController {
     }
 
     @GetMapping("/get_selling_goods")
-    public List<GoodsDTO> getSellingGoods(@RequestParam String rid) {
-        List<GoodsDTO> res = new ArrayList<>();
-        goodsService.getSellingGoods(rid).parallelStream().forEach(goods -> {
-            res.add(new GoodsDTO(goods));
+    public List<GoodsDTO> getSellingGoods(@RequestParam String rid, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+        List<GoodsDTO> goodsDTOS = new ArrayList<>();
+        List<Goods> goods;
+        if (null != page && null != size) {
+            Pageable pageable = PageRequest.of(page - 1, size);
+            goods = goodsService.getSellingGoods(rid, pageable);
+        } else goods = goodsService.getSellingGoods(rid);
+        goods.parallelStream().forEach(item -> {
+            goodsDTOS.add(new GoodsDTO(item));
         });
-        return res;
+        return goodsDTOS;
     }
 }

@@ -14,6 +14,7 @@ import org.casual.yummy.service.ComboService;
 import org.casual.yummy.utils.Code;
 import org.casual.yummy.utils.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -121,6 +122,11 @@ public class ComboServiceImpl implements ComboService {
     @Override
     public List<Combo> getSellingCombos(String rid) {
         return comboDAO.findSellingCombos(rid);
+    }
+
+    @Override
+    public List<Combo> getSellingCombos(String rid, Pageable pageable) {
+        return comboDAO.findSellingCombos(rid, pageable);
     }
 
     @Override
