@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface GoodsService {
 
-    ResultMsg<Goods> addGoods(String rid, Goods goods);
+    ResultMsg<Goods> addGoods(String rid, Long cgid, Goods goods);
 
     ResultMsg<Goods> modifyGoods(Goods goods);
 

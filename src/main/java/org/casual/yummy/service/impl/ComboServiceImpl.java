@@ -42,14 +42,14 @@ public class ComboServiceImpl implements ComboService {
         List<ComboItem> comboItems = new ArrayList<>();
         combo.setItems(comboItems);
 
-        Map<Long, Integer> items = goodsDTOS.parallelStream().collect(
+        Map<Long, Integer> id2num = goodsDTOS.parallelStream().collect(
                 Collectors.toMap(GoodsDTO::getGid, GoodsDTO::getNum, (oldValue, newValue) -> newValue)
         );
-        List<Goods> goods = goodsDAO.findByGidIn(items.keySet());
+        List<Goods> goods = goodsDAO.findByGidIn(id2num.keySet());
         goods.parallelStream().forEach(item -> {
             ComboItem comboItem = new ComboItem();
             comboItem.setGoods(item);
-            comboItem.setNum(items.get(item.getGid()));
+            comboItem.setNum(id2num.get(item.getGid()));
             comboItem.setCombo(combo);
             comboItems.add(comboItem);
         });

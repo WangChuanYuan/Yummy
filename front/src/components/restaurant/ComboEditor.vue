@@ -31,6 +31,9 @@
               <el-table-column fixed type="expand">
                 <template slot-scope="scope">
                   <el-form label-position="left" inline>
+                    <el-form-item label="类别">
+                      <span>{{scope.row.category}}</span>
+                    </el-form-item>
                     <el-form-item label="单价">
                       <span>{{scope.row.price}}</span>
                     </el-form-item>

@@ -1,5 +1,6 @@
 package org.casual.yummy.model.member;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.casual.yummy.model.User;
@@ -21,5 +22,6 @@ public class Member extends User {
     private int level;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Address> addresses;
 }

@@ -1,5 +1,6 @@
 package org.casual.yummy.controller;
 
+import org.casual.yummy.dto.GoodsDTO;
 import org.casual.yummy.model.goods.Combo;
 import org.casual.yummy.model.goods.SaleInfo;
 import org.casual.yummy.service.ComboService;
@@ -7,7 +8,6 @@ import org.casual.yummy.service.FileUploadService;
 import org.casual.yummy.utils.Code;
 import org.casual.yummy.utils.JsonUtil;
 import org.casual.yummy.utils.ResultMsg;
-import org.casual.yummy.dto.GoodsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -34,7 +34,7 @@ public class ComboController {
                               @RequestParam Double price, @RequestParam Long dailySupply, @RequestParam Long stock,
                               @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
                               @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
-                              @RequestParam String itemsJson, @RequestParam String restaurant){
+                              @RequestParam String itemsJson, @RequestParam String restaurant) {
         String url = uploadService.upload(avatar);
         if (null == url)
             return new ResultMsg("上传套餐图像失败", Code.FAILURE);
@@ -53,7 +53,7 @@ public class ComboController {
                                  @RequestParam Double price, @RequestParam Long dailySupply, @RequestParam Long stock,
                                  @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
                                  @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
-                                 @RequestParam String itemsJson, @RequestParam Long cid){
+                                 @RequestParam String itemsJson, @RequestParam Long cid) {
         Combo combo = comboService.getComboById(cid);
         if (null == combo)
             return new ResultMsg("套餐不存在", Code.FAILURE);
@@ -91,9 +91,11 @@ public class ComboController {
     }
 
     @GetMapping("/get_combo_goods")
-    public List<GoodsDTO> getComboGoods(@RequestParam Long cid){
+    public List<GoodsDTO> getComboGoods(@RequestParam Long cid) {
         List<GoodsDTO> res = new ArrayList<>();
-        comboService.getComboItems(cid).parallelStream().forEach(comboItem -> {res.add(new GoodsDTO(comboItem));});
+        comboService.getComboItems(cid).parallelStream().forEach(comboItem -> {
+            res.add(new GoodsDTO(comboItem));
+        });
         return res;
     }
 }

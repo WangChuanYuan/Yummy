@@ -7,7 +7,10 @@
       <div class="info">
         <span style="font-size: 20px; font-weight: bold">{{inGoods.name}}</span>
         <br/>
-        <br/>
+        <div style="font-size: 13px">
+          <span>类别:</span>
+          <span>{{inGoods.category}}</span>
+        </div>
         <div style="font-size: 13px">
           <span>价格:</span>
           <span>{{inGoods.price}}</span>
@@ -47,6 +50,8 @@ export default {
       default: function () {
         return {
           gid: 0,
+          cgid: 0,
+          category: '',
           avatar: require('../../assets/image/oil.jpg'),
           name: '',
           description: '',

@@ -27,10 +27,24 @@
               <el-input v-model="goodsForm.name" placeholder="名称"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="6" :offset="2">
+        </el-row>
+        <el-row>
+          <el-col :span="6">
             <el-form-item prop="price" label="单价">
               <el-input-number v-model="goodsForm.price" :min="0" size="medium"
                                controls-position="right"></el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6" :offset="2">
+            <el-form-item prop="category" label="分类">
+              <el-select v-model="goodsForm.cgid">
+                <el-option
+                  v-for="cg in categories"
+                  :key="cg.cgid"
+                  :label="cg.name"
+                  :value="cg.cgid">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -122,11 +136,17 @@ export default {
     }
   },
   mounted () {
+    Api.get('/get_categories', {restaurant: sessionStorage.getItem('id')}).then((data) => {
+      if (data) {
+        this.categories = data;
+      }
+    }).catch(() => {});
     if (this.aim === 'modify') {
       Api.get('/get_goods', {gid: this.gid}).then((data) => {
         if (data) {
           this.goodsForm.avatar = data.avatar;
           this.goodsForm.name = data.name;
+          this.goodsForm.cgid = data.cgid;
           this.goodsForm.description = data.description;
           this.goodsForm.price = data.price;
           this.goodsForm.dailySupply = data.dailySupply;
@@ -143,10 +163,12 @@ export default {
     return {
       avatarRaw: null,
       supplyPeriod: '',
+      categories: [],
       /** form */
       goodsForm: {
         avatar: '',
         name: '',
+        cgid: undefined,
         description: '',
         price: 0,
         dailySupply: 0,
@@ -165,6 +187,13 @@ export default {
           {
             required: true,
             message: '请输入商品名称',
+            trigger: 'blur'
+          }
+        ],
+        cgid: [
+          {
+            required: true,
+            message: '请选择商品分类',
             trigger: 'blur'
           }
         ],
@@ -210,6 +239,7 @@ export default {
           if (this.avatarRaw) formData.append('avatar', this.avatarRaw);
           formData.append('name', this.goodsForm.name);
           formData.append('description', this.goodsForm.description);
+          formData.append('category', this.goodsForm.cgid);
           formData.append('price', this.goodsForm.price);
           formData.append('stock', this.goodsForm.stock);
           formData.append('dailySupply', this.goodsForm.dailySupply);

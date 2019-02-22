@@ -1,7 +1,6 @@
 package org.casual.yummy.model.goods;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +28,5 @@ public class ComboItem {
     @ManyToOne
     @JoinColumn(name = "combo", referencedColumnName = "cid")
     @JsonBackReference
-    @JsonManagedReference
     private Combo combo;
 }

@@ -6,6 +6,7 @@
         <img :src="scope.row.avatar" style="height: 40px; width: 40px"/>
       </template>
     </el-table-column>
+    <el-table-column prop="category" label="类别"/>
     <el-table-column prop="num" label="包含数量"/>
     <el-table-column prop="price" label="单价"/>
     <el-table-column type="expand">

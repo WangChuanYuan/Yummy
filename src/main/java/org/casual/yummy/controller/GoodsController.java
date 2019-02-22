@@ -1,11 +1,14 @@
 package org.casual.yummy.controller;
 
 import org.casual.yummy.dto.GoodsDTO;
+import org.casual.yummy.model.goods.Category;
 import org.casual.yummy.model.goods.Goods;
 import org.casual.yummy.model.goods.SaleInfo;
+import org.casual.yummy.service.CategoryService;
 import org.casual.yummy.service.FileUploadService;
 import org.casual.yummy.service.GoodsService;
 import org.casual.yummy.utils.Code;
+import org.casual.yummy.utils.JsonUtil;
 import org.casual.yummy.utils.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,12 +31,15 @@ public class GoodsController {
     @Autowired
     private GoodsService goodsService;
 
+    @Autowired
+    private CategoryService categoryService;
+
     @PostMapping("/add_goods")
     public ResultMsg addGoods(@RequestParam MultipartFile avatar, @RequestParam String name, @RequestParam String description,
                               @RequestParam Double price, @RequestParam Long dailySupply, @RequestParam Long stock,
                               @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
                               @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
-                              @RequestParam String restaurant){
+                              @RequestParam Long category, @RequestParam String restaurant) {
         String url = uploadService.upload(avatar);
         if (null == url)
             return new ResultMsg("上传商品图像失败", Code.FAILURE);
@@ -44,18 +50,23 @@ public class GoodsController {
                 .setStartDate(startDate).setEndDate(endDate);
         Goods goods = new Goods();
         goods.setSaleInfo(saleInfo);
-        return goodsService.addGoods(restaurant, goods);
+        return goodsService.addGoods(restaurant, category, goods);
     }
 
     @PostMapping("/modify_goods")
     public ResultMsg modifyGoods(@RequestParam(required = false) MultipartFile avatar, @RequestParam String name, @RequestParam String description,
-                              @RequestParam Double price, @RequestParam Long dailySupply, @RequestParam Long stock,
-                              @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-                              @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
-                              @RequestParam Long gid){
+                                 @RequestParam Double price, @RequestParam Long dailySupply, @RequestParam Long stock,
+                                 @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                                 @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+                                 @RequestParam Long category, @RequestParam Long gid) {
         Goods goods = goodsService.getGoodsById(gid);
         if (null == goods)
             return new ResultMsg("商品不存在", Code.FAILURE);
+
+        Category cg = categoryService.getCategoryById(category);
+        if (null == category)
+            return new ResultMsg("分类不存在", Code.FAILURE);
+        goods.setCategory(cg);
 
         SaleInfo saleInfo = goods.getSaleInfo();
         if (null != avatar) {
@@ -79,13 +90,16 @@ public class GoodsController {
 
     @GetMapping("/get_goods")
     public GoodsDTO getGoods(@RequestParam Long gid) {
+        System.out.println(JsonUtil.obj2json(goodsService.getGoodsById(gid)));
         return new GoodsDTO(goodsService.getGoodsById(gid));
     }
 
     @GetMapping("/get_selling_goods")
     public List<GoodsDTO> getSellingGoods(@RequestParam String rid) {
         List<GoodsDTO> res = new ArrayList<>();
-        goodsService.getSellingGoods(rid).parallelStream().forEach(goods -> {res.add(new GoodsDTO(goods));});
+        goodsService.getSellingGoods(rid).parallelStream().forEach(goods -> {
+            res.add(new GoodsDTO(goods));
+        });
         return res;
     }
 }

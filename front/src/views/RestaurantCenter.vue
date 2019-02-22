@@ -27,6 +27,7 @@
             <span>菜单管理</span>
           </template>
           <el-menu-item-group>
+            <el-menu-item index="category">分类管理</el-menu-item>
             <el-menu-item index="goods">单品管理</el-menu-item>
             <el-menu-item index="combo">套餐管理</el-menu-item>
           </el-menu-item-group>
@@ -72,6 +73,9 @@ export default {
           break;
         case 'marketInfo':
           this.$router.push('/restaurantCenter/marketInfo');
+          break;
+        case 'category':
+          this.$router.push('/restaurantCenter/category');
           break;
         case 'goods':
           this.$router.push('/restaurantCenter/goods');

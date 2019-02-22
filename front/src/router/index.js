@@ -10,6 +10,7 @@ import MemberInfo from '@/components/member/MemberInfo';
 import MemberAddress from '@/components/member/MemberAddress';
 import RegisterInfo from '@/components/restaurant/RegisterInfo';
 import MarketInfo from '@/components/restaurant/MarketInfo';
+import CategoryManager from '@/components/restaurant/CategoryManager';
 import GoodsManager from '@/components/restaurant/GoodsManager';
 import GoodsEditor from '@/components/restaurant/GoodsEditor';
 import ComboManager from '@/components/restaurant/ComboManager';
@@ -76,6 +77,11 @@ export default new Router({
           path: 'marketInfo',
           name: 'marketInfo',
           component: MarketInfo
+        },
+        {
+          path: 'category',
+          name: 'category',
+          component: CategoryManager
         },
         {
           path: 'goods',

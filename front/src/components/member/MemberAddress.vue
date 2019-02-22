@@ -64,7 +64,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        Api.post('/delete_Address', {
+        Api.post('/delete_address', {
           'aid': this.addresses[index].aid
         }).then((data) => {
           if (data.code === Code.SUCCESS) {

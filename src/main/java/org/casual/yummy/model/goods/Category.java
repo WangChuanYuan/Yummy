@@ -15,20 +15,21 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Combo {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cid;
+    private Long cgid;
 
-    @Embedded
-    private SaleInfo saleInfo;
+    private String name;
 
-    @OneToMany(mappedBy = "combo", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<ComboItem> items;
+    private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant", referencedColumnName = "id")
     private Restaurant restaurant;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    private List<Goods> goods;
 }

@@ -1,7 +1,6 @@
 package org.casual.yummy.model.member;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +33,5 @@ public class Address {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member", referencedColumnName = "id")
     @JsonBackReference
-    @JsonManagedReference
     private Member member;
 }

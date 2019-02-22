@@ -36,7 +36,7 @@ public class AddressServiceImpl implements AddressService {
     @Transactional
     public ResultMsg<Address> addAddress(String mid, Address address) {
         try {
-            Member member = memberDAO.findById(mid).get();
+            Member member = memberDAO.findById(mid).orElse(null);
             address.setMember(member);
             Address savedAddress = addressDAO.saveAndFlush(address);
             return new ResultMsg<>("新增地址成功", Code.SUCCESS, savedAddress);
@@ -62,8 +62,7 @@ public class AddressServiceImpl implements AddressService {
     @Transactional
     public ResultMsg deleteAddress(Long aid) {
         try {
-            Address address = addressDAO.findById(aid).get();
-            addressDAO.delete(address);
+            addressDAO.findById(aid).ifPresent(address -> addressDAO.delete(address));
             return new ResultMsg("删除地址成功", Code.SUCCESS);
         } catch (Exception e) {
             e.printStackTrace();

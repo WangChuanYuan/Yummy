@@ -1,8 +1,10 @@
 package org.casual.yummy.service.impl;
 
+import org.casual.yummy.dao.CategoryDAO;
 import org.casual.yummy.dao.GoodsDAO;
 import org.casual.yummy.dao.RestaurantDAO;
 import org.casual.yummy.model.AccountState;
+import org.casual.yummy.model.goods.Category;
 import org.casual.yummy.model.goods.Goods;
 import org.casual.yummy.model.goods.SaleInfo;
 import org.casual.yummy.model.restaurant.Restaurant;
@@ -23,16 +25,22 @@ public class GoodsServiceImpl implements GoodsService {
     private GoodsDAO goodsDAO;
 
     @Autowired
+    private CategoryDAO categoryDAO;
+
+    @Autowired
     private RestaurantDAO restaurantDAO;
 
     @Override
     @Transactional
-    public ResultMsg<Goods> addGoods(String rid, Goods goods) {
+    public ResultMsg<Goods> addGoods(String rid, Long cgid, Goods goods) {
         try {
             Restaurant restaurant = restaurantDAO.findById(rid).orElse(null);
 
             if (null != restaurant && restaurant.getAccountState() == AccountState.VALID) {
                 goods.setRestaurant(restaurant);
+                Category category = categoryDAO.findById(cgid).orElse(null);
+                if (null == category) return new ResultMsg<>("分类不存在", Code.FAILURE);
+                goods.setCategory(category);
                 Goods savedGoods = goodsDAO.saveAndFlush(goods);
                 return new ResultMsg<>("添加商品成功", Code.SUCCESS, savedGoods);
             } else return new ResultMsg<>("餐厅不存在或已注销", Code.FAILURE);

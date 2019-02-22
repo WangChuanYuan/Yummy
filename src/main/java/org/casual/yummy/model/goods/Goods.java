@@ -1,5 +1,6 @@
 package org.casual.yummy.model.goods;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,4 +26,9 @@ public class Goods {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant", referencedColumnName = "id")
     private Restaurant restaurant;
+
+    @ManyToOne
+    @JoinColumn(name = "category", referencedColumnName = "cgid")
+    @JsonBackReference
+    private Category category;
 }
