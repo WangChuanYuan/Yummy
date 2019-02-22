@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import GoodsCard from './goods/GoodsCard';
+import GoodsCard from '../goods/GoodsCard';
 import Api from '../../assets/js/api';
 import {Code} from '../../assets/js/attrib';
 

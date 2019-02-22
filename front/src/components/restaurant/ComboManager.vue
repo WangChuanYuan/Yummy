@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import ComboCard from './goods/ComboCard';
+import ComboCard from '../goods/ComboCard';
 import Api from '../../assets/js/api';
 import {Code} from '../../assets/js/attrib';
 

@@ -47,7 +47,7 @@ export default {
       default: function () {
         return {
           gid: 0,
-          avatar: require('../../../assets/image/oil.jpg'),
+          avatar: require('../../assets/image/oil.jpg'),
           name: '',
           description: '',
           price: 0,

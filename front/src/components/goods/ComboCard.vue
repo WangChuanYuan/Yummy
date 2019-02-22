@@ -39,7 +39,7 @@
 
 <script>
 import GoodsTable from './GoodsTable';
-import Api from '../../../assets/js/api';
+import Api from '../../assets/js/api';
 
 export default {
   name: 'ComboCard',
@@ -56,7 +56,7 @@ export default {
         return {
           cid: 0,
           saleInfo: {
-            avatar: require('../../../assets/image/cream.jpg'),
+            avatar: require('../../assets/image/cream.jpg'),
             name: '',
             description: '',
             price: 0,
