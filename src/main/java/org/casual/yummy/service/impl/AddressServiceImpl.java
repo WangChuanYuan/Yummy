@@ -2,6 +2,8 @@ package org.casual.yummy.service.impl;
 
 import org.casual.yummy.dao.AddressDAO;
 import org.casual.yummy.dao.MemberDAO;
+import org.casual.yummy.dto.AddressDTO;
+import org.casual.yummy.model.Anchor;
 import org.casual.yummy.model.member.Address;
 import org.casual.yummy.model.member.Member;
 import org.casual.yummy.service.AddressService;
@@ -25,21 +27,24 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
-    public List<Address> getAddresses(String mid) {
+    public List<AddressDTO> getAddresses(String mid) {
         Member member = memberDAO.findById(mid).orElse(null);
-        if (null != member)
-            return member.getAddresses();
-        else return new ArrayList<>();
+        if (null != member) {
+            List<AddressDTO> addressDTOS = new ArrayList<>();
+            member.getAddresses().parallelStream().forEach(address -> addressDTOS.add(new AddressDTO(address)));
+            return addressDTOS;
+        } else return new ArrayList<>();
     }
 
     @Override
     @Transactional
-    public ResultMsg<Address> addAddress(String mid, Address address) {
+    public ResultMsg<AddressDTO> addAddress(String mid, AddressDTO addressDTO) {
         try {
             Member member = memberDAO.findById(mid).orElse(null);
+            Address address = addressDTO.toAddress();
             address.setMember(member);
             Address savedAddress = addressDAO.saveAndFlush(address);
-            return new ResultMsg<>("新增地址成功", Code.SUCCESS, savedAddress);
+            return new ResultMsg<>("新增地址成功", Code.SUCCESS, new AddressDTO(savedAddress));
         } catch (Exception e) {
             e.printStackTrace();
             return new ResultMsg<>("新增地址失败", Code.FAILURE);
@@ -48,10 +53,17 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
-    public ResultMsg<Address> modifyAddress(Address address) {
+    public ResultMsg<AddressDTO> modifyAddress(AddressDTO addressDTO) {
         try {
-            Address modifiedAddress = addressDAO.saveAndFlush(address);
-            return new ResultMsg<>("修改地址成功", Code.SUCCESS, modifiedAddress);
+            Address address = addressDAO.findById(addressDTO.getAid()).orElse(null);
+            if (null != address) {
+                address.setName(addressDTO.getName()).
+                        setSex(addressDTO.getSex()).
+                        setAnchor(new Anchor(addressDTO.getLocation(), addressDTO.getDetailLocation(), addressDTO.getLng(), addressDTO.getLat())).
+                        setPhone(addressDTO.getPhone());
+                Address modifiedAddress = addressDAO.saveAndFlush(address);
+                return new ResultMsg<>("修改地址成功", Code.SUCCESS, new AddressDTO(modifiedAddress));
+            } else return new ResultMsg<>("修改地址失败", Code.FAILURE);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResultMsg<>("修改地址失败", Code.FAILURE);

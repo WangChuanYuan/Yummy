@@ -8,12 +8,12 @@
       <el-radio v-model="addressForm.sex" label="WOMAN">女士</el-radio>
     </el-form-item>
     <el-form-item prop="location" label="位置">
-      <el-input v-model="addressForm.location" placeholder="位置" readonly="true">
-        <v-region slot="append" :ui="true" @values="locationChange"></v-region>
-      </el-input>
+      <v-region :ui="true" @values="locationChange"></v-region>
+      <el-input v-model="addressForm.location" placeholder="位置" :readonly="true"></el-input>
     </el-form-item>
     <el-form-item prop="detailLocation" label="详细地址">
-      <el-input v-model="addressForm.detailLocation" placeholder="详细地址"></el-input>
+      <el-input v-model="addressForm.detailLocation" placeholder="详细地址" :readonly="true"></el-input>
+      <Map :center="addressForm.location" @locate="detailLocation"/>
     </el-form-item>
     <el-form-item prop="phone" label="手机号">
       <el-input v-model="addressForm.phone" placeholder="手机号"></el-input>
@@ -27,9 +27,11 @@
 
 <script>
 import {Sex} from '../../../assets/js/attrib';
+import Map from '../../Map';
 
 export default {
   name: 'AddressEditor',
+  components: {Map},
   props: {
     'address': {
       type: Object,
@@ -40,6 +42,8 @@ export default {
           sex: Sex.MAN,
           location: '',
           detailLocation: '',
+          lng: 0,
+          lat: 0,
           phone: ''
         };
       }
@@ -64,14 +68,14 @@ export default {
         location: [
           {
             required: true,
-            message: '请输入位置',
+            message: '请选择位置',
             trigger: 'blur'
           }
         ],
         detailLocation: [
           {
             required: true,
-            message: '请输入详细地址',
+            message: '请选择详细地址',
             trigger: 'blur'
           }
         ],
@@ -96,6 +100,11 @@ export default {
     }
   },
   methods: {
+    detailLocation (poi) {
+      this.addressForm.detailLocation = poi.address;
+      this.addressForm.lng = poi.point.lng;
+      this.addressForm.lat = poi.point.lat;
+    },
     locationChange (val) {
       let location = '';
       if (val.province) {

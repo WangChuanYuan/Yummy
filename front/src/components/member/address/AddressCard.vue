@@ -39,6 +39,8 @@ export default {
           sex: Sex.MAN,
           location: '',
           detailLocation: '',
+          lng: 0,
+          lat: 0,
           phone: ''
         };
       }

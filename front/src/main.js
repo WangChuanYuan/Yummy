@@ -4,17 +4,21 @@ import Vue from 'vue';
 import App from './App';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-import './assets/css/normal.css';
-import router from './router';
 import VueCookies from 'vue-cookies';
 import vRegion from 'v-region';
+import BaiduMap from 'vue-baidu-map';
+import './assets/css/normal.css';
 import './assets/js/extend';
+import router from './router';
 
 Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
 Vue.use(VueCookies);
 Vue.use(vRegion);
+Vue.use(BaiduMap, {
+  ak: '1cRLwrvQfqCVZOzf7XPtUgmHmIXI199y'
+});
 
 /* eslint-disable no-new */
 new Vue({

@@ -15,12 +15,12 @@
       </el-select>
     </el-form-item>
     <el-form-item prop="location" label="位置">
-      <el-input v-model="registerInfo.location" placeholder="位置">
-        <v-region slot="append" :ui="true" @values="locationChange"></v-region>
-      </el-input>
+      <v-region :ui="true" @values="locationChange"></v-region>
+      <el-input v-model="registerInfo.location" placeholder="位置" :readonly="true"></el-input>
     </el-form-item>
     <el-form-item prop="detailLocation" label="详细地址">
-      <el-input v-model="registerInfo.detailLocation" placeholder="详细地址"></el-input>
+      <el-input v-model="registerInfo.detailLocation" placeholder="详细地址" :readonly="true"></el-input>
+      <Map :center="registerInfo.location" @locate="detailLocation"/>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submit('registerInfo')" style="width: 100%">提交</el-button>
@@ -31,9 +31,11 @@
 <script>
 import {Code, RestaurantType} from '../../assets/js/attrib';
 import Api from '../../assets/js/api';
+import Map from '../Map';
 
 export default {
   name: 'RegisterForm',
+  components: {Map},
   props: {
     'aim': {
       // add || modify
@@ -51,7 +53,9 @@ export default {
         password: '',
         type: RestaurantType.DELICACY.value,
         location: '',
-        detailLocation: ''
+        detailLocation: '',
+        lng: 0,
+        lat: 0
       },
       infoRules: {
         name: [
@@ -98,6 +102,11 @@ export default {
     }
   },
   methods: {
+    detailLocation (poi) {
+      this.registerInfo.detailLocation = poi.address;
+      this.registerInfo.lng = poi.point.lng;
+      this.registerInfo.lat = poi.point.lat;
+    },
     locationChange (val) {
       let location = '';
       if (val.province) {

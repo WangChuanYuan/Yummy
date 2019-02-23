@@ -1,6 +1,6 @@
 package org.casual.yummy.controller;
 
-import org.casual.yummy.model.member.Address;
+import org.casual.yummy.dto.AddressDTO;
 import org.casual.yummy.service.AddressService;
 import org.casual.yummy.utils.JsonUtil;
 import org.casual.yummy.utils.ResultMsg;
@@ -17,21 +17,21 @@ public class AddressController {
     private AddressService addressService;
 
     @GetMapping("/get_addresses")
-    public List<Address> getAddresses(@RequestParam String id) {
+    public List<AddressDTO> getAddresses(@RequestParam String id) {
         return addressService.getAddresses(id);
     }
 
     @PostMapping("/add_address")
     public ResultMsg addAddress(@RequestBody Map param) {
         String id = (String) param.get("id");
-        Address address = JsonUtil.obj2pojo(param.get("address"), Address.class);
-        return addressService.addAddress(id, address);
+        AddressDTO addressDTO = JsonUtil.obj2pojo(param.get("address"), AddressDTO.class);
+        return addressService.addAddress(id, addressDTO);
     }
 
     @PostMapping("/modify_address")
     public ResultMsg modifyAddress(@RequestBody Map param) {
-        Address address = JsonUtil.obj2pojo(param.get("address"), Address.class);
-        return addressService.modifyAddress(address);
+        AddressDTO addressDTO = JsonUtil.obj2pojo(param.get("address"), AddressDTO.class);
+        return addressService.modifyAddress(addressDTO);
     }
 
     @PostMapping("/delete_address")

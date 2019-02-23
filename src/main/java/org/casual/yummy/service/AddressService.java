@@ -1,17 +1,17 @@
 package org.casual.yummy.service;
 
-import org.casual.yummy.model.member.Address;
+import org.casual.yummy.dto.AddressDTO;
 import org.casual.yummy.utils.ResultMsg;
 
 import java.util.List;
 
 public interface AddressService {
 
-    List<Address> getAddresses(String mid);
+    List<AddressDTO> getAddresses(String mid);
 
-    ResultMsg<Address> addAddress(String mid, Address address);
+    ResultMsg<AddressDTO> addAddress(String mid, AddressDTO addressDTO);
 
-    ResultMsg<Address> modifyAddress(Address address);
+    ResultMsg<AddressDTO> modifyAddress(AddressDTO addressDTO);
 
     ResultMsg deleteAddress(Long aid);
 }

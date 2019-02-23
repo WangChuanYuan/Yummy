@@ -14,6 +14,7 @@
     "axios": "^0.18.0",
     "element-ui": "^2.4.6",
     "v-region": "^2.1.3",
+    "vue-baidu-map": "^0.21.16",
     "vue": "^2.5.2",
     "vue-cookies": "^1.5.12",
     "vue-router": "^3.0.1"

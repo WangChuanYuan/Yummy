@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.casual.yummy.model.Anchor;
 import org.casual.yummy.model.Sex;
 
 import javax.persistence.*;
@@ -24,9 +25,8 @@ public class Address {
 
     private Sex sex;
 
-    private String location;
-
-    private String detailLocation;
+    @Embedded
+    private Anchor anchor;
 
     private String phone;
 

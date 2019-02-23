@@ -1,4 +1,4 @@
-package org.casual.yummy.model.restaurant;
+package org.casual.yummy.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,12 +12,7 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
-/* 餐厅的注册信息修改需要经过经理审核 */
-public class RegisterInfo {
-
-    private String name;
-
-    private RestaurantType type;
+public class Anchor {
 
     private String location;
 

@@ -29,7 +29,7 @@ export default {
       codeButton: {
         name: '发送验证码',
         isDisabled: false,
-        time: 10
+        time: 30
       },
       registerForm: {
         id: '',
@@ -84,9 +84,9 @@ export default {
         Api.post('/send_verify_mail', {
           'email': this.registerForm.id
         }).then((data) => {
-          if (data.code === Code.FAILURE) {
-            this.$message.warning(data.msg);
-          }
+          if (data.code === Code.SUCCESS) {
+            this.$message.success(data.msg);
+          } else this.$message.warning(data.msg);
         });
       } else {
         this.$message.warning('请输入正确的邮箱地址');
