@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header>
-      <CategorySelector :categories="types" :width="1200" label="label" value="value" @select="selectRestaurantType"/>
+      <CategorySelector title="商家分类" :categories="types" :width="1200" label="label" value="value" @select="selectRestaurantType"/>
     </el-header>
     <el-main class="restaurants">
       <el-row>

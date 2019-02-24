@@ -114,7 +114,7 @@ export default {
   }
 
   .avatar {
-    padding: 10px 8px 0 7px;
+    padding: 10px 8px 0 5px;
     float: left;
   }
 

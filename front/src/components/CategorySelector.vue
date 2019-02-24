@@ -71,11 +71,13 @@ export default {
   }
 
   .selected {
-    background-color: var(--theme-grey);
+    background-color: var(--theme-blue);
+    color: white;
   }
 
   .item:hover {
-    background-color: var(--theme-grey);
+    background-color: var(--theme-blue);
+    color: white;
     cursor: pointer;
   }
 </style>
