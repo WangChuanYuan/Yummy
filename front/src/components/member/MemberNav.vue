@@ -59,11 +59,13 @@ export default {
     navigation (key) {
       switch (key) {
         case 'bookCenter':
+          this.$router.push('/bookCenter');
           break;
         case 'memberCenter':
           this.$router.push('/memberCenter');
           break;
         case 'register':
+          this.$router.push('/register');
           break;
         case 'member-info':
           break;

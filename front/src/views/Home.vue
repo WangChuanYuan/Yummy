@@ -80,6 +80,6 @@ export default {
     opacity: 0.85;
     filter: alpha(opacity:85);
     /* 边框 */
-    box-shadow: 10px 10px 5px #888;
+    box-shadow: 10px 10px 5px var(--theme-medium-grey);
   }
 </style>

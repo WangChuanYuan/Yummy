@@ -1,5 +1,5 @@
 <template>
-  <div class="footer" style="border-top: 1px solid #c0c0c0">
+  <div class="footer" style="border-top: 1px solid var(--theme-medium-grey)">
     <div class="clear-fix">
       <div class="footer-block" style="margin-left: 38%">
         <a>关于</a>

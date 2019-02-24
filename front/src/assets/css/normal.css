@@ -1,8 +1,9 @@
 :root {
   --theme-blue: #409eff;
   --theme-golden: #ffd04b;
-  --theme-grey: #f7f7f7;
   --theme-black: #2e3f51;
+  --theme-grey: #f7f7f7;
+  --theme-medium-grey: #c0c0c0;
   --theme-deep-grey: #545c64;
 }
 

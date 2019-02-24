@@ -5,6 +5,7 @@ import Home from '@/views/Home';
 import Register from '@/views/Register';
 import MemberCenter from '@/views/MemberCenter';
 import RestaurantCenter from '@/views/RestaurantCenter';
+import BookCenter from '@/views/BookCenter';
 
 import MemberInfo from '@/components/member/MemberInfo';
 import MemberAddress from '@/components/member/MemberAddress';
@@ -15,6 +16,7 @@ import GoodsManager from '@/components/restaurant/GoodsManager';
 import GoodsEditor from '@/components/restaurant/GoodsEditor';
 import ComboManager from '@/components/restaurant/ComboManager';
 import ComboEditor from '@/components/restaurant/ComboEditor';
+import RestaurantPage from '@/components/book/RestaurantPage';
 
 Vue.use(Router);
 
@@ -29,6 +31,18 @@ export default new Router({
       path: '/register',
       name: 'register',
       component: Register
+    },
+    {
+      path: '/bookCenter',
+      name: 'bookCenter',
+      component: BookCenter,
+      children: [
+        {
+          path: '',
+          name: 'restaurantPage',
+          component: RestaurantPage
+        }
+      ]
     },
     {
       path: '/memberCenter',
