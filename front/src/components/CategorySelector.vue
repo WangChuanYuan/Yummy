@@ -1,11 +1,14 @@
 <template>
-  <div class="selector" :style="{width: width + 'px'}">
+  <div class="selector center" :style="{width: width + 'px', backgroundColor: backgroundColor}">
     <el-row>
-      <el-col :span="3" style="color: #888; font-weight: bold">{{title}}</el-col>
+      <el-col :span="3" style="font-weight: bold" :style="{color: titleColor}">{{title}}</el-col>
       <el-col :span="21">
         <el-row :gutter="5">
+          <el-col :span="3">
+            <div class="item" :class="{selected: '' === selected}" @click="select('')">全部</div>
+          </el-col>
           <el-col :span="3" v-for="item in categories" :key="item[value]">
-            <div class="item" :class="{selected: item[value] === selected}" @click="select(item[value])">{{item[label]}}</div>
+            <div class="item" :class="{selected: selected === item[value]}" @click="select(item[value])">{{item[label]}}</div>
           </el-col>
         </el-row>
       </el-col>
@@ -20,6 +23,14 @@ export default {
     'title': {
       type: String,
       default: '分类'
+    },
+    'titleColor': {
+      type: String,
+      default: '#888'
+    },
+    'backgroundColor': {
+      type: String,
+      default: 'white'
     },
     'categories': {
       type: [Array, Object],
@@ -55,7 +66,6 @@ export default {
 <style scoped>
   .selector {
     padding: 5px 10px 5px 10px;
-    background-color: white;
     border: 1px solid var(--theme-medium-grey);
     box-shadow: 10px 10px 5px var(--theme-medium-grey);
   }

@@ -23,7 +23,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberDAO.findById(mid).orElse(null);
         if (null == member)
             return new ResultMsg<>("邮箱未注册", Code.INVALID_EMAIL);
-        else if (member.getAccountState() == AccountState.CANCELED)
+        else if (member.getAccountState() == AccountState.INVALID)
             return new ResultMsg<>("邮箱已注销", Code.CANCELED_EMAIL);
         else if (!member.getPassword().equals(password))
             return new ResultMsg<>("密码错误", Code.WRONG_PASS);
@@ -56,7 +56,7 @@ public class MemberServiceImpl implements MemberService {
     public ResultMsg<Member> evict(String mid) {
         Member member = memberDAO.findById(mid).orElse(null);
         if (null != member) {
-            member.setAccountState(AccountState.CANCELED);
+            member.setAccountState(AccountState.INVALID);
             memberDAO.flush();
             return new ResultMsg<>("注销成功", Code.SUCCESS, member);
         } else return new ResultMsg<>("注销失败", Code.FAILURE);

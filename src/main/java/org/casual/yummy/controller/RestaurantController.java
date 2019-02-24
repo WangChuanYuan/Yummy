@@ -29,7 +29,8 @@ public class RestaurantController {
         String password = (String) param.get("password");
         RegisterInfo registerInfo = JsonUtil.obj2pojo(param, RegisterInfo.class);
         Restaurant restaurant = new Restaurant(registerInfo, new MarketInfo());
-        restaurant.setPassword(password).setAccountState(AccountState.VALID).setRole(Role.RESTAURANT);
+        /* 完整经营信息后，账号生效 */
+        restaurant.setPassword(password).setAccountState(AccountState.INVALID).setRole(Role.RESTAURANT);
         return restaurantService.register(restaurant);
     }
 }

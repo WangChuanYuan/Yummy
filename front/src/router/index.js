@@ -17,6 +17,7 @@ import GoodsEditor from '@/components/restaurant/GoodsEditor';
 import ComboManager from '@/components/restaurant/ComboManager';
 import ComboEditor from '@/components/restaurant/ComboEditor';
 import RestaurantPage from '@/components/book/RestaurantPage';
+import GoodsPage from '@/components/book/GoodsPage';
 
 Vue.use(Router);
 
@@ -41,6 +42,11 @@ export default new Router({
           path: '',
           name: 'restaurantPage',
           component: RestaurantPage
+        },
+        {
+          path: '/bookCenter/:id',
+          name: 'goodsPage',
+          component: GoodsPage
         }
       ]
     },
