@@ -1,7 +1,7 @@
 <template>
   <el-container>
-    <el-header>
-      <CategorySelector title="商家分类" :categories="types" :width="1200" label="label" value="value" @select="selectRestaurantType"/>
+    <el-header style="margin-top: 20px">
+      <CategorySelector class="center" title="商家分类" :categories="types" :width="1110" label="label" value="value" @select="selectRestaurantType"/>
     </el-header>
     <el-main class="restaurants">
       <el-row>
@@ -37,9 +37,10 @@ export default {
 <style scoped>
   .restaurants {
     padding: 0;
-    margin: 2% 10% 0 10%;
+    margin: 2% 13% 2% 13%;
     min-height: 500px;
     width: 1110px;
     background-color: white;
+    box-shadow: 10px 10px 5px var(--theme-medium-grey);
   }
 </style>

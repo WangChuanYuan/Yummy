@@ -4,7 +4,7 @@
       <el-header style="padding: 0">
         <MemberNav/>
       </el-header>
-      <el-main>
+      <el-main style="padding: 0">
         <router-view/>
       </el-main>
     </el-container>

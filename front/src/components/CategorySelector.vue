@@ -1,5 +1,5 @@
 <template>
-  <div class="selector center" :style="{width: width + 'px', backgroundColor: backgroundColor}">
+  <div class="selector" :style="{width: width + 'px', backgroundColor: backgroundColor}">
     <el-row>
       <el-col :span="3" style="font-weight: bold" :style="{color: titleColor}">{{title}}</el-col>
       <el-col :span="21">
