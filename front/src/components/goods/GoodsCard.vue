@@ -30,7 +30,7 @@
       <el-button type="text" @click="deleteGoods">下架</el-button>
     </div>
     <div class="goods-op" v-show="aim === 'purchase'">
-      <el-input-number :min="0" :precision="0" size="mini"></el-input-number>
+      <el-input-number :min="1" :precision="0" size="mini" v-model="numToPurchase"></el-input-number>
       <el-button type="text">购买</el-button>
     </div>
   </el-card>
@@ -52,6 +52,7 @@ export default {
           gid: 0,
           cgid: 0,
           category: '',
+          num: 1,
           avatar: require('../../assets/image/oil.jpg'),
           name: '',
           description: '',
@@ -66,7 +67,8 @@ export default {
   },
   data () {
     return {
-      inGoods: JSON.parse(JSON.stringify(this.goods))
+      inGoods: JSON.parse(JSON.stringify(this.goods)),
+      numToPurchase: 1
     };
   },
   watch: {

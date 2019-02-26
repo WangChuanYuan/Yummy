@@ -1,5 +1,6 @@
 <template>
   <div style="height: 100%">
+    <ShoppingCart/>
     <el-container class="section" style="background-color: var(--theme-grey)">
       <el-header style="padding: 0">
         <MemberNav/>
@@ -15,10 +16,11 @@
 <script>
 import MemberNav from '../components/member/MemberNav';
 import Footer from '../components/Footer';
+import ShoppingCart from '../components/ShoppingCart';
 
 export default {
   name: 'BookCenter',
-  components: {Footer, MemberNav}
+  components: {ShoppingCart, Footer, MemberNav}
 };
 </script>
 

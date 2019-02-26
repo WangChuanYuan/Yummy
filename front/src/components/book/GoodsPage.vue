@@ -36,11 +36,11 @@
       <el-container>
         <el-main>
           <el-header style="margin-top: 20px">
-            <CategorySelector title="商品分类" :categories="categories" :width="800" label="name" value="cgid" @select="selectCategory"/>
+            <CategorySelector class="center" title="商品分类" :categories="categories" :width="800" label="name" value="cgid" @select="selectCategory"/>
           </el-header>
           <el-main>
             <el-row>
-              <el-col :span="8" v-for="item in goods" :key="item.gid">
+              <el-col :span="6" v-for="item in goods" :key="item.gid">
                 <GoodsCard aim="purchase"></GoodsCard>
               </el-col>
             </el-row>
@@ -64,7 +64,7 @@ export default {
     return {
       id: this.$route.params.id,
       restaurant: {
-        id: '0000000',
+        id: '',
         avatar: require('../../assets/image/city.jpg'),
         registerInfo: {
           name: '',

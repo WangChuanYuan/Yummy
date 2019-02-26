@@ -31,7 +31,7 @@
       <el-button type="text" @click="deleteCombo">下架</el-button>
     </div>
     <div class="combo-op" v-show="aim === 'purchase'">
-      <el-input-number :min="0" :precision="0" size="mini"></el-input-number>
+      <el-input-number :min="1" :precision="0" size="mini" v-model="numToPurchase"></el-input-number>
       <el-button type="text">购买</el-button>
     </div>
   </el-card>
@@ -72,7 +72,8 @@ export default {
   data () {
     return {
       inCombo: JSON.parse(JSON.stringify(this.combo)),
-      comboGoods: []
+      comboGoods: [],
+      numToPurchase: 1
     };
   },
   mounted () {

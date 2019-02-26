@@ -40,10 +40,8 @@ public class GoodsDTO {
         Category category = goods.getCategory();
         SaleInfo saleInfo = goods.getSaleInfo();
         this.gid = goods.getGid();
-        if (null != category) {
-            this.cgid = category.getCgid();
-            this.category = category.getName();
-        }
+        this.cgid = category.getCgid();
+        this.category = category.getName();
         this.num = comboItem.getNum();
         this.avatar = saleInfo.getAvatar();
         this.name = saleInfo.getName();
@@ -59,11 +57,9 @@ public class GoodsDTO {
         Category category = goods.getCategory();
         SaleInfo saleInfo = goods.getSaleInfo();
         this.gid = goods.getGid();
-        if (null != category) {
-            this.cgid = category.getCgid();
-            this.category = category.getName();
-        }
-        this.num = 0;
+        this.cgid = category.getCgid();
+        this.category = category.getName();
+        this.num = 1;
         this.avatar = saleInfo.getAvatar();
         this.name = saleInfo.getName();
         this.description = saleInfo.getDescription();
