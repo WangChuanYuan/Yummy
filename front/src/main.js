@@ -10,6 +10,7 @@ import BaiduMap from 'vue-baidu-map';
 import './assets/css/normal.css';
 import './assets/js/extend';
 import router from './router';
+import store from './store';
 
 Vue.config.productionTip = false;
 
@@ -24,6 +25,7 @@ Vue.use(BaiduMap, {
 new Vue({
   el: '#app',
   router,
+  store,
   components: {App},
   template: '<App/>'
 });

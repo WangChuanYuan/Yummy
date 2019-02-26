@@ -32,7 +32,7 @@
     </div>
     <div class="combo-op" v-show="aim === 'purchase'">
       <el-input-number :min="1" :precision="0" size="mini" v-model="numToPurchase"></el-input-number>
-      <el-button type="text">购买</el-button>
+      <el-button type="text" @click="addToCart">加入购物车</el-button>
     </div>
   </el-card>
 </template>
@@ -101,6 +101,9 @@ export default {
       Api.get('/get_combo_goods', {cid: cid}).then((data) => {
         this.comboGoods = data;
       }).catch(() => {});
+    },
+    addToCart () {
+      // TODO
     }
   }
 };

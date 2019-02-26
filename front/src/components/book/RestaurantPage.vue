@@ -16,7 +16,7 @@
 <script>
 import CategorySelector from '../CategorySelector';
 import {RestaurantType} from '../../assets/js/attrib';
-import RestaurantCard from './RestaurantCard';
+import RestaurantCard from '../restaurant/RestaurantCard';
 
 export default {
   name: 'RestaurantPage',
