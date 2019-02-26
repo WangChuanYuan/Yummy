@@ -1,4 +1,5 @@
 export default {
   /* 购物车 */
-  cart: sessionStorage.getItem('cart') ? JSON.parse(sessionStorage.getItem('cart')) : {},
+  goods: sessionStorage.getItem('goods') ? JSON.parse(sessionStorage.getItem('goods')) : {},
+  combos: sessionStorage.getItem('combos') ? JSON.parse(sessionStorage.getItem('combos')) : {}
 };

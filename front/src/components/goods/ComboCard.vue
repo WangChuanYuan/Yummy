@@ -2,11 +2,11 @@
   <el-card class="box-card clear-fix" :body-style="{ padding: '0px' }">
     <div class="clear-fix">
       <div class="avatar">
-        <img :src="inCombo.saleInfo.avatar">
+        <img :src="inCombo.avatar">
       </div>
       <div class="info">
         <div class="omission">
-          <span style="font-size: 20px; font-weight: bold">{{inCombo.saleInfo.name}}</span>
+          <span style="font-size: 20px; font-weight: bold">{{inCombo.name}}</span>
         </div>
         <el-popover placement="right" trigger="click">
           <GoodsTable :goods="comboGoods"/>
@@ -15,14 +15,14 @@
         <br/>
         <div style="font-size: 13px">
           <span>价格:</span>
-          <span>{{inCombo.saleInfo.price}}</span>
+          <span>{{inCombo.price}}</span>
         </div>
         <div class="omission" style="font-size: 13px">
           <span>今日剩余:</span>
-          <span>{{inCombo.saleInfo.dLeft}}</span>
+          <span>{{inCombo.dLeft}}</span>
           <br/>
           <span>库存总量:</span>
-          <span>{{inCombo.saleInfo.stock}}</span>
+          <span>{{inCombo.stock}}</span>
         </div>
       </div>
     </div>
@@ -31,7 +31,7 @@
       <el-button type="text" @click="deleteCombo">下架</el-button>
     </div>
     <div class="combo-op" v-show="aim === 'purchase'">
-      <el-input-number :min="1" :precision="0" size="mini" v-model="numToPurchase"></el-input-number>
+      <el-input-number :min="1" :precision="0" size="mini" v-model="inCombo.num"></el-input-number>
       <el-button type="text" @click="addToCart">加入购物车</el-button>
     </div>
   </el-card>
@@ -39,6 +39,7 @@
 
 <script>
 import GoodsTable from './GoodsTable';
+import {mapGetters, mapActions} from 'vuex';
 import Api from '../../assets/js/api';
 
 export default {
@@ -55,16 +56,15 @@ export default {
       default: function () {
         return {
           cid: 0,
-          saleInfo: {
-            avatar: require('../../assets/image/cream.jpg'),
-            name: '',
-            description: '',
-            price: 0,
-            dLeft: 0,
-            stock: 0,
-            startDate: '',
-            endDate: ''
-          }
+          avatar: require('../../assets/image/cream.jpg'),
+          name: '',
+          description: '',
+          price: 0,
+          num: 1,
+          dLeft: 0,
+          stock: 0,
+          startDate: '',
+          endDate: ''
         };
       }
     }
@@ -72,8 +72,7 @@ export default {
   data () {
     return {
       inCombo: JSON.parse(JSON.stringify(this.combo)),
-      comboGoods: [],
-      numToPurchase: 1
+      comboGoods: []
     };
   },
   mounted () {
@@ -83,6 +82,11 @@ export default {
     combo (val) {
       this.inCombo = JSON.parse(JSON.stringify(val));
     }
+  },
+  computed: {
+    ...mapGetters({
+      hasCombo: 'cart/hasCombo'
+    })
   },
   methods: {
     modifyCombo () {
@@ -100,10 +104,20 @@ export default {
     getComboGoods (cid) {
       Api.get('/get_combo_goods', {cid: cid}).then((data) => {
         this.comboGoods = data;
-      }).catch(() => {});
+      }).catch(() => {
+      });
     },
+    ...mapActions({
+      'createComboToCart': 'cart/create_combo_to_cart',
+      'modifyComboFromCart': 'cart/modify_combo_num_from_cart'
+    }),
     addToCart () {
-      // TODO
+      if (this.inCombo.num > 0) {
+        let combo = JSON.parse(JSON.stringify(this.inCombo));
+        if (this.hasCombo(combo)) {
+          this.modifyComboFromCart({combo: combo, num: combo.num});
+        } else this.createComboToCart(combo);
+      }
     }
   }
 };

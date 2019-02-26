@@ -1,5 +1,6 @@
 package org.casual.yummy.controller;
 
+import org.casual.yummy.dto.ComboDTO;
 import org.casual.yummy.dto.GoodsDTO;
 import org.casual.yummy.model.goods.Combo;
 import org.casual.yummy.model.goods.SaleInfo;
@@ -83,16 +84,22 @@ public class ComboController {
     }
 
     @GetMapping("/get_combo")
-    public Combo getCombo(@RequestParam Long cid) {
-        return comboService.getComboById(cid);
+    public ComboDTO getCombo(@RequestParam Long cid) {
+        return new ComboDTO(comboService.getComboById(cid));
     }
 
     @GetMapping("/get_selling_combos")
-    public List<Combo> getCombos(@RequestParam String rid, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    public List<ComboDTO> getCombos(@RequestParam String rid, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+        List<ComboDTO> comboDTOS = new ArrayList<>();
+        List<Combo> combos;
         if (null != page && null != size) {
             Pageable pageable = PageRequest.of(page - 1, size);
-            return comboService.getSellingCombos(rid, pageable);
-        } else return comboService.getSellingCombos(rid);
+            combos = comboService.getSellingCombos(rid, pageable);
+        } else combos = comboService.getSellingCombos(rid);
+        combos.parallelStream().forEach(item -> {
+            comboDTOS.add(new ComboDTO(item));
+        });
+        return comboDTOS;
     }
 
     @GetMapping("/get_combo_goods")
