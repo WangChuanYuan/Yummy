@@ -13,10 +13,13 @@ import org.casual.yummy.utils.Code;
 import org.casual.yummy.utils.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Predicate;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -87,12 +90,28 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public List<Goods> getSellingGoods(String rid) {
-        return goodsDAO.findSellingGoods(rid);
-    }
-
-    @Override
-    public List<Goods> getSellingGoods(String rid, Pageable page) {
-        return goodsDAO.findSellingGoods(rid, page);
+    public List<Goods> getSellingGoods(String rid, Long cgid, Pageable page) {
+        Specification<Goods> specification = (Specification<Goods>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> conditions = new ArrayList<>();
+            Predicate restaurantCondition = null;
+            if (null != rid) {
+                restaurantCondition = criteriaBuilder.equal(root.join("restaurant").get("id").as(String.class), rid);
+                conditions.add(restaurantCondition);
+            }
+            Predicate categoryCondition = null;
+            if (null != cgid) {
+                categoryCondition = criteriaBuilder.equal(root.join("category").get("cgid").as(Long.class), cgid);
+                conditions.add(categoryCondition);
+            }
+            Predicate startDateCondition = criteriaBuilder.lessThanOrEqualTo(root.get("saleInfo").get("startDate").as(LocalDate.class), LocalDate.now());
+            conditions.add(startDateCondition);
+            Predicate endDateCondition = criteriaBuilder.greaterThanOrEqualTo(root.get("saleInfo").get("endDate").as(LocalDate.class), LocalDate.now());
+            conditions.add(endDateCondition);
+            Predicate[] predicates = new Predicate[conditions.size()];
+            return criteriaBuilder.and(conditions.toArray(predicates));
+        };
+        if (null != page)
+            return goodsDAO.findAll(specification, page).getContent();
+        else return goodsDAO.findAll(specification);
     }
 }

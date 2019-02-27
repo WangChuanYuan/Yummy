@@ -25,18 +25,18 @@ export default {
   /* 添加套餐到购物车中 */
   [types.CREATE_COMBO_TO_CART] (state, combo) {
     /* 以key-value键值对的形式存放在购物车中 */
-    Vue.set(state.combo, `${combo.cid}`, combo);
+    Vue.set(state.combos, `${combo.cid}`, combo);
   },
   /* 删除购物车里的套餐 */
   [types.DELETE_COMBO_FROM_CART] (state, combo) {
     /* 删除套餐只要删除指定的key */
-    Vue.delete(state.combo, `${combo.cid}`);
+    Vue.delete(state.combos, `${combo.cid}`);
   },
   /* 修改购物车的商品的数量 */
   [types.MODIFY_COMBO_NUM_FROM_CART] (state, data) {
     let combo = data.combo;
     let num = data.num;
-    let item = state.goods[`${combo.cid}`];
+    let item = state.combos[`${combo.cid}`];
 
     /* 购买次数限制的逻辑这里不写，有需要自己添加 */
     /* 更新 */

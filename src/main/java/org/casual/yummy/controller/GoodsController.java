@@ -97,14 +97,15 @@ public class GoodsController {
     }
 
     @GetMapping("/get_selling_goods")
-    public List<GoodsDTO> getSellingGoods(@RequestParam String rid, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    public List<GoodsDTO> getSellingGoods(@RequestParam String rid,
+                                          @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size,
+                                          @RequestParam(required = false) Long cgid) {
         List<GoodsDTO> goodsDTOS = new ArrayList<>();
-        List<Goods> goods;
+        Pageable pageable = null;
         if (null != page && null != size) {
-            Pageable pageable = PageRequest.of(page - 1, size);
-            goods = goodsService.getSellingGoods(rid, pageable);
-        } else goods = goodsService.getSellingGoods(rid);
-        goods.parallelStream().forEach(item -> {
+            pageable = PageRequest.of(page - 1, size);
+        }
+        goodsService.getSellingGoods(rid, cgid, pageable).parallelStream().forEach(item -> {
             goodsDTOS.add(new GoodsDTO(item));
         });
         return goodsDTOS;

@@ -16,7 +16,5 @@ public interface GoodsService {
 
     Goods getGoodsById(Long gid);
 
-    List<Goods> getSellingGoods(String rid);
-
-    List<Goods> getSellingGoods(String rid, Pageable page);
+    List<Goods> getSellingGoods(String rid, Long cgid, Pageable page);
 }

@@ -19,8 +19,6 @@ public interface ComboService {
 
     Combo getComboById(Long cid);
 
-    List<Combo> getSellingCombos(String rid);
-
     List<Combo> getSellingCombos(String rid, Pageable pageable);
 
     List<ComboItem> getComboItems(Long cid);

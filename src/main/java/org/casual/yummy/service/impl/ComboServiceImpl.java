@@ -15,9 +15,11 @@ import org.casual.yummy.utils.Code;
 import org.casual.yummy.utils.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Predicate;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -120,13 +122,24 @@ public class ComboServiceImpl implements ComboService {
     }
 
     @Override
-    public List<Combo> getSellingCombos(String rid) {
-        return comboDAO.findSellingCombos(rid);
-    }
-
-    @Override
-    public List<Combo> getSellingCombos(String rid, Pageable pageable) {
-        return comboDAO.findSellingCombos(rid, pageable);
+    public List<Combo> getSellingCombos(String rid, Pageable page) {
+        Specification<Combo> specification = (Specification<Combo>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> conditions = new ArrayList<>();
+            Predicate restaurantCondition = null;
+            if (null != rid) {
+                restaurantCondition = criteriaBuilder.equal(root.join("restaurant").get("id").as(String.class), rid);
+                conditions.add(restaurantCondition);
+            }
+            Predicate startDateCondition = criteriaBuilder.lessThanOrEqualTo(root.get("saleInfo").get("startDate").as(LocalDate.class), LocalDate.now());
+            conditions.add(startDateCondition);
+            Predicate endDateCondition = criteriaBuilder.greaterThanOrEqualTo(root.get("saleInfo").get("endDate").as(LocalDate.class), LocalDate.now());
+            conditions.add(endDateCondition);
+            Predicate[] predicates = new Predicate[conditions.size()];
+            return criteriaBuilder.and(conditions.toArray(predicates));
+        };
+        if (null != page)
+            return comboDAO.findAll(specification, page).getContent();
+        else return comboDAO.findAll(specification);
     }
 
     @Override

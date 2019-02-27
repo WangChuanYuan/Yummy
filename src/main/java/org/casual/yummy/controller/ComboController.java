@@ -91,12 +91,11 @@ public class ComboController {
     @GetMapping("/get_selling_combos")
     public List<ComboDTO> getCombos(@RequestParam String rid, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
         List<ComboDTO> comboDTOS = new ArrayList<>();
-        List<Combo> combos;
+        Pageable pageable = null;
         if (null != page && null != size) {
-            Pageable pageable = PageRequest.of(page - 1, size);
-            combos = comboService.getSellingCombos(rid, pageable);
-        } else combos = comboService.getSellingCombos(rid);
-        combos.parallelStream().forEach(item -> {
+             pageable = PageRequest.of(page - 1, size);
+        }
+        comboService.getSellingCombos(rid, pageable).parallelStream().forEach(item -> {
             comboDTOS.add(new ComboDTO(item));
         });
         return comboDTOS;

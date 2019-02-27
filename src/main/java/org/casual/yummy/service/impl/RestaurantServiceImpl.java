@@ -1,14 +1,21 @@
 package org.casual.yummy.service.impl;
 
 import org.casual.yummy.dao.RestaurantDAO;
+import org.casual.yummy.model.AccountState;
 import org.casual.yummy.model.restaurant.Restaurant;
+import org.casual.yummy.model.restaurant.RestaurantType;
 import org.casual.yummy.service.RestaurantService;
 import org.casual.yummy.utils.Code;
 import org.casual.yummy.utils.IDGenerator;
 import org.casual.yummy.utils.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
@@ -44,5 +51,27 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public Restaurant getRestaurantById(String rid) {
         return restaurantDAO.findById(rid).orElse(null);
+    }
+
+    @Override
+    public List<Restaurant> getRestaurants(RestaurantType type, String location) {
+        Specification<Restaurant> specification = (Specification<Restaurant>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> conditions = new ArrayList<>();
+            Predicate typeCondition = null;
+            if (null != type) {
+                typeCondition = criteriaBuilder.equal(root.get("registerInfo").get("type").as(RestaurantType.class), type);
+                conditions.add(typeCondition);
+            }
+            Predicate locationCondition = null;
+            if (null != location) {
+                locationCondition = criteriaBuilder.like(root.get("registerInfo").get("location").as(String.class), location);
+                conditions.add(locationCondition);
+            }
+            Predicate validCondition = criteriaBuilder.equal(root.get("accountState").as(AccountState.class), AccountState.VALID);
+            conditions.add(validCondition);
+            Predicate[] predicates = new Predicate[conditions.size()];
+            return criteriaBuilder.and(conditions.toArray(predicates));
+        };
+        return restaurantDAO.findAll(specification);
     }
 }

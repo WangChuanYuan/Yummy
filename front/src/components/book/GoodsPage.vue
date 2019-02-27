@@ -34,19 +34,38 @@
     </el-header>
     <el-main style="padding: 0">
       <el-container>
-        <el-main>
-          <el-header style="margin-top: 20px">
-            <CategorySelector class="center" title="商品分类" :categories="categories" :width="800" label="name" value="cgid" @select="selectCategory"/>
-          </el-header>
-          <el-main>
-            <el-row>
-              <el-col :span="6" v-for="item in goods" :key="item.gid">
-                <GoodsCard aim="purchase"></GoodsCard>
-              </el-col>
-            </el-row>
-          </el-main>
+        <el-main style="padding-right: 0">
+          <el-container>
+            <el-header class="clear-fix">
+              <el-radio-group v-model="sort" style="float: left">
+                <el-radio-button label="goods">单品</el-radio-button>
+                <el-radio-button label="combos">套餐</el-radio-button>
+              </el-radio-group>
+            </el-header>
+            <el-main v-show="sort === 'goods'">
+              <el-header>
+                <CategorySelector class="center" title="商品分类" :categories="categories" :width="800" label="name" value="cgid" @select="selectCategory"/>
+              </el-header>
+              <el-main>
+                <el-row>
+                  <el-col :span="6" v-for="item in goods" :key="item.gid">
+                    <GoodsCard aim="purchase" :goods="item"></GoodsCard>
+                  </el-col>
+                </el-row>
+              </el-main>
+            </el-main>
+            <el-main v-show="sort === 'combos'">
+              <el-row>
+                <el-col :span="6" v-for="item in combos" :key="item.cid">
+                  <ComboCard aim="purchase" :combo="item"></ComboCard>
+                </el-col>
+              </el-row>
+            </el-main>
+          </el-container>
         </el-main>
-        <el-aside></el-aside>
+        <el-aside width="280px">
+          <!-- 优惠栏 -->
+        </el-aside>
       </el-container>
     </el-main>
   </el-container>
@@ -54,12 +73,14 @@
 
 <script>
 import GoodsCard from '../goods/GoodsCard';
+import ComboCard from '../goods/ComboCard';
 import CategorySelector from '../CategorySelector';
 import {RestaurantType} from '../../assets/js/attrib';
+import Api from '../../assets/js/api';
 
 export default {
   name: 'GoodsPage',
-  components: {CategorySelector, GoodsCard},
+  components: {ComboCard, CategorySelector, GoodsCard},
   data () {
     return {
       id: this.$route.params.id,
@@ -83,12 +104,38 @@ export default {
           endHour: '22:00:00'
         }
       },
+      sort: 'goods',
       categories: [],
-      goods: []
+      cgid: '', // 实际为Number类型，但选择全部时返回的是''
+      goods: [],
+      combos: []
     };
+  },
+  mounted () {
+    Api.get('/get_restaurant', {id: this.$route.params.id}).then((data) => {
+      if (data) this.restaurant = data;
+    }).catch(() => {});
+    Api.get('/get_categories', {restaurant: this.$route.params.id}).then((data) => {
+      if (data) this.categories = data;
+    }).catch(() => {});
+    this.getGoods();
+    this.getCombos();
   },
   methods: {
     selectCategory (cgid) {
+      this.cgid = cgid;
+    },
+    getGoods () {
+      let params = {rid: this.$route.params.id};
+      if (this.cgid) params['cgid'] = this.cgid;
+      Api.get('/get_selling_goods', params).then((data) => {
+        if (data) this.goods = data;
+      }).catch(() => {});
+    },
+    getCombos () {
+      Api.get('/get_selling_combos', {rid: this.$route.params.id}).then((data) => {
+        if (data) this.combos = data;
+      }).catch(() => {});
     }
   }
 };
