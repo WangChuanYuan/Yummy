@@ -23,7 +23,7 @@ public class Goods {
     @Embedded
     private SaleInfo saleInfo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "restaurant", referencedColumnName = "id")
     private Restaurant restaurant;
 

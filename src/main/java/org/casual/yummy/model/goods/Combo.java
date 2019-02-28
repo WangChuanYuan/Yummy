@@ -28,7 +28,7 @@ public class Combo {
     @JsonManagedReference
     private List<ComboItem> items;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "restaurant", referencedColumnName = "id")
     private Restaurant restaurant;
 }

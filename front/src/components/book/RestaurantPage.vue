@@ -3,7 +3,7 @@
     <el-header style="margin-top: 20px" height="120px">
       <div class="clear-fix">
         <div style="margin-bottom: 10px; float: left">
-          <span>请选择地址</span>
+          <span>{{location ? location : '请选择地址'}}</span>
           <v-region @values="locationChange" style="background-color: white"></v-region>
         </div>
       </div>

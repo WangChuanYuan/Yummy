@@ -16,7 +16,7 @@
 <script>
 import MemberNav from '../components/member/MemberNav';
 import Footer from '../components/Footer';
-import ShoppingCart from '../components/ShoppingCart';
+import ShoppingCart from '../components/book/ShoppingCart';
 
 export default {
   name: 'BookCenter',

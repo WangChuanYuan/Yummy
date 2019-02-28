@@ -6,6 +6,7 @@ import Register from '@/views/Register';
 import MemberCenter from '@/views/MemberCenter';
 import RestaurantCenter from '@/views/RestaurantCenter';
 import BookCenter from '@/views/BookCenter';
+import OrderChecker from '@/views/OrderChecker';
 
 import MemberInfo from '@/components/member/MemberInfo';
 import MemberAddress from '@/components/member/MemberAddress';
@@ -49,6 +50,11 @@ export default new Router({
           component: GoodsPage
         }
       ]
+    },
+    {
+      path: '/orderChecker',
+      name: 'orderChecker',
+      component: OrderChecker
     },
     {
       path: '/memberCenter',

@@ -3,6 +3,7 @@ package org.casual.yummy.dto;
 import lombok.Data;
 import org.casual.yummy.model.goods.Combo;
 import org.casual.yummy.model.goods.SaleInfo;
+import org.casual.yummy.model.restaurant.Restaurant;
 
 import java.time.LocalDate;
 
@@ -10,6 +11,10 @@ import java.time.LocalDate;
 public class ComboDTO {
 
     private Long cid;
+
+    private String rid;
+
+    private String restaurant;
 
     private int num;
 
@@ -31,7 +36,10 @@ public class ComboDTO {
 
     public ComboDTO(Combo combo) {
         SaleInfo saleInfo = combo.getSaleInfo();
+        Restaurant restaurant = combo.getRestaurant();
         this.cid = combo.getCid();
+        this.rid = restaurant.getId();
+        this.restaurant = restaurant.getRegisterInfo().getName();
         this.num = 1;
         this.avatar = saleInfo.getAvatar();
         this.name = saleInfo.getName();
