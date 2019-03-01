@@ -63,10 +63,5 @@ export default {
     padding: 15px 0 15px 0;
     margin-bottom: 10px;
     text-align: left;
-    cursor: pointer;
-  }
-
-  .bar-card:hover {
-    border: 1px solid var(--theme-blue);
   }
 </style>

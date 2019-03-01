@@ -21,6 +21,7 @@
               </template>
               <el-menu-item index="/memberCenter/info">个人资料</el-menu-item>
               <el-menu-item index="/memberCenter/address">地址管理</el-menu-item>
+              <el-menu-item index="/memberCenter/pay">支付管理</el-menu-item>
             </el-submenu>
             <el-menu-item index="/memberCenter/orders">
               <i class="el-icon-tickets"></i>

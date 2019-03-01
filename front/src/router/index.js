@@ -10,6 +10,7 @@ import OrderChecker from '@/views/OrderChecker';
 
 import MemberInfo from '@/components/member/MemberInfo';
 import MemberAddress from '@/components/member/MemberAddress';
+import MemberPay from '@/components/member/MemberPay';
 import RegisterInfo from '@/components/restaurant/RegisterInfo';
 import MarketInfo from '@/components/restaurant/MarketInfo';
 import CategoryManager from '@/components/restaurant/CategoryManager';
@@ -36,7 +37,6 @@ export default new Router({
     },
     {
       path: '/bookCenter',
-      name: 'bookCenter',
       component: BookCenter,
       children: [
         {
@@ -69,6 +69,11 @@ export default new Router({
           path: 'info',
           name: 'member-info',
           component: MemberInfo
+        },
+        {
+          path: 'pay',
+          name: 'member-pay',
+          component: MemberPay
         },
         {
           path: 'address',

@@ -35,7 +35,31 @@
             <el-main class="member-info">
               <div class="member-info-block">
                 <div style="font-weight: bold; padding-bottom: 20px">收货地址</div>
-                <AddressBar :class="{'selected-address' : selectedAddress === item.aid}" v-for="item in addresses" :key="item.aid" :address="item" @select="selectAddress"/>
+                <el-button type="text" @click="$router.push('/memberCenter/address')">管理地址</el-button>
+                <AddressBar
+                  class="to-select"
+                  :class="{'selected' : address === item.aid}"
+                  v-for="item in addresses" :key="item.aid" :address="item"
+                  @select="selectAddress"/>
+              </div>
+              <div class="member-info-block">
+                <div style="font-weight: bold; padding-bottom: 20px">支付方式</div>
+                <el-button type="text" @click="$router.push('/memberCenter/pay')">管理支付</el-button>
+                <BankCard
+                  aim="display"
+                  class="to-select"
+                  :class="{'selected' : bankcard === item.cardNo}"
+                  v-for="item in bankcards" :key="item.cardNo" :bankcard="item"
+                  @select="selectBankCard"/>
+              </div>
+              <div class="member-info-block">
+                <div style="font-weight: bold; padding-bottom: 20px">送达时间</div>
+                <el-time-picker
+                  v-model="arrivalTime"
+                  value-format="HH:mm:ss"
+                  :picker-options="{selectableRange: '00:00:00 - 24:00:00'}"
+                  placeholder="选择送达时间">
+                </el-time-picker>
               </div>
               <div class="member-info-block">
                 <div style="font-weight: bold; padding-bottom: 20px">备注</div>
@@ -59,14 +83,19 @@ import MemberNav from '../components/member/MemberNav';
 import CartTable from '../components/book/cart/CartTable';
 import Footer from '../components/Footer';
 import AddressBar from '../components/member/address/AddressBar';
+import BankCard from '../components/member/pay/BankCard';
 
 export default {
   name: 'OrderChecker',
-  components: {AddressBar, Footer, CartTable, MemberNav},
+  components: {BankCard, AddressBar, Footer, CartTable, MemberNav},
   data () {
     return {
       addresses: [{}, {}],
-      selectedAddress: -1,
+      bankcards: [{}, {}],
+      /* form */
+      address: -1,
+      bankcard: '',
+      arrivalTime: '',
       tip: ''
     };
   },
@@ -89,7 +118,10 @@ export default {
   },
   methods: {
     selectAddress (aid) {
-      this.selectedAddress = aid;
+      this.address = aid;
+    },
+    selectBankCard (cardNo) {
+      this.bankcard = cardNo;
     }
   }
 };
@@ -137,7 +169,8 @@ export default {
     padding: 10px 20px 70px 20px;
   }
 
-  .selected-address {
+  .to-select:hover, .selected {
+    cursor: pointer;
     border: 1px solid var(--theme-blue);
   }
 

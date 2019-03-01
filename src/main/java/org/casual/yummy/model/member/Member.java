@@ -5,9 +5,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 import org.casual.yummy.model.User;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Data
@@ -26,4 +24,11 @@ public class Member extends User {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Address> addresses;
+
+    @ManyToMany
+    @JoinTable(name = "Member_BankCards",
+            joinColumns = {@JoinColumn(name = "member", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "bankcard", referencedColumnName = "cardNo")}
+    )
+    private List<BankCard> bankCards;
 }
