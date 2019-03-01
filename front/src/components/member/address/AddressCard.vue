@@ -1,17 +1,21 @@
 <template>
   <div>
-    <el-card class="box-card">
-      <div>
+    <el-card class="box-card clear-fix" :body-style="{ padding: '0px' }">
+      <div class="clear-fix">
         <span>{{inAddress.name}}</span>
         <span>{{inAddress.sex === 'MAN' ? '先生' : '女士'}}</span>
-        <el-button type="text" class="address-op" @click="deleteAddress">删除</el-button>
-        <el-button type="text" class="address-op" @click="editing = true">修改</el-button>
+        <div class="address-op">
+          <el-button type="text" @click="editing = true">修改</el-button>
+          <el-button type="text" @click="deleteAddress">删除</el-button>
+        </div>
         <br/>
         <br/>
-        <span>{{inAddress.location}}</span>
-        <span>{{inAddress.detailLocation}}</span>
-        <br/>
-        <span>{{inAddress.phone}}</span>
+        <div class="omission">
+          <span>{{inAddress.location}}</span>
+          <span>{{inAddress.detailLocation}}</span>
+          <br/>
+          <span>{{inAddress.phone}}</span>
+        </div>
       </div>
     </el-card>
     <!-- 修改地址 -->
@@ -87,15 +91,12 @@ export default {
   .box-card {
     width: 320px;
     height: 120px;
-    margin: 8px 0;
+    margin-bottom: 10px;
     text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .address-op {
+    padding-right: 20px;
     float: right;
-    padding: 3px 0;
   }
 </style>

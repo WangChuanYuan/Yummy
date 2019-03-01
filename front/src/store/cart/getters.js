@@ -39,8 +39,24 @@ export default {
       return res;
     } else return [];
   },
+  /* 计算单个商家的金额 */
+  cartMoney: state => (rid) => {
+    let money = 0;
+    let cart = state.cart[rid];
+    if (cart) {
+      let goods = cart.goods;
+      for (let item in goods) {
+        money += goods[item].price * goods[item].num;
+      }
+      let combos = cart.combos;
+      for (let item in combos) {
+        money += combos[item].price * combos[item].num;
+      }
+    }
+    return money;
+  },
   /* 计算购物车的总金额 */
-  cartMoney: state => {
+  totalMoney: state => {
     let money = 0;
     for (let item in state.cart) {
       let cart = state.cart[item];

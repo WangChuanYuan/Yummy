@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-//@Entity
+@Entity
 public class Order {
 
     @Id

@@ -21,6 +21,8 @@ public class Member extends User {
 
     private int level;
 
+    private int experience;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Address> addresses;
