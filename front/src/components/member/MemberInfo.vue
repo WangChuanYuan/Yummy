@@ -53,7 +53,7 @@
         <span>3000-9999: 5级</span>
         <i class="el-icon-info" slot="reference"></i>
       </el-popover>
-      <el-progress :text-inside="false" :stroke-width="15" :percentage="memberInfo.experience / 9999"/>
+      <el-progress :text-inside="true" :stroke-width="15" :percentage="memberInfo.experience / 9999"/>
       <div style="position: relative; top: -27px; left: 60px">{{memberInfo.experience}} / 9999</div>
     </el-form-item>
   </el-form>

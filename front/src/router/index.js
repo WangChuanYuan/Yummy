@@ -58,12 +58,11 @@ export default new Router({
     },
     {
       path: '/memberCenter',
-      name: 'memberCenter',
       component: MemberCenter,
       children: [
         {
           path: '',
-          name: 'member'
+          name: 'memberCenter'
         },
         {
           path: 'info',
@@ -92,12 +91,11 @@ export default new Router({
     },
     {
       path: '/restaurantCenter',
-      name: 'restaurantCenter',
       component: RestaurantCenter,
       children: [
         {
           path: '',
-          name: 'restaurant'
+          name: 'restaurantCenter'
         },
         {
           path: 'registerInfo',

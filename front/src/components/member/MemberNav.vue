@@ -68,10 +68,13 @@ export default {
           this.$router.push('/register');
           break;
         case 'member-info':
+          this.$router.push('/memberCenter/info');
           break;
         case 'member-orders':
+          this.$router.push('/memberCenter/orders');
           break;
         case 'member-address':
+          this.$router.push('/memberCenter/address');
           break;
         case 'member-logout':
           this.logout();

@@ -25,7 +25,7 @@
           <el-container>
             <el-aside width="665px">
               <div class="order-detail">
-                <span style="font-weight: bold">订单详情</span>
+                <div style="padding-top:15px; font-weight: bold">订单详情</div>
                 <hr/>
                 <div class="order-info">
                   <CartTable v-for="item in carts" :key="item" :rid="item"/>
@@ -57,7 +57,7 @@
                 <el-time-picker
                   v-model="arrivalTime"
                   value-format="HH:mm:ss"
-                  :picker-options="{selectableRange: '00:00:00 - 24:00:00'}"
+                  :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
                   placeholder="选择送达时间">
                 </el-time-picker>
               </div>
@@ -66,7 +66,7 @@
                 <el-input type="textarea" v-model="tip"></el-input>
               </div>
               <div class="member-info-block">
-                <el-button type="success" style="width: 200px">确认下单</el-button>
+                <el-button type="success" style="width: 200px" @click="submitOrder">确认下单</el-button>
               </div>
             </el-main>
           </el-container>
@@ -78,7 +78,9 @@
 </template>
 
 <script>
+import Api from '../assets/js/api';
 import {mapGetters} from 'vuex';
+import {Code} from '../assets/js/attrib';
 import MemberNav from '../components/member/MemberNav';
 import CartTable from '../components/book/cart/CartTable';
 import Footer from '../components/Footer';
@@ -95,7 +97,7 @@ export default {
       /* form */
       address: -1,
       bankcard: '',
-      arrivalTime: '',
+      arrivalTime: null,
       tip: ''
     };
   },
@@ -105,16 +107,12 @@ export default {
     })
   },
   mounted () {
-    let sessionCart = this.$store.state.cart.cart;
-    let carts = [];
-    for (let rid in sessionCart) {
-      let cart = {
-        rid: rid,
-        goods: this.$store.getters['cart/cartGoods'](rid),
-        combos: this.$store.getters['cart/cartCombos'](rid)
-      };
-      carts.push(cart);
-    }
+    Api.get('/get_addresses', {id: sessionStorage.getItem('id')}).then((data) => {
+      if (data) this.addresses = data;
+    }).catch(() => {});
+    Api.get('/get_bankcards', {mid: sessionStorage.getItem('id')}).then((data) => {
+      if (data) this.bankcards = data;
+    }).catch(() => {});
   },
   methods: {
     selectAddress (aid) {
@@ -122,6 +120,39 @@ export default {
     },
     selectBankCard (cardNo) {
       this.bankcard = cardNo;
+    },
+    submitOrder () {
+      if (this.address === -1) {
+        this.$message.warning('请选择收货地址');
+        return;
+      }
+      if (this.bankcard === '') {
+        this.$message.warning('请选择支付方式');
+        return;
+      }
+      let sessionCart = this.$store.state.cart.cart;
+      let carts = [];
+      for (let rid in sessionCart) {
+        let cart = {
+          rid: rid,
+          goods: this.$store.getters['cart/cartGoods'](rid),
+          combos: this.$store.getters['cart/cartCombos'](rid)
+        };
+        carts.push(cart);
+      }
+      if (carts.length === 0) {
+        this.$message.warning('购物车为空');
+        return;
+      }
+      Api.post('/submit_order', {
+        member: sessionStorage.getItem('id'),
+        address: this.address,
+        bankcard: this.bankcard,
+        arrivalTime: this.arrivalTime,
+        carts: carts
+      }).then((data) => {
+        if (data.code === Code.SUCCESS) {}
+      }).catch(() => {});
     }
   }
 };
