@@ -20,6 +20,8 @@ import ComboManager from '@/components/restaurant/ComboManager';
 import ComboEditor from '@/components/restaurant/ComboEditor';
 import RestaurantPage from '@/components/book/RestaurantPage';
 import GoodsPage from '@/components/book/GoodsPage';
+import OrderConfirmer from '@/components/order/OrderConfirmer';
+import OrderResult from '@/components/order/OrderResult';
 
 Vue.use(Router);
 
@@ -53,8 +55,20 @@ export default new Router({
     },
     {
       path: '/orderChecker',
-      name: 'orderChecker',
-      component: OrderChecker
+      component: OrderChecker,
+      children: [
+        {
+          path: '',
+          name: 'orderChecker',
+          component: OrderConfirmer
+        },
+        {
+          path: 'result',
+          name: 'orderResult',
+          component: OrderResult,
+          props: true
+        }
+      ]
     },
     {
       path: '/memberCenter',
