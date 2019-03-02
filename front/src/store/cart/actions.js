@@ -31,6 +31,11 @@ export default {
     commit(types.MODIFY_COMBO_NUM_FROM_CART, data);
     commit(types.UPDATE_CART);
   },
+  /* 清空购物车 */
+  clear_cart: ({commit}) => {
+    commit(types.CLEAR_CART);
+    commit(types.UPDATE_CART);
+  },
   /* 更新本地购物车 */
   update_cart: ({ commit }) => {
     commit(types.UPDATE_CART);

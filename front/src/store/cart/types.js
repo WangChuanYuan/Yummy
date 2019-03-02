@@ -10,5 +10,7 @@ export const CREATE_COMBO_TO_CART = 'CREATE_COMBO_TO_CART';
 export const DELETE_COMBO_FROM_CART = 'DELETE_COMBO_FROM_CART';
 /* 修改购物车套餐的数量 */
 export const MODIFY_COMBO_NUM_FROM_CART = 'MODIFY_COMBO_NUM_FROM_CART';
+/* 清空购物车 */
+export const CLEAR_CART = 'CLEAR_CART';
 /* 更新购物车 */
 export const UPDATE_CART = 'UPDATE_CART';

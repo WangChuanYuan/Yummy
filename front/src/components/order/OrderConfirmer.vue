@@ -51,7 +51,7 @@
 
 <script>
 import Api from '../../assets/js/api';
-import {mapGetters} from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 import {Code} from '../../assets/js/attrib';
 import CartTable from '../../components/book/cart/CartTable';
 import AddressBar from '../../components/member/address/AddressBar';
@@ -85,6 +85,9 @@ export default {
     }).catch(() => {});
   },
   methods: {
+    ...mapActions({
+      'clearCart': 'cart/clear_cart'
+    }),
     selectAddress (aid) {
       this.address = aid;
     },
@@ -122,6 +125,7 @@ export default {
         carts: JSON.stringify(carts)
       }).then((data) => {
         if (data.code === Code.SUCCESS) {
+          this.clearCart();
           this.$emit('success', data.value);
         }
       }).catch(() => {});

@@ -59,6 +59,10 @@ export default {
     /* 更新 */
     state.cart[`${combo.rid}`]['combos'][`${combo.cid}`] = Object.assign({}, item, {num: num});
   },
+  /* 清空购物车 */
+  [types.CLEAR_CART] (state) {
+    state.cart = {};
+  },
   /* 更新购物车 */
   [types.UPDATE_CART] (state) {
     sessionStorage.setItem('cart', JSON.stringify(state.cart));
