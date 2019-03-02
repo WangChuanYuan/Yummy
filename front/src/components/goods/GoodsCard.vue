@@ -17,8 +17,8 @@
         </div>
         <br/>
         <div class="omission" style="font-size: 13px">
-          <span>今日剩余:</span>
-          <span>{{inGoods.dLeft}}</span>
+          <span>每日供应:</span>
+          <span>{{inGoods.dailySupply}}</span>
           <br/>
           <span>库存总量:</span>
           <span>{{inGoods.stock}}</span>

@@ -149,7 +149,7 @@ export default {
         address: this.address,
         bankcard: this.bankcard,
         arrivalTime: this.arrivalTime,
-        carts: carts
+        carts: JSON.stringify(carts)
       }).then((data) => {
         if (data.code === Code.SUCCESS) {}
       }).catch(() => {});

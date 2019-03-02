@@ -111,12 +111,15 @@ export default {
         location += val.province.value;
       }
       if (val.city) {
+        location += ',';
         location += val.city.value;
       }
       if (val.area) {
+        location += ',';
         location += val.area.value;
       }
       if (val.town) {
+        location += ',';
         location += val.town.value;
       }
       this.addressForm.location = location;

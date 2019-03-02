@@ -4,12 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.casual.yummy.model.goods.Combo;
+import org.casual.yummy.model.goods.Goods;
 import org.casual.yummy.model.member.Address;
+import org.casual.yummy.model.member.BankCard;
 import org.casual.yummy.model.member.Member;
 import org.casual.yummy.model.restaurant.Restaurant;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Data
 @Accessors(chain = true)
@@ -33,6 +37,25 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "address", referencedColumnName = "aid")
     private Address address;
+
+    @ManyToOne
+    @JoinColumn(name = "bankcard", referencedColumnName = "cardNo")
+    private BankCard bankCard;
+
+    @ElementCollection
+    @MapKeyColumn(name = "goods")
+    @Column(name = "num")
+    @CollectionTable(name = "Order_Goods", joinColumns = {@JoinColumn(name = "order", referencedColumnName = "oid")})
+    private Map<Goods, Integer> goods;
+
+    @ElementCollection
+    @MapKeyColumn(name = "combo")
+    @Column(name = "num")
+    @CollectionTable(name = "Order_Combos", joinColumns = {@JoinColumn(name = "order", referencedColumnName = "oid")})
+    private Map<Combo, Integer> combos;
+
+    @Embedded
+    private OrderBill bill;
 
     private LocalDateTime orderTime;
 

@@ -27,11 +27,4 @@ public class ResultMsg<T> {
         this.code = code;
         this.value = null;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof ResultMsg)
-            return code == ((ResultMsg) o).code;
-        else return false;
-    }
 }

@@ -1,4 +1,4 @@
-package org.casual.yummy.model;
+package org.casual.yummy.model.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,14 +12,16 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
-public class Anchor {
+public class OrderBill {
 
-    // location regex like: 北京市,北京市，西城区
-    private String location;
+    private double deliveryExp;
 
-    private String detailLocation;
+    private double goodsTotal;
 
-    private double lng;
+    private double combosTotal;
 
-    private double lat;
+    private double total;
+
+    // 会员折扣后费用
+    private double finalFee;
 }
