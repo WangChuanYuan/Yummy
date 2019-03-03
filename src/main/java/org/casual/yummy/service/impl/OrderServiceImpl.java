@@ -184,4 +184,9 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderDTO> getMemberOrders(String mid) {
         return orderDAO.findMemberOrders(mid).stream().map(OrderDTO::new).collect(Collectors.toList());
     }
+
+    @Override
+    public List<OrderDTO> getRestaurantOrders(String rid) {
+        return orderDAO.findRestaurantOrders(rid).stream().map(OrderDTO::new).collect(Collectors.toList());
+    }
 }

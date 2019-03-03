@@ -14,4 +14,6 @@ public interface OrderService {
     ResultMsg<Map<String, OrderBill>> submitOrder(String mid, Long aid, String cardNo, LocalTime askedArrivalTime, String tip, List<CartDTO> carts);
 
     List<OrderDTO> getMemberOrders(String mid);
+
+    List<OrderDTO> getRestaurantOrders(String rid);
 }

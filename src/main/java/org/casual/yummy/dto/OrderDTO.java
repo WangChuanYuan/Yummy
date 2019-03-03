@@ -1,6 +1,7 @@
 package org.casual.yummy.dto;
 
 import lombok.Data;
+import org.casual.yummy.model.Sex;
 import org.casual.yummy.model.order.Order;
 import org.casual.yummy.model.order.OrderBill;
 import org.casual.yummy.model.order.OrderStatus;
@@ -51,7 +52,7 @@ public class OrderDTO {
     public OrderDTO(Order order) {
         this.oid = order.getOid();
         this.mid = order.getMember().getId();
-        this.mName = order.getAddress().getName();
+        this.mName = order.getAddress().getName() + (order.getAddress().getSex() == Sex.MAN ? "先生" : "女士");
         this.mAvatar = order.getMember().getAvatar();
         this.rid = order.getRestaurant().getId();
         this.rName = order.getRestaurant().getRegisterInfo().getName();

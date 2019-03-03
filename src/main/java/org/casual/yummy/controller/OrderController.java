@@ -19,8 +19,13 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping("/get_member_orders")
-    public List<OrderDTO> getOrders(@RequestParam String mid) {
+    public List<OrderDTO> getMemberOrders(@RequestParam String mid) {
         return orderService.getMemberOrders(mid);
+    }
+
+    @GetMapping("/get_restaurant_orders")
+    public List<OrderDTO> getRestaurantOrders(@RequestParam String rid) {
+        return orderService.getRestaurantOrders(rid);
     }
 
     @PostMapping("/submit_orders")

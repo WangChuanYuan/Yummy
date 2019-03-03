@@ -12,4 +12,7 @@ public interface OrderDAO extends JpaRepository<Order, Long>, JpaSpecificationEx
 
     @Query("select o from Order o where o.member.id = :mid order by o.orderTime desc")
     List<Order> findMemberOrders(@Param("mid") String mid);
+
+    @Query("select o from Order o where o.restaurant.id = :rid order by o.orderTime desc")
+    List<Order> findRestaurantOrders(@Param("rid") String rid);
 }
