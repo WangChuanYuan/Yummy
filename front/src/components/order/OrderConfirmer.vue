@@ -122,6 +122,7 @@ export default {
         address: this.address,
         bankcard: this.bankcard,
         arrivalTime: this.arrivalTime,
+        tip: this.tip,
         carts: JSON.stringify(carts)
       }).then((data) => {
         if (data.code === Code.SUCCESS) {

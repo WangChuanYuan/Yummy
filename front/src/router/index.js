@@ -12,6 +12,10 @@ import MemberInfo from '@/components/member/MemberInfo';
 import MemberAddress from '@/components/member/MemberAddress';
 import MemberOrders from '@/components/member/MemberOrders';
 import MemberPay from '@/components/member/MemberPay';
+import RestaurantPage from '@/components/book/RestaurantPage';
+import GoodsPage from '@/components/book/GoodsPage';
+import OrderConfirmer from '@/components/order/OrderConfirmer';
+import OrderResult from '@/components/order/OrderResult';
 import RegisterInfo from '@/components/restaurant/RegisterInfo';
 import MarketInfo from '@/components/restaurant/MarketInfo';
 import CategoryManager from '@/components/restaurant/CategoryManager';
@@ -19,10 +23,7 @@ import GoodsManager from '@/components/restaurant/GoodsManager';
 import GoodsEditor from '@/components/restaurant/GoodsEditor';
 import ComboManager from '@/components/restaurant/ComboManager';
 import ComboEditor from '@/components/restaurant/ComboEditor';
-import RestaurantPage from '@/components/book/RestaurantPage';
-import GoodsPage from '@/components/book/GoodsPage';
-import OrderConfirmer from '@/components/order/OrderConfirmer';
-import OrderResult from '@/components/order/OrderResult';
+import OrderManager from '@/components/restaurant/OrderManager';
 
 Vue.use(Router);
 
@@ -151,6 +152,11 @@ export default new Router({
           component: ComboEditor,
           props: true
           // props: (route) => ({gid: route.query.gid, aim: route.query.aim})
+        },
+        {
+          path: 'orders',
+          name: 'orders',
+          component: OrderManager
         }
       ]
     }

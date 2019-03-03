@@ -63,6 +63,8 @@ public class Order {
 
     private LocalDateTime arrivalTime;
 
+    private String tip;
+
     private double rate = 5;
 
     @Enumerated(value = EnumType.STRING)

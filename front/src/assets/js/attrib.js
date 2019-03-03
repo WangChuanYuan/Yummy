@@ -26,6 +26,10 @@ export const OrderStatus = {
     value: 'PAYED',
     label: '已支付'
   },
+  DISPATCHED: {
+    value: 'DISPATCHED',
+    label: '已派送'
+  },
   CANCELED: {
     value: 'CANCELED',
     label: '已取消'

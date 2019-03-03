@@ -4,6 +4,7 @@ import org.casual.yummy.dao.*;
 import org.casual.yummy.dto.CartDTO;
 import org.casual.yummy.dto.ComboDTO;
 import org.casual.yummy.dto.GoodsDTO;
+import org.casual.yummy.dto.OrderDTO;
 import org.casual.yummy.model.AccountState;
 import org.casual.yummy.model.Anchor;
 import org.casual.yummy.model.goods.Combo;
@@ -67,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
      * 判断库存是否足够
      * 下达订单，更新库存，未付款不更新余额信息
      */
-    public ResultMsg<Map<String, OrderBill>> submitOrder(String mid, Long aid, String cardNo, LocalTime askedArrivalTime, List<CartDTO> carts) {
+    public ResultMsg<Map<String, OrderBill>> submitOrder(String mid, Long aid, String cardNo, LocalTime askedArrivalTime, String tip, List<CartDTO> carts) {
         Member member = memberDAO.findById(mid).orElse(null);
         if (null == member || member.getAccountState() == AccountState.INVALID)
             return new ResultMsg<>("下单失败，用户不存在或已注销", Code.FAILURE);
@@ -161,7 +162,7 @@ public class OrderServiceImpl implements OrderService {
             order.setMember(member).setRestaurant(restaurant).setAddress(address)
                     .setBankCard(bankCard).setGoods(goods2num).setCombos(combo2num)
                     .setBill(bill).setOrderTime(now).setPredictedArrivalTime(LocalDateTime.of(LocalDate.now(), predictedArrivalTime))
-                    .setStatus(OrderStatus.ORDERED);
+                    .setStatus(OrderStatus.ORDERED).setTip(tip);
 
             orders.add(order);
             rid2bill.put(restaurant.getId(), bill);
@@ -177,5 +178,10 @@ public class OrderServiceImpl implements OrderService {
         orderDAO.saveAll(orders);
 
         return new ResultMsg<>("下单成功", Code.SUCCESS, rid2bill);
+    }
+
+    @Override
+    public List<OrderDTO> getMemberOrders(String mid) {
+        return orderDAO.findMemberOrders(mid).stream().map(OrderDTO::new).collect(Collectors.toList());
     }
 }

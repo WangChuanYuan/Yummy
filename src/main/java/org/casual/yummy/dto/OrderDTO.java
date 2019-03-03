@@ -42,6 +42,8 @@ public class OrderDTO {
 
     private LocalDateTime arrivalTime;
 
+    private String tip;
+
     private double rate;
 
     private OrderStatus status;
@@ -62,6 +64,7 @@ public class OrderDTO {
         this.orderTime = order.getOrderTime();
         this.predictedArrivalTime = order.getPredictedArrivalTime();
         this.arrivalTime = order.getArrivalTime();
+        this.tip = order.getTip();
         this.rate = order.getRate();
         this.status = order.getStatus();
     }

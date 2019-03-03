@@ -84,6 +84,7 @@ export default {
           this.$router.push('/restaurantCenter/combo');
           break;
         case 'orders':
+          this.$router.push('/restaurantCenter/orders');
           break;
         case 'statistics':
           break;
