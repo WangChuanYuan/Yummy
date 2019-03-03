@@ -19,7 +19,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @PostMapping
+    @PostMapping("/submit_orders")
     public ResultMsg submitOrder(@RequestBody Map param) {
         String mid = (String) param.get("member");
         Long aid = Long.parseLong((String) param.get("address"));

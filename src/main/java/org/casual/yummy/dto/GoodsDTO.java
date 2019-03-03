@@ -89,4 +89,9 @@ public class GoodsDTO {
         this.startDate = saleInfo.getStartDate();
         this.endDate = saleInfo.getEndDate();
     }
+
+    public GoodsDTO(Goods goods, int num) {
+        this(goods);
+        this.num = num;
+    }
 }

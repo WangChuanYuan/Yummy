@@ -50,4 +50,9 @@ public class ComboDTO {
         this.startDate = saleInfo.getStartDate();
         this.endDate = saleInfo.getEndDate();
     }
+
+    public ComboDTO(Combo combo, int num) {
+        this(combo);
+        this.num = num;
+    }
 }

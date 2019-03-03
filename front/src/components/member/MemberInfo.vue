@@ -3,7 +3,8 @@
     <h3>个人资料</h3>
     <hr/>
     <el-form-item label="头像" style="padding-top: 3%">
-      <AvatarUploader :avatar="avatar" @upload="uploadAvatar"/>
+      <AvatarUploader :avatar="avatar" @upload="getAvatar"/>
+      <el-button type="text" style="margin-left: 9.5%" @click="uploadAvatar">上传</el-button>
     </el-form-item>
     <el-form-item label="邮箱">
       <span>{{memberInfo.id}}</span>
@@ -61,6 +62,7 @@
 
 <script>
 import Api from '../../assets/js/api';
+import {Code} from '../../assets/js/attrib';
 import AvatarUploader from '../AvatarUploader';
 
 export default {
@@ -68,7 +70,7 @@ export default {
   components: {AvatarUploader},
   data () {
     return {
-      avatar: sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user').avatar) : require('@/assets/image/avatar.jpg'),
+      avatar: require('@/assets/image/avatar.jpg'),
       avatarRaw: null,
       memberInfo: {
         id: '',
@@ -81,14 +83,32 @@ export default {
     Api.get('/get_member', {
       'id': sessionStorage.getItem('id')
     }).then((data) => {
-      if (data) this.memberInfo = data;
+      if (data) {
+        this.memberInfo = data;
+        if (data.avatar) this.avatar = data.avatar;
+      }
     }).catch(() => {
     });
   },
   methods: {
-    uploadAvatar (avatar) {
+    getAvatar (avatar) {
       this.avatar = avatar.url;
       this.avatarRaw = avatar.raw;
+    },
+    uploadAvatar () {
+      let formData = new FormData();
+      formData.append('id', sessionStorage.getItem('id'));
+      if (this.avatarRaw) {
+        formData.append('avatar', this.avatarRaw);
+      } else {
+        this.$message.warning('请选择头像');
+        return;
+      }
+      Api.post('/upload_member_avatar', formData).then((data) => {
+        if (data.code === Code.SUCCESS) {
+          this.$message.success(data.msg);
+        } else this.$message.warning(data.msg);
+      }).catch(() => {});
     }
   }
 };

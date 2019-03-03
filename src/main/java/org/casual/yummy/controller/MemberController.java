@@ -6,6 +6,7 @@ import org.casual.yummy.utils.Code;
 import org.casual.yummy.utils.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -20,6 +21,11 @@ public class MemberController {
     @GetMapping("/get_member")
     public Member getMember(@RequestParam String id) {
         return memberService.getMemberById(id);
+    }
+
+    @PostMapping("/upload_member_avatar")
+    public ResultMsg uploadAvatar(@RequestParam String id, @RequestParam MultipartFile avatar) {
+        return memberService.uploadAvatar(id, avatar);
     }
 
     @PostMapping("/evict")

@@ -59,7 +59,11 @@ public class Order {
 
     private LocalDateTime orderTime;
 
+    private LocalDateTime predictedArrivalTime;
+
     private LocalDateTime arrivalTime;
+
+    private double rate = 5;
 
     @Enumerated(value = EnumType.STRING)
     private OrderStatus status;

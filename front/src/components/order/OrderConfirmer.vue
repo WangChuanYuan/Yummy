@@ -117,7 +117,7 @@ export default {
         this.$message.warning('购物车为空');
         return;
       }
-      Api.post('/submit_order', {
+      Api.post('/submit_orders', {
         member: sessionStorage.getItem('id'),
         address: this.address,
         bankcard: this.bankcard,

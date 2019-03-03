@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -31,7 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.casual.yummy.utils.MemberLevel.FAVOUR;
+import static org.casual.yummy.utils.MemberRule.LEVEL_FAVOUR;
+import static org.casual.yummy.utils.RestaurantRule.MAX_OVER_DELIVERY_MINUTES;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -103,10 +105,9 @@ public class OrderServiceImpl implements OrderService {
                 return new ResultMsg<>("下单失败，超出" + restaurant.getRegisterInfo().getName() + "门店配送范围",
                         Code.FAILURE);
 
-            LocalTime predictedArrivalTime = currHour.plusMinutes(minutes);
-            if (null != askedArrivalTime) { // 若客户对送达时间有要求
-                LocalTime looseTime = askedArrivalTime.plusMinutes(30);
-                if (predictedArrivalTime.isAfter(looseTime))
+            LocalTime predictedArrivalTime = currHour.plusMinutes(minutes).plusMinutes(MAX_OVER_DELIVERY_MINUTES);
+            if (null != askedArrivalTime) { // 若客户对送达时间有要求;
+                if (predictedArrivalTime.isAfter(askedArrivalTime))
                     return new ResultMsg<>(
                             "下单失败，" + restaurant.getRegisterInfo().getName() + "门店无法在要求送达时间送达",
                             Code.FAILURE);
@@ -153,13 +154,14 @@ public class OrderServiceImpl implements OrderService {
 
 
             OrderBill bill = new OrderBill();
-            double finalFee = total * FAVOUR[member.getLevel()];
+            double finalFee = total * LEVEL_FAVOUR[member.getLevel()];
             bill.setGoodsTotal(goodsTotal).setCombosTotal(combosTotal).setDeliveryExp(deliveryExp).setTotal(total).setFinalFee(finalFee);
 
             Order order = new Order();
             order.setMember(member).setRestaurant(restaurant).setAddress(address)
                     .setBankCard(bankCard).setGoods(goods2num).setCombos(combo2num)
-                    .setBill(bill).setOrderTime(now).setStatus(OrderStatus.ORDERED);
+                    .setBill(bill).setOrderTime(now).setPredictedArrivalTime(LocalDateTime.of(LocalDate.now(), predictedArrivalTime))
+                    .setStatus(OrderStatus.ORDERED);
 
             orders.add(order);
             rid2bill.put(restaurant.getId(), bill);

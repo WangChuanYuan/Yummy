@@ -10,6 +10,7 @@ import OrderChecker from '@/views/OrderChecker';
 
 import MemberInfo from '@/components/member/MemberInfo';
 import MemberAddress from '@/components/member/MemberAddress';
+import MemberOrders from '@/components/member/MemberOrders';
 import MemberPay from '@/components/member/MemberPay';
 import RegisterInfo from '@/components/restaurant/RegisterInfo';
 import MarketInfo from '@/components/restaurant/MarketInfo';
@@ -95,7 +96,8 @@ export default new Router({
         },
         {
           path: 'orders',
-          name: 'member-orders'
+          name: 'member-orders',
+          component: MemberOrders
         },
         {
           path: 'statistics',

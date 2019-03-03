@@ -4,12 +4,15 @@ import org.casual.yummy.dao.MemberDAO;
 import org.casual.yummy.model.AccountState;
 import org.casual.yummy.model.Role;
 import org.casual.yummy.model.member.Member;
+import org.casual.yummy.service.FileUploadService;
 import org.casual.yummy.service.MemberService;
 import org.casual.yummy.utils.Code;
 import org.casual.yummy.utils.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Service
@@ -17,6 +20,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private MemberDAO memberDAO;
+
+    @Autowired
+    @Qualifier("ossService")
+    private FileUploadService uploadService;
 
     @Override
     public ResultMsg<Member> login(String mid, String password) {
@@ -44,6 +51,19 @@ public class MemberServiceImpl implements MemberService {
         } catch (Exception e) {
             return new ResultMsg<>("注册失败", Code.FAILURE);
         }
+    }
+
+    @Override
+    @Transactional
+    public ResultMsg<Member> uploadAvatar(String mid, MultipartFile avatar) {
+        String url = uploadService.upload(avatar);
+        if (null == url) return new ResultMsg<>("上传头像失败", Code.FAILURE);
+        Member member = memberDAO.findById(mid).orElse(null);
+        if (null != member && member.getAccountState() == AccountState.VALID) {
+            member.setAvatar(url);
+            Member modifiedMember = memberDAO.saveAndFlush(member);
+            return new ResultMsg<>("上传头像成功", Code.SUCCESS, modifiedMember);
+        } else return new ResultMsg<>("用户不存在或已注销", Code.FAILURE);
     }
 
     @Override

@@ -17,6 +17,29 @@ export const Role = {
   MANAGEMENT: 'MANAGEMENT'
 };
 
+export const OrderStatus = {
+  ORDERED: {
+    value: 'ORDERED',
+    label: '已下单'
+  },
+  PAYED: {
+    value: 'PAYED',
+    label: '已支付'
+  },
+  CANCELED: {
+    value: 'CANCELED',
+    label: '已取消'
+  },
+  FINISHED: {
+    value: 'FINISHED',
+    label: '已完成'
+  },
+  UNSUBSCRIBED: {
+    value: 'UNSUBSCRIBED',
+    label: '已退订'
+  }
+};
+
 export const RestaurantType = {
   DELICACY: {
     value: 'DELICACY',
