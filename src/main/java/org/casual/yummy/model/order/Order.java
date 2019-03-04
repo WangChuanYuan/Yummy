@@ -20,6 +20,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "Order_")
 public class Order {
 
     @Id
@@ -43,15 +44,15 @@ public class Order {
     private BankCard bankCard;
 
     @ElementCollection
-    @MapKeyColumn(name = "goods")
+    @MapKeyJoinColumn(name = "goods")
     @Column(name = "num")
-    @CollectionTable(name = "Order_Goods", joinColumns = {@JoinColumn(name = "order", referencedColumnName = "oid")})
+    @CollectionTable(name = "Order_Goods", joinColumns = {@JoinColumn(name = "order_", referencedColumnName = "oid")})
     private Map<Goods, Integer> goods;
 
     @ElementCollection
-    @MapKeyColumn(name = "combo")
+    @MapKeyJoinColumn(name = "combo")
     @Column(name = "num")
-    @CollectionTable(name = "Order_Combos", joinColumns = {@JoinColumn(name = "order", referencedColumnName = "oid")})
+    @CollectionTable(name = "Order_Combos", joinColumns = {@JoinColumn(name = "order_", referencedColumnName = "oid")})
     private Map<Combo, Integer> combos;
 
     @Embedded

@@ -22,6 +22,7 @@ import org.casual.yummy.utils.Code;
 import org.casual.yummy.utils.DistanceUtil;
 import org.casual.yummy.utils.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.casual.yummy.utils.MemberRule.*;
+import static org.casual.yummy.utils.RestaurantRule.AUTO_CONFIRM_MINUTES_AFTER_PREDICTED;
 import static org.casual.yummy.utils.RestaurantRule.MAX_OVER_DELIVERY_MINUTES;
 
 @Service
@@ -336,5 +338,19 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public List<OrderDTO> getRestaurantOrders(String rid) {
         return orderDAO.findRestaurantOrders(rid).stream().map(OrderDTO::new).collect(Collectors.toList());
+    }
+
+    /**
+     * 后台定时处理一些订单事务，每隔一分钟运行一次
+     * 下单规定时间段后未支付自动取消
+     * 订单预期送达时间规定时间段后未确认自动确认收取
+     */
+    @Override
+    @Transactional
+    @Scheduled(cron = "0 0/1 * * * ?")
+    public void autoDealWithOrders() {
+        LocalDateTime now = LocalDateTime.now();
+        orderDAO.autoCancelOverdueOrders(now.minusMinutes(ORDER_PAY_MINUTES_LIMIT));
+        orderDAO.autoConfirmArrivedOrders(now.minusMinutes(AUTO_CONFIRM_MINUTES_AFTER_PREDICTED));
     }
 }

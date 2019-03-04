@@ -26,4 +26,6 @@ public interface OrderService {
     List<OrderDTO> getMemberOrders(String mid);
 
     List<OrderDTO> getRestaurantOrders(String rid);
+
+    void autoDealWithOrders();
 }
