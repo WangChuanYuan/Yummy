@@ -17,6 +17,8 @@ public class RegisterInfo {
 
     private String name;
 
+    private String email;
+
     private RestaurantType type;
 
     private String location;

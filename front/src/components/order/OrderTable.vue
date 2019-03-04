@@ -123,7 +123,7 @@
 </template>
 
 <script>
-  import {Code, OrderStatus} from '../../assets/js/attrib';
+import {Code, OrderStatus} from '../../assets/js/attrib';
 import Api from '../../assets/js/api';
 
 export default {

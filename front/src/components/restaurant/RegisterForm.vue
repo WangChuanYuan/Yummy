@@ -1,17 +1,20 @@
 <template>
   <el-form :model="registerInfo" :rules="infoRules" ref="registerInfo" class="center" style="width: 30%">
     <el-form-item prop="id" label="注册码" v-show="aim !== 'add'">
-      <el-input v-model="registerInfo.id" :readonly="true"></el-input>
+      <el-input v-model="registerInfo.id" :readonly="true"/>
     </el-form-item>
     <el-form-item prop="name" label="门店名称">
-      <el-input v-model="registerInfo.name" placeholder="门店名称"></el-input>
+      <el-input v-model="registerInfo.name" placeholder="门店名称"/>
     </el-form-item>
     <el-form-item prop="password" label="密码" v-show="aim === 'add'">
-      <el-input v-model="registerInfo.password" type="password" placeholder="密码"></el-input>
+      <el-input v-model="registerInfo.password" type="password" placeholder="密码"/>
+    </el-form-item>
+    <el-form-item prop="email" label="门店邮箱">
+      <el-input v-model="registerInfo.email" type="email" placeholder="邮箱"/>
     </el-form-item>
     <el-form-item prop="type" label="门店分类">
       <el-select v-model="registerInfo.type" placeholder="请选择" style="width: 100%" :value="types.DELICACY.value">
-        <el-option v-for="type in types" :key="type.value" :value="type.value" :label="type.label"></el-option>
+        <el-option v-for="type in types" :key="type.value" :value="type.value" :label="type.label"/>
       </el-select>
     </el-form-item>
     <el-form-item prop="location" label="位置">
@@ -50,6 +53,7 @@ export default {
       registerInfo: {
         id: '',
         name: '',
+        email: '',
         password: '',
         type: RestaurantType.DELICACY.value,
         location: '',
@@ -62,6 +66,18 @@ export default {
           {
             required: true,
             message: '请输入门店名称',
+            trigger: 'blur'
+          }
+        ],
+        email: [
+          {
+            required: true,
+            message: '请输入门店邮箱',
+            trigger: 'blur'
+          },
+          {
+            type: 'email',
+            message: '请输入正确的邮箱地址',
             trigger: 'blur'
           }
         ],

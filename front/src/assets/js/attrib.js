@@ -14,7 +14,7 @@ export const Code = {
 export const Role = {
   MEMBER: 'MEMBER',
   RESTAURANT: 'RESTAURANT',
-  MANAGEMENT: 'MANAGEMENT'
+  MANAGER: 'MANAGER'
 };
 
 export const OrderStatus = {

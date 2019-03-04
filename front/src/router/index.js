@@ -7,6 +7,8 @@ import MemberCenter from '@/views/MemberCenter';
 import RestaurantCenter from '@/views/RestaurantCenter';
 import BookCenter from '@/views/BookCenter';
 import OrderChecker from '@/views/OrderChecker';
+import ManagerLogin from '@/views/ManagerLogin';
+import ManagerCenter from '@/views/ManagerCenter';
 
 import MemberInfo from '@/components/member/MemberInfo';
 import MemberAddress from '@/components/member/MemberAddress';
@@ -157,6 +159,25 @@ export default new Router({
           path: 'orders',
           name: 'orders',
           component: OrderManager
+        }
+      ]
+    },
+    {
+      path: '/manager',
+      name: 'manager',
+      component: ManagerLogin
+    },
+    {
+      path: '/background',
+      component: ManagerCenter,
+      children: [
+        {
+          path: '',
+          name: 'background'
+        },
+        {
+          path: 'registers',
+          name: 'restaurants-info'
         }
       ]
     }

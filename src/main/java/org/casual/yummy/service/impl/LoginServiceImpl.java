@@ -26,7 +26,7 @@ public class LoginServiceImpl implements LoginService {
                 return memberService.login(id, password);
             case RESTAURANT:
                 return restaurantService.login(id, password);
-            case MANAGEMENT:
+            case MANAGER:
                 break;
         }
         return new ResultMsg<>("登录失败", Code.FAILURE);
