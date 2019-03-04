@@ -13,6 +13,16 @@ public interface OrderService {
 
     ResultMsg<Map<String, OrderBill>> submitOrder(String mid, Long aid, String cardNo, LocalTime askedArrivalTime, String tip, List<CartDTO> carts);
 
+    ResultMsg payOrder(Long oid, String bankCardPassword);
+
+    ResultMsg cancelOrder(Long oid);
+
+    ResultMsg dispatchOrder(Long oid);
+
+    ResultMsg confirmOrder(Long oid);
+
+    ResultMsg unsubscribeOrder(Long oid);
+
     List<OrderDTO> getMemberOrders(String mid);
 
     List<OrderDTO> getRestaurantOrders(String rid);

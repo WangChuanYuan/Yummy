@@ -55,6 +55,7 @@
 <script>
 import Logo from '../components/Logo';
 import Api from '../assets/js/api';
+import {Code} from '../assets/js/attrib';
 
 export default {
   name: 'RestaurantCenter',
@@ -97,7 +98,7 @@ export default {
     },
     logout () {
       Api.post('/logout').then((data) => {
-        if (data.code === 'SUCCESS') {
+        if (data.code === Code.SUCCESS) {
           sessionStorage.clear();
           this.$router.push('/');
         }

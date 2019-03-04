@@ -42,4 +42,35 @@ public class OrderController {
         List<CartDTO> carts = JsonUtil.json2list((String) param.get("carts"), CartDTO.class);
         return orderService.submitOrder(mid, aid, cardNo, arrivalTime, tip, carts);
     }
+
+    @PostMapping("/pay_order")
+    public ResultMsg payOrder(@RequestBody Map param) {
+        Long oid = Long.parseLong((String) param.get("oid"));
+        String bankCardPassword = (String) param.get("bankcardPassword");
+        return orderService.payOrder(oid, bankCardPassword);
+    }
+
+    @PostMapping("/cancel_order")
+    public ResultMsg cancelOrder(@RequestBody Map param) {
+        Long oid = Long.parseLong((String) param.get("oid"));
+        return orderService.cancelOrder(oid);
+    }
+
+    @PostMapping("/dispatch_order")
+    public ResultMsg dispatchOrder(@RequestBody Map param) {
+        Long oid = Long.parseLong((String) param.get("oid"));
+        return orderService.dispatchOrder(oid);
+    }
+
+    @PostMapping("/confirm_order")
+    public ResultMsg confirmOrder(@RequestBody Map param) {
+        Long oid = Long.parseLong((String) param.get("oid"));
+        return orderService.confirmOrder(oid);
+    }
+
+    @PostMapping("/unsubscribe_order")
+    public ResultMsg unsubscribeOrder(@RequestBody Map param) {
+        Long oid = Long.parseLong((String) param.get("oid"));
+        return orderService.unsubscribeOrder(oid);
+    }
 }

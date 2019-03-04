@@ -46,6 +46,7 @@
 <script>
 import Logo from '../Logo';
 import Api from '../../assets/js/api';
+import {Code} from '../../assets/js/attrib';
 
 export default {
   name: 'MemberNav',
@@ -94,7 +95,7 @@ export default {
     },
     logout () {
       Api.post('/logout').then((data) => {
-        if (data.code === 'SUCCESS') {
+        if (data.code === Code.SUCCESS) {
           sessionStorage.clear();
           this.$router.push('/');
         }
@@ -108,12 +109,12 @@ export default {
       }).then(() => {
         let _this = this;
         Api.post('/evict').then((data) => {
-          if (data.code === 'SUCCESS') {
+          if (data.code === Code.SUCCESS) {
             sessionStorage.clear();
             _this.$message.success('注销成功');
             _this.$router.push('/');
           } else {
-            _this.$message.error('注销失败');
+            _this.$message.warning('注销失败');
           }
         });
       }).catch(() => {

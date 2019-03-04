@@ -10,14 +10,19 @@ public class MemberRule {
 
     /**
      * 会员等级0-5
-     * 会员等级对应经验下限
+     * 会员等级对应经验上限
      */
-    public static final int[] LEVEL_EXPERIENCE = new int[]{0, 50, 200, 500, 1500, 3000};
+    public static final int[] LEVEL_EXPERIENCE = new int[]{50, 200, 500, 1500, 3000};
 
     /**
      * 下单后支付时间限制
      */
     public static final int ORDER_PAY_MINUTES_LIMIT = 2;
+
+    /**
+     * 单笔订单每10元获得10点经验
+     */
+    public static final int CONSUME_TO_EXPERIENCE = 10;
 
     /**
      * 退订时间与退还金额比例

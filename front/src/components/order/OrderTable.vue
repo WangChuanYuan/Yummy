@@ -10,7 +10,7 @@
                 :src="scope.row.rAvatar"
                 :class="{link : role === 'member'}"
                 style="height: 70px; width: 70px; border-radius: 70px"
-                @click="visit(scope.row.rid)"/>
+                @click="visit(scope.$index)"/>
             </div>
             <div class="omission" style="padding-left: 10px; color: var(--theme-medium-grey)">
               <span>订单号:{{scope.row.oid}}</span>
@@ -80,24 +80,21 @@
         <template slot-scope="scope">
           <div v-if="role === 'member'">
             <div v-if="scope.row.status === 'ORDERED'">
-              <el-button type="primary" size="mini" @click="isPaying = true; payForm.oid = scope.row.oid; payForm.cardNo = scope.row.cardNo">支付</el-button>
-              <el-button type="info" size="mini" @click="cancel(scope.row.oid)">取消</el-button>
+              <el-button type="primary" size="mini" @click="isPaying = true; payForm.index = scope.$index; payForm.cardNo = scope.row.cardNo">支付</el-button>
+              <el-button type="info" size="mini" @click="cancel(scope.$index)">取消</el-button>
             </div>
             <div v-else-if="scope.row.status === 'PAYED' || scope.row.status === 'DISPATCHED'">
-              <el-button type="primary" size="mini" @click="confirm(scope.row.oid)">收货确认</el-button>
-              <el-button type="danger" size="mini" @click="unsubscribe(scope.row.oid)">退订</el-button>
+              <el-button type="primary" size="mini" @click="confirm(scope.$index)">收货确认</el-button>
+              <el-button type="danger" size="mini" @click="unsubscribe(scope.$index)">退订</el-button>
             </div>
             <div v-else>
-              <el-button type="success" size="mini" @click="visit(scope.row.rid)">再去看看</el-button>
+              <el-button type="success" size="mini" @click="visit(scope.$index)">再去看看</el-button>
             </div>
-            <!--<div v-else>-->
-            <!--<el-rate v-model="scope.row.rate"></el-rate>-->
-            <!--</div>-->
           </div>
           <div v-else-if="role === 'restaurant'">
             <div v-if="scope.row.status === 'ORDERED' || scope.row.status === 'PAYED'">
               <el-button type="primary" size="mini" :disabled="scope.row.status === 'ORDERED'"
-                         @click="dispatch(scope.row.oid)">派送
+                         @click="dispatch(scope.$index)">派送
               </el-button>
             </div>
             <div v-else-if="scope.row.status === 'DISPATCHED'">
@@ -126,7 +123,8 @@
 </template>
 
 <script>
-import {OrderStatus} from '../../assets/js/attrib';
+  import {Code, OrderStatus} from '../../assets/js/attrib';
+import Api from '../../assets/js/api';
 
 export default {
   name: 'OrderTable',
@@ -153,7 +151,7 @@ export default {
       /* form */
       isPaying: false,
       payForm: {
-        oid: 0,
+        index: null,
         cardNo: '',
         password: ''
       },
@@ -185,22 +183,95 @@ export default {
       }
       return shot;
     },
-    visit (rid) {
-      if (this.role === 'member') this.$router.push(`/bookCenter/${rid}`);
+    visit (index) {
+      if (this.role === 'member') this.$router.push(`/bookCenter/${this.inOrders[index].rid}`);
     },
     pay (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          Api.post('/pay_order', {
+            oid: this.inOrders[this.payForm.index].oid,
+            bankcardPassword: this.payForm.password
+          }).then((data) => {
+            if (data.code === Code.SUCCESS) {
+              this.$message.success(data.msg);
+              this.inOrders[this.payForm.index].status = OrderStatus.PAYED.value;
+            } else this.$message.warning(data.msg);
+            this.isPaying = false;
+          }).catch(() => {
+            this.$message.warning('错误');
+            this.isPaying = false;
+          });
         }
       });
     },
-    cancel (oid) {
+    cancel (index) {
+      this.$confirm('确定取消订单？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let _this = this;
+        Api.post('/cancel_order', {
+          oid: _this.inOrders[index].oid
+        }).then((data) => {
+          if (data.code === Code.SUCCESS) {
+            _this.$message.success(data.msg);
+            _this.inOrders[index].status = OrderStatus.CANCELED.value;
+          } else {
+            _this.$message.warning(data.msg);
+          }
+        });
+      }).catch(() => {});
     },
-    confirm (oid) {
+    confirm (index) {
+      this.$confirm('订单已完成？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'success'
+      }).then(() => {
+        let _this = this;
+        Api.post('/confirm_order', {
+          oid: _this.inOrders[index].oid
+        }).then((data) => {
+          if (data.code === Code.SUCCESS) {
+            _this.$message.success(data.msg);
+            _this.inOrders[index].status = OrderStatus.FINISHED.value;
+          } else {
+            _this.$message.warning(data.msg);
+          }
+        });
+      }).catch(() => {});
     },
-    unsubscribe (oid) {
+    unsubscribe (index) {
+      this.$confirm('确定退订订单？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let _this = this;
+        Api.post('/unsubscribe_order', {
+          oid: _this.inOrders[index].oid
+        }).then((data) => {
+          if (data.code === Code.SUCCESS) {
+            _this.$message.success(data.msg);
+            _this.inOrders[index].status = OrderStatus.UNSUBSCRIBED.value;
+          } else {
+            _this.$message.warning(data.msg);
+          }
+        });
+      }).catch(() => {});
     },
-    dispatch (oid) {
+    dispatch (index) {
+      Api.post('/dispatch_order', {
+        oid: this.inOrders[index].oid
+      }).then((data) => {
+        if (data.code === Code.SUCCESS) {
+          this.$message.success(data.msg);
+          this.inOrders[index].status = OrderStatus.DISPATCHED.value;
+        }
+        this.isPaying = false;
+      }).catch(() => { this.$message.warning('错误'); });
     }
   }
 };
