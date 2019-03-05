@@ -159,7 +159,7 @@ export default {
         if (valid) {
           let url = '/register_restaurant';
           if (this.aim !== 'add') {
-            url = '/modify_restaurant';
+            url = '/modify_register_info';
           }
           Api.post(url, this.registerInfo).then((data) => {
             if (data.code === Code.SUCCESS) {
@@ -172,10 +172,12 @@ export default {
                   }
                 });
               } else if (this.aim === 'modify') {
-                this.$alert('提交成功，经理审核通过后即可完成信息修改', '提交成功', {
+                this.$alert('提交成功，修改结果将在审核后通过邮件通知', '提交成功', {
                   confirmButtonText: '确定',
                   callback: action => {
-                    this.init();
+                    this.registerInfo = data.value.registerInfo;
+                    this.registerInfo.id = data.value.id;
+                    this.registerInfo.password = data.value.password;
                   }
                 });
               }

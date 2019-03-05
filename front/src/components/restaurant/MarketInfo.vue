@@ -39,6 +39,7 @@
 <script>
 import AvatarUploader from '../AvatarUploader';
 import Api from '../../assets/js/api';
+import {Code} from '../../assets/js/attrib';
 
 export default {
   name: 'MarketInfo',
@@ -124,6 +125,20 @@ export default {
     submit (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          let formData = new FormData();
+          formData.append('rid', sessionStorage.getItem('id'));
+          if (this.avatarRaw) formData.append('avatar', this.avatarRaw);
+          formData.append('leastExp', this.marketInfo.balance);
+          formData.append('deliveryExp', this.marketInfo.deliveryExp);
+          formData.append('phone', this.marketInfo.phone);
+          formData.append('startHour', this.marketInfo.hours[0]);
+          formData.append('endHour', this.marketInfo.hours[1]);
+
+          Api.post('/modify_market_info', formData).then((data) => {
+            if (data.code === Code.SUCCESS) {
+              this.$message.success(data.msg);
+            } else this.$message.warning(data.msg);
+          }).catch(() => {});
         }
       });
     },

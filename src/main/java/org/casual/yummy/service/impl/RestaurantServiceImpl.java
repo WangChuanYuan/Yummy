@@ -1,7 +1,11 @@
 package org.casual.yummy.service.impl;
 
+import org.casual.yummy.dao.RegistrationDAO;
 import org.casual.yummy.dao.RestaurantDAO;
 import org.casual.yummy.model.AccountState;
+import org.casual.yummy.model.manager.RegStatus;
+import org.casual.yummy.model.manager.Registration;
+import org.casual.yummy.model.restaurant.RegisterInfo;
 import org.casual.yummy.model.restaurant.Restaurant;
 import org.casual.yummy.model.restaurant.RestaurantType;
 import org.casual.yummy.service.RestaurantService;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.Predicate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +27,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Autowired
     private RestaurantDAO restaurantDAO;
+
+    @Autowired
+    private RegistrationDAO registrationDAO;
 
     @Override
     public ResultMsg<Restaurant> login(String rid, String password) {
@@ -45,6 +53,34 @@ public class RestaurantServiceImpl implements RestaurantService {
         } catch (Exception e) {
             e.printStackTrace();
             return new ResultMsg<>("注册餐厅失败", Code.FAILURE);
+        }
+    }
+
+    @Override
+    @Transactional
+    public ResultMsg<Restaurant> modifyRestaurant(Restaurant restaurant) {
+        try {
+            Restaurant modifiedRestaurant = restaurantDAO.saveAndFlush(restaurant);
+            return new ResultMsg<>("修改餐厅信息成功", Code.SUCCESS, modifiedRestaurant);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultMsg<>("修改餐厅信息失败", Code.FAILURE);
+        }
+    }
+
+    @Override
+    @Transactional
+    public ResultMsg<Restaurant> modifyRegisterInfo(String rid, RegisterInfo info) {
+        Restaurant restaurant = restaurantDAO.findById(rid).orElse(null);
+        if (null == restaurant) return new ResultMsg<>("餐厅不存在", Code.FAILURE);
+        try {
+            Registration registration = new Registration();
+            registration.setRestaurant(restaurant).setRegisterInfo(info).setTime(LocalDateTime.now()).setStatus(RegStatus.PENDING);
+            registrationDAO.saveAndFlush(registration);
+            return new ResultMsg<>("注册信息修改申请成功", Code.SUCCESS, restaurant);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultMsg<>("注册信息修改申请失败", Code.FAILURE);
         }
     }
 

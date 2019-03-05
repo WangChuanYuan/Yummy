@@ -47,7 +47,7 @@
               </div>
               <hr/>
               <div>
-                <h3>修改后信息</h3>
+                <h3>新信息</h3>
                 <el-form style="color: red">
                   <el-form-item label="门店名称">
                     {{scope.row.registerInfo.name}}
@@ -87,7 +87,8 @@
 </template>
 
 <script>
-import {RegStatus, RestaurantType} from '../../assets/js/attrib';
+import {Code, RegStatus, RestaurantType} from '../../assets/js/attrib';
+import Api from '../../assets/js/api';
 
 export default {
   name: 'RegistrationChecker',
@@ -95,25 +96,24 @@ export default {
     return {
       status: RegStatus,
       types: RestaurantType,
-      registrations: [
-        {
-          rgid: 0,
-          restaurant: {
-            registerInfo: {
-              type: RestaurantType.DELICACY.value
-            }
-          },
-          registerInfo: {
-            type: RestaurantType.BENTO.value
-          },
-          time: '2018-09-19 00:23:00',
-          status: 'PENDING'
-        }
-      ]
+      registrations: []
     };
+  },
+  mounted () {
+    Api.get('/get_pending_registrations').then((data) => {
+      if (data) this.registrations = data;
+    }).catch(() => {});
   },
   methods: {
     check (registration) {
+      Api.post('/check_registration', {
+        rgid: registration.rgid,
+        status: registration.status
+      }).then((data) => {
+        if (data.code === Code.SUCCESS) {
+          this.$message.success(data.msg);
+        } else this.$message.warning(data.msg);
+      }).catch(() => {});
     }
   }
 };

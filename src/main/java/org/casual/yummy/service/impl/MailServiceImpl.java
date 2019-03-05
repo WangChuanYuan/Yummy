@@ -5,6 +5,7 @@ import org.casual.yummy.utils.Code;
 import org.casual.yummy.utils.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -78,5 +79,15 @@ public class MailServiceImpl implements MailService {
         if (sendHtmlMail(email, "Yummy!注册验证码", emailContent).getCode() == Code.SUCCESS)
             return verifyCode;
         else return null;
+    }
+
+    @Override
+    public void sendSimpleMail(String to, String subject, String content) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(from);
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(content);
+        sender.send(message);
     }
 }
