@@ -1,5 +1,6 @@
 package org.casual.yummy.model.manager;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ public class Registration {
     @Embedded
     private RegisterInfo registerInfo;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime time;
 
     @Enumerated(value = EnumType.STRING)

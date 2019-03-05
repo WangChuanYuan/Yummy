@@ -51,11 +51,11 @@
         <br/>
         <span>1500-3000: 4级</span>
         <br/>
-        <span>3000-9999: 5级</span>
+        <span>3000-3999: 5级</span>
         <i class="el-icon-info" slot="reference"></i>
       </el-popover>
-      <el-progress :text-inside="true" :stroke-width="15" :percentage="memberInfo.experience / 9999"/>
-      <div style="position: relative; top: -27px; left: 60px">{{memberInfo.experience}} / 9999</div>
+      <el-progress :text-inside="true" :stroke-width="15" :percentage="memberInfo.experience / 3999"/>
+      <div style="position: relative; top: -27px; left: 60px">{{memberInfo.experience}} / 3999</div>
     </el-form-item>
   </el-form>
 </template>

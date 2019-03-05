@@ -1,5 +1,6 @@
 package org.casual.yummy.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.casual.yummy.model.Sex;
 import org.casual.yummy.model.order.Order;
@@ -37,10 +38,13 @@ public class OrderDTO {
 
     private OrderBill bill;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime orderTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime predictedArrivalTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime arrivalTime;
 
     private String tip;

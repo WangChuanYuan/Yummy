@@ -215,12 +215,12 @@ public class OrderServiceImpl implements OrderService {
         if (order.getStatus() != OrderStatus.ORDERED) return new ResultMsg("支付失败，订单状态异常", Code.FAILURE);
 
         LocalDateTime now = LocalDateTime.now();
-        if (order.getOrderTime().plusMinutes(2).isAfter(now))
-            return new ResultMsg("2分钟内未支付，订单已取消", Code.FAILURE);
+        if (order.getOrderTime().plusMinutes(ORDER_PAY_MINUTES_LIMIT).isBefore(now))
+            return new ResultMsg(ORDER_PAY_MINUTES_LIMIT + "分钟内未支付，订单已取消", Code.FAILURE);
 
         BankCard bankCard = bankCardDAO.findById(order.getBankCard().getCardNo()).orElse(null);
         if (null == bankCard) return new ResultMsg("支付失败，无支付信息", Code.FAILURE);
-        if (bankCard.getPassword().equals(bankCardPassword)) return new ResultMsg("支付失败，支付密码错误", Code.FAILURE);
+        if (!bankCard.getPassword().equals(bankCardPassword)) return new ResultMsg("支付失败，支付密码错误", Code.FAILURE);
         double balance = bankCard.getBalance();
         double fee = order.getBill().getFinalFee();
         double remain = balance - fee;
@@ -288,7 +288,7 @@ public class OrderServiceImpl implements OrderService {
         Restaurant restaurant = order.getRestaurant();
         restaurant.getMarketInfo().setBalance(restaurant.getMarketInfo().getBalance() + restaurantIncome);
 
-        order.setStatus(OrderStatus.FINISHED);
+        order.setArrivalTime(LocalDateTime.now()).setStatus(OrderStatus.FINISHED);
 
         orderDAO.saveAndFlush(order);
         memberDAO.saveAndFlush(member);

@@ -84,7 +84,7 @@
               <el-button type="info" size="mini" @click="cancel(scope.$index)">取消</el-button>
             </div>
             <div v-else-if="scope.row.status === 'PAYED' || scope.row.status === 'DISPATCHED'">
-              <el-button type="primary" size="mini" @click="confirm(scope.$index)">收货确认</el-button>
+              <el-button type="primary" size="mini" @click="confirm(scope.$index)" :disabled="scope.row.status !== 'DISPATCHED'">收货</el-button>
               <el-button type="danger" size="mini" @click="unsubscribe(scope.$index)">退订</el-button>
             </div>
             <div v-else>
@@ -93,7 +93,7 @@
           </div>
           <div v-else-if="role === 'restaurant'">
             <div v-if="scope.row.status === 'ORDERED' || scope.row.status === 'PAYED'">
-              <el-button type="primary" size="mini" :disabled="scope.row.status === 'ORDERED'"
+              <el-button type="primary" size="mini" :disabled="scope.row.status !== 'PAYED'"
                          @click="dispatch(scope.$index)">派送
               </el-button>
             </div>
