@@ -181,7 +181,7 @@ export default {
     } else if (this.aim === 'modify') {
       Api.get('/get_combo', {'cid': this.cid}).then((data) => {
         if (data) {
-          let saleInfo = data.saleInfo;
+          let saleInfo = data;
           this.comboForm.avatar = saleInfo.avatar;
           this.comboForm.name = saleInfo.name;
           this.comboForm.description = saleInfo.description;

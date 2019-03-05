@@ -69,6 +69,7 @@ export default {
                 sessionStorage.setItem('id', user.id);
                 sessionStorage.setItem('user', JSON.stringify(user));
               }
+              this.$router.push('/managerCenter/registrations');
             } else {
               this.$message.warning(data.msg);
             }

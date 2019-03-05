@@ -17,15 +17,15 @@ public class OrderDTO {
 
     private String mid;
 
-    private String mName;
+    private String mname;
 
-    private String mAvatar;
+    private String mavatar;
 
     private String rid;
 
-    private String rName;
+    private String rname;
 
-    private String rAvatar;
+    private String ravatar;
 
     private String detailLocation;
 
@@ -52,11 +52,11 @@ public class OrderDTO {
     public OrderDTO(Order order) {
         this.oid = order.getOid();
         this.mid = order.getMember().getId();
-        this.mName = order.getAddress().getName() + (order.getAddress().getSex() == Sex.MAN ? "先生" : "女士");
-        this.mAvatar = order.getMember().getAvatar();
+        this.mname = order.getAddress().getName() + (order.getAddress().getSex() == Sex.MAN ? "先生" : "女士");
+        this.mavatar = order.getMember().getAvatar();
         this.rid = order.getRestaurant().getId();
-        this.rName = order.getRestaurant().getRegisterInfo().getName();
-        this.rAvatar = order.getRestaurant().getAvatar();
+        this.rname = order.getRestaurant().getRegisterInfo().getName();
+        this.ravatar = order.getRestaurant().getAvatar();
         this.detailLocation = order.getAddress().getAnchor().getDetailLocation();
         this.cardNo = order.getBankCard().getCardNo();
         this.goods = order.getGoods().entrySet().parallelStream().map(et -> new GoodsDTO(et.getKey(), et.getValue())).collect(Collectors.toList());

@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Data
 @Accessors(chain = true)
@@ -19,6 +21,7 @@ public class RegisterInfo {
 
     private String email;
 
+    @Enumerated(value = EnumType.STRING)
     private RestaurantType type;
 
     private String location;

@@ -1,7 +1,7 @@
 package org.casual.yummy.service;
 
 import org.casual.yummy.model.member.Member;
-import org.casual.yummy.utils.ResultMsg;
+import org.casual.yummy.utils.message.ResultMsg;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface MemberService {

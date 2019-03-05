@@ -27,7 +27,7 @@
           <div class="banner-block">
             <span>营业时间</span>
             <br/>
-            <span>{{restaurant.marketInfo.starHour}}-{{restaurant.marketInfo.endHour}}</span>
+            <span>{{restaurant.marketInfo.startHour}}-{{restaurant.marketInfo.endHour}}</span>
           </div>
         </el-col>
       </el-row>
@@ -100,7 +100,7 @@ export default {
           phone: '',
           leastExp: 0,
           deliveryExp: 0,
-          starHour: '08:00:00',
+          startHour: '08:00:00',
           endHour: '22:00:00'
         }
       },
@@ -124,6 +124,7 @@ export default {
   methods: {
     selectCategory (cgid) {
       this.cgid = cgid;
+      this.getGoods();
     },
     getGoods () {
       let params = {rid: this.$route.params.id};

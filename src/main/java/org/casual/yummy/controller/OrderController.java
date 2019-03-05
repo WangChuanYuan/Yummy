@@ -4,7 +4,7 @@ import org.casual.yummy.dto.CartDTO;
 import org.casual.yummy.dto.OrderDTO;
 import org.casual.yummy.service.OrderService;
 import org.casual.yummy.utils.JsonUtil;
-import org.casual.yummy.utils.ResultMsg;
+import org.casual.yummy.utils.message.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +31,8 @@ public class OrderController {
     @PostMapping("/submit_orders")
     public ResultMsg submitOrder(@RequestBody Map param) {
         String mid = (String) param.get("member");
-        Long aid = Long.parseLong((String) param.get("address"));
-        String cardNo = (String) param.get("cardNo");
+        Long aid = (long) (int) param.get("address");
+        String cardNo = (String) param.get("bankcard");
         String formattedTime = (String) param.get("arrivalTime");
         String tip = (String) param.get("tip");
         LocalTime arrivalTime = null;
@@ -45,32 +45,32 @@ public class OrderController {
 
     @PostMapping("/pay_order")
     public ResultMsg payOrder(@RequestBody Map param) {
-        Long oid = Long.parseLong((String) param.get("oid"));
+        Long oid = (long) (int) param.get("oid");
         String bankCardPassword = (String) param.get("bankcardPassword");
         return orderService.payOrder(oid, bankCardPassword);
     }
 
     @PostMapping("/cancel_order")
     public ResultMsg cancelOrder(@RequestBody Map param) {
-        Long oid = Long.parseLong((String) param.get("oid"));
+        Long oid = (long) (int) param.get("oid");
         return orderService.cancelOrder(oid);
     }
 
     @PostMapping("/dispatch_order")
     public ResultMsg dispatchOrder(@RequestBody Map param) {
-        Long oid = Long.parseLong((String) param.get("oid"));
+        Long oid = (long) (int) param.get("oid");
         return orderService.dispatchOrder(oid);
     }
 
     @PostMapping("/confirm_order")
     public ResultMsg confirmOrder(@RequestBody Map param) {
-        Long oid = Long.parseLong((String) param.get("oid"));
+        Long oid = (long) (int) param.get("oid");
         return orderService.confirmOrder(oid);
     }
 
     @PostMapping("/unsubscribe_order")
     public ResultMsg unsubscribeOrder(@RequestBody Map param) {
-        Long oid = Long.parseLong((String) param.get("oid"));
+        Long oid = (long) (int) param.get("oid");
         return orderService.unsubscribeOrder(oid);
     }
 }

@@ -30,5 +30,6 @@ public class Registration {
 
     private LocalDateTime time;
 
+    @Enumerated(value = EnumType.STRING)
     private RegStatus status;
 }

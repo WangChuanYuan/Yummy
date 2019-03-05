@@ -1,7 +1,7 @@
 package org.casual.yummy.service;
 
 import org.casual.yummy.model.member.BankCard;
-import org.casual.yummy.utils.ResultMsg;
+import org.casual.yummy.utils.message.ResultMsg;
 
 import java.util.List;
 

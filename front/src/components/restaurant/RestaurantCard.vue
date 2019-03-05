@@ -14,7 +14,7 @@
         <div style="font-size: 13px">
           <span>营业时间:</span>
           <br/>
-          <span>{{inRestaurant.marketInfo.starHour}}-{{inRestaurant.marketInfo.endHour}}</span>
+          <span>{{inRestaurant.marketInfo.startHour}}-{{inRestaurant.marketInfo.endHour}}</span>
         </div>
         <br/>
         <div class="omission" style="font-size: 13px">
@@ -56,7 +56,7 @@ export default {
             phone: '',
             leastExp: 0,
             deliveryExp: 0,
-            starHour: '08:00:00',
+            startHour: '08:00:00',
             endHour: '22:00:00'
           }
         };

@@ -3,7 +3,7 @@ package org.casual.yummy.service;
 import org.casual.yummy.dto.CartDTO;
 import org.casual.yummy.dto.OrderDTO;
 import org.casual.yummy.model.order.OrderBill;
-import org.casual.yummy.utils.ResultMsg;
+import org.casual.yummy.utils.message.ResultMsg;
 
 import java.time.LocalTime;
 import java.util.List;

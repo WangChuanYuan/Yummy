@@ -1,4 +1,4 @@
-package org.casual.yummy.utils;
+package org.casual.yummy.utils.rules;
 
 public class MemberRule {
 

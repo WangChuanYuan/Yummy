@@ -1,7 +1,7 @@
 package org.casual.yummy.service;
 
 import org.casual.yummy.model.goods.Goods;
-import org.casual.yummy.utils.ResultMsg;
+import org.casual.yummy.utils.message.ResultMsg;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

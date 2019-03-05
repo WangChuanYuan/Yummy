@@ -72,7 +72,7 @@ export default {
         let _this = this;
         _this.codeButton.isDisabled = true;
         let interval = window.setInterval(function () {
-          _this.codeButton.name = '(' + _this.codeButton.time + '秒)后重发';
+          _this.codeButton.name = '(' + _this.codeButton.time + '秒后)重发';
           --_this.codeButton.time;
           if (_this.codeButton.time < 0) {
             _this.codeButton.name = '重新发送验证码';

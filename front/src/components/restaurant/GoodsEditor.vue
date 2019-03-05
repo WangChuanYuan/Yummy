@@ -37,7 +37,7 @@
           </el-col>
           <el-col :span="6" :offset="2">
             <el-form-item prop="cgid" label="分类">
-              <el-select v-model="goodsForm.cgid">
+              <el-select v-model="goodsForm.cgid" :value="goodsForm.cgid">
                 <el-option
                   v-for="cg in categories"
                   :key="cg.cgid"

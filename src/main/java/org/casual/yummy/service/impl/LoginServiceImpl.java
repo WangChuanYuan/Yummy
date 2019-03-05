@@ -5,8 +5,8 @@ import org.casual.yummy.model.User;
 import org.casual.yummy.service.LoginService;
 import org.casual.yummy.service.MemberService;
 import org.casual.yummy.service.RestaurantService;
-import org.casual.yummy.utils.Code;
-import org.casual.yummy.utils.ResultMsg;
+import org.casual.yummy.utils.message.Code;
+import org.casual.yummy.utils.message.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +19,9 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private RestaurantService restaurantService;
 
+    @Autowired
+    private ManagerServiceImpl managerService;
+
     @Override
     public ResultMsg<? extends User> login(String id, String password, Role role) {
         switch (role) {
@@ -27,8 +30,9 @@ public class LoginServiceImpl implements LoginService {
             case RESTAURANT:
                 return restaurantService.login(id, password);
             case MANAGER:
-                break;
+                return managerService.login(id, password);
+            default:
+                return new ResultMsg<>("登录失败", Code.FAILURE);
         }
-        return new ResultMsg<>("登录失败", Code.FAILURE);
     }
 }

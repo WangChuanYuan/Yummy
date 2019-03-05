@@ -4,7 +4,7 @@ import org.casual.yummy.dto.GoodsDTO;
 import org.casual.yummy.model.goods.Combo;
 import org.casual.yummy.model.goods.ComboItem;
 import org.casual.yummy.model.goods.SaleInfo;
-import org.casual.yummy.utils.ResultMsg;
+import org.casual.yummy.utils.message.ResultMsg;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

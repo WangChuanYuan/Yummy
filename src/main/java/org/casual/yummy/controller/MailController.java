@@ -1,8 +1,8 @@
 package org.casual.yummy.controller;
 
 import org.casual.yummy.service.MailService;
-import org.casual.yummy.utils.Code;
-import org.casual.yummy.utils.ResultMsg;
+import org.casual.yummy.utils.message.Code;
+import org.casual.yummy.utils.message.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -117,7 +117,12 @@ export default {
           this.marketInfo.leastExp = info.leastExp;
           this.marketInfo.deliveryExp = info.deliveryExp;
           if (info.phone) this.marketInfo.phone = info.phone;
-          if (info.startHour && info.endHour) this.marketInfo.hours = [info.startHour, info.endHour];
+          if (info.startHour && info.endHour) {
+            let hours = [];
+            hours[0] = info.startHour;
+            hours[1] = info.endHour;
+            this.marketInfo.hours = hours;
+          }
         }
       }).catch(() => {
       });
@@ -128,7 +133,7 @@ export default {
           let formData = new FormData();
           formData.append('rid', sessionStorage.getItem('id'));
           if (this.avatarRaw) formData.append('avatar', this.avatarRaw);
-          formData.append('leastExp', this.marketInfo.balance);
+          formData.append('leastExp', this.marketInfo.leastExp);
           formData.append('deliveryExp', this.marketInfo.deliveryExp);
           formData.append('phone', this.marketInfo.phone);
           formData.append('startHour', this.marketInfo.hours[0]);

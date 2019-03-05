@@ -7,9 +7,8 @@ import org.casual.yummy.model.goods.SaleInfo;
 import org.casual.yummy.service.CategoryService;
 import org.casual.yummy.service.FileUploadService;
 import org.casual.yummy.service.GoodsService;
-import org.casual.yummy.utils.Code;
-import org.casual.yummy.utils.JsonUtil;
-import org.casual.yummy.utils.ResultMsg;
+import org.casual.yummy.utils.message.Code;
+import org.casual.yummy.utils.message.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageRequest;
@@ -86,13 +85,12 @@ public class GoodsController {
 
     @PostMapping("/delete_goods")
     public ResultMsg deleteGoods(@RequestBody Map param) {
-        Long gid = Long.parseLong((String) param.get("gid"));
+        Long gid = (long) (int) param.get("gid");
         return goodsService.deleteGoods(gid);
     }
 
     @GetMapping("/get_goods")
     public GoodsDTO getGoods(@RequestParam Long gid) {
-        System.out.println(JsonUtil.obj2json(goodsService.getGoodsById(gid)));
         return new GoodsDTO(goodsService.getGoodsById(gid));
     }
 

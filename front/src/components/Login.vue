@@ -121,9 +121,9 @@ export default {
                 sessionStorage.setItem('user', JSON.stringify(user));
               }
               if (this.role === Role.MEMBER) {
-                this.$router.push('/memberCenter');
+                this.$router.push('/memberCenter/info');
               } else if (this.role === Role.RESTAURANT) {
-                this.$router.push('/restaurantCenter');
+                this.$router.push('/restaurantCenter/marketInfo');
               }
             } else {
               this.$message.warning(data.msg);

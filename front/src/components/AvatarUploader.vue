@@ -23,6 +23,11 @@ export default {
       url: this.avatar
     };
   },
+  watch: {
+    avatar (url) {
+      this.url = url;
+    }
+  },
   methods: {
     uploadAvatar (file) {
       this.url = URL.createObjectURL(file.raw);

@@ -127,8 +127,9 @@ export default {
       }).then((data) => {
         if (data.code === Code.SUCCESS) {
           this.clearCart();
+          this.$message.success(data.msg);
           this.$emit('success', data.value);
-        }
+        } else this.$message.warning(data.msg);
       }).catch(() => {});
     }
   }

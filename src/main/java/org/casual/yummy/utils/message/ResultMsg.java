@@ -1,7 +1,8 @@
-package org.casual.yummy.utils;
+package org.casual.yummy.utils.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.casual.yummy.utils.message.Code;
 
 @Data
 @AllArgsConstructor

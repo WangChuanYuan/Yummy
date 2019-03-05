@@ -23,7 +23,7 @@ public class MarketInfo {
 
     private double deliveryExp;
 
-    private LocalTime starHour;
+    private LocalTime startHour;
 
     private LocalTime endHour;
 }

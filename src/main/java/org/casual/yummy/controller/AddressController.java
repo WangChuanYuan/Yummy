@@ -3,7 +3,7 @@ package org.casual.yummy.controller;
 import org.casual.yummy.dto.AddressDTO;
 import org.casual.yummy.service.AddressService;
 import org.casual.yummy.utils.JsonUtil;
-import org.casual.yummy.utils.ResultMsg;
+import org.casual.yummy.utils.message.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +36,7 @@ public class AddressController {
 
     @PostMapping("/delete_address")
     public ResultMsg deleteAddress(@RequestBody Map param) {
-        Long aid = (Long) param.get("aid");
+        Long aid = (long) (int) param.get("aid");
         return addressService.deleteAddress(aid);
     }
 }

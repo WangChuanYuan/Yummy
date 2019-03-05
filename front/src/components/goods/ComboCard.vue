@@ -8,7 +8,7 @@
         <div class="omission">
           <span style="font-size: 20px; font-weight: bold">{{inCombo.name}}</span>
         </div>
-        <el-popover placement="right" trigger="click">
+        <el-popover placement="right" trigger="hover">
           <GoodsTable :goods="comboGoods"/>
           <el-button slot="reference" type="text">详情</el-button>
         </el-popover>

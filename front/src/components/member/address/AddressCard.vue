@@ -10,8 +10,9 @@
         </div>
         <br/>
         <br/>
-        <div class="omission">
+        <div>
           <span>{{inAddress.location}}</span>
+          <br/>
           <span>{{inAddress.detailLocation}}</span>
           <br/>
           <span>{{inAddress.phone}}</span>
@@ -90,7 +91,7 @@ export default {
 <style scoped>
   .box-card {
     width: 320px;
-    height: 120px;
+    height: 110px;
     margin-bottom: 10px;
     text-align: left;
   }

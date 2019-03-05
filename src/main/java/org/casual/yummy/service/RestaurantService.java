@@ -3,7 +3,7 @@ package org.casual.yummy.service;
 import org.casual.yummy.model.restaurant.RegisterInfo;
 import org.casual.yummy.model.restaurant.Restaurant;
 import org.casual.yummy.model.restaurant.RestaurantType;
-import org.casual.yummy.utils.ResultMsg;
+import org.casual.yummy.utils.message.ResultMsg;
 
 import java.util.List;
 

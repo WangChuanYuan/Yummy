@@ -7,7 +7,7 @@
           <div class="clear-fix">
             <div style="float: left">
               <img
-                :src="scope.row.rAvatar"
+                :src="scope.row.ravatar"
                 :class="{link : role === 'member'}"
                 style="height: 70px; width: 70px; border-radius: 70px"
                 @click="visit(scope.$index)"/>
@@ -33,7 +33,7 @@
             <div>
               <span>会员号: {{scope.row.mid}}</span>
               <br/>
-              <span>接收人: {{scope.row.mName}}</span>
+              <span>接收人: {{scope.row.mname}}</span>
               <br/>
               <span>详细地址: {{scope.row.detailLocation}}</span>
             </div>
@@ -142,6 +142,11 @@ export default {
     'role': {
       type: String,
       default: 'member'
+    }
+  },
+  watch: {
+    orders (val) {
+      this.inOrders = JSON.parse(JSON.stringify(val));
     }
   },
   data () {
