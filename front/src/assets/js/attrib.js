@@ -44,6 +44,21 @@ export const OrderStatus = {
   }
 };
 
+export const RegStatus = {
+  PENDING: {
+    value: 'PENDING',
+    label: '未处理'
+  },
+  ACCESS: {
+    value: 'ACCESS',
+    label: '通过'
+  },
+  DENIED: {
+    value: 'DENIED',
+    label: '拒绝'
+  }
+};
+
 export const RestaurantType = {
   DELICACY: {
     value: 'DELICACY',

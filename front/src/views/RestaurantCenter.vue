@@ -6,7 +6,7 @@
                background-color="var(--theme-deep-grey)"
                text-color="white"
                active-text-color="var(--theme-golden)">
-        <Logo style="-webkit-text-stroke: 1px var(--theme-golden); font-size: 35px; margin: 30px auto 30px auto"/>
+        <Logo style="-webkit-text-stroke: 1px var(--theme-golden); font-size: 35px; margin: 60px auto 30px auto"/>
         <el-menu-item index="restaurantCenter">
           <i class="el-icon-info"></i>
           <span>门店中心</span>
@@ -67,7 +67,7 @@ export default {
     navigation (key) {
       switch (key) {
         case 'restaurantCenter':
-          this.$router.push('/restaurantCenter');
+          this.$router.push('/restaurantCenter/registerInfo');
           break;
         case 'registerInfo':
           this.$router.push('/restaurantCenter/registerInfo');
@@ -112,7 +112,6 @@ export default {
   #main {
     margin: 3% auto 0 auto;
     min-height: 90%;
-    min-width: 80%;
     background-color: white;
   }
 </style>

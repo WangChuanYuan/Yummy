@@ -14,7 +14,7 @@
           <i class="el-icon-info"></i>
           <span>后台管理</span>
         </el-menu-item>
-        <el-menu-item index="restaurants-info">
+        <el-menu-item index="registrations">
             <i class="el-icon-edit-outline"></i>
             <span>门店管理</span>
         </el-menu-item>
@@ -37,7 +37,7 @@
       </el-menu>
     </el-aside>
     <el-main>
-      <router-view></router-view>
+      <router-view id="main"></router-view>
     </el-main>
   </el-container>
 </template>
@@ -51,8 +51,8 @@ export default {
   methods: {
     navigation (key) {
       switch (key) {
-        case 'restaurants-info':
-          this.$router.push('/managerCenter/registers');
+        case 'registrations':
+          this.$router.push('/managerCenter/registrations');
           break;
         case 'statistics-restaurants':
           break;
@@ -99,5 +99,11 @@ export default {
     text-align: center;
     -webkit-text-stroke: 1px var(--theme-golden);
     letter-spacing: 0.04em;
+  }
+
+  #main {
+    margin: 3% auto 0 auto;
+    min-height: 80%;
+    background-color: white;
   }
 </style>

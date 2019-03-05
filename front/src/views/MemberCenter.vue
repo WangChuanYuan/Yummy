@@ -10,7 +10,7 @@
                    :router="true"
                    background-color="var(--theme-grey)"
                    active-text-color="var(--theme-blue)">
-            <el-menu-item index="/memberCenter">
+            <el-menu-item index="/memberCenter/info">
               <i class="el-icon-info"></i>
               <span>个人中心</span>
             </el-menu-item>

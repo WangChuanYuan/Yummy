@@ -22,31 +22,7 @@ export default {
   },
   data () {
     return {
-      orders: [
-        {
-          oid: 1,
-          rid: 1,
-          rAvatar: require('../../assets/image/cream.jpg'),
-          mid: 1,
-          mName: 'wcy',
-          cardNo: '3323',
-          goods: [
-            {name: 'abc', num: 1}
-          ],
-          combos: [],
-          bill: {
-            goodsTotal: 100,
-            combosTotal: 100,
-            deliveryExp: 0,
-            total: 200,
-            finalFee: 180
-          },
-          rate: 10,
-          predictedArrivalTime: '2018-09-01 11:02:02',
-          arrivalTime: '2018-09-01 11:02:02',
-          status: 'ORDERED'
-        }
-      ]
+      orders: []
     };
   }
 };

@@ -26,6 +26,7 @@ import GoodsEditor from '@/components/restaurant/GoodsEditor';
 import ComboManager from '@/components/restaurant/ComboManager';
 import ComboEditor from '@/components/restaurant/ComboEditor';
 import OrderManager from '@/components/restaurant/OrderManager';
+import RegistrationChecker from '@/components/manager/RegistrationChecker';
 
 Vue.use(Router);
 
@@ -168,16 +169,17 @@ export default new Router({
       component: ManagerLogin
     },
     {
-      path: '/background',
+      path: '/managerCenter',
       component: ManagerCenter,
       children: [
         {
           path: '',
-          name: 'background'
+          name: 'managerCenter'
         },
         {
-          path: 'registers',
-          name: 'restaurants-info'
+          path: 'registrations',
+          name: 'registrations',
+          component: RegistrationChecker
         }
       ]
     }
