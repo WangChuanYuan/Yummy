@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.casual.yummy.utils.rules.ManagerRule.DEFAULT_MANAGER;
+
 @Service
 public class ManagerServiceImpl implements ManagerService {
 
@@ -35,8 +37,15 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public ResultMsg<Manager> login(String id, String password) {
         Manager manager = managerDAO.findById(id).orElse(null);
-        if (null == manager)
-            return new ResultMsg<>("账号不存在", Code.FAILURE);
+        if (null == manager) {
+            if (id.equals(DEFAULT_MANAGER)) {
+                Manager defaultManager = new Manager();
+                manager.setId(DEFAULT_MANAGER).setPassword(password);
+                Manager savedManager = managerDAO.saveAndFlush(defaultManager);
+                return new ResultMsg<>("登录成功", Code.SUCCESS, savedManager);
+            }
+            else return new ResultMsg<>("账号不存在", Code.FAILURE);
+        }
         else if (!manager.getPassword().equals(password))
             return new ResultMsg<>("密码错误", Code.WRONG_PASS);
         else
