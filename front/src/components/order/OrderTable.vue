@@ -59,6 +59,8 @@
               <span>总费用: {{scope.row.bill.total}}</span>
               <span>会员优惠价: {{scope.row.bill.finalFee}}</span>
               <br/>
+              <span>实际消费: {{scope.row.bill.actualFee}}</span>
+              <br/>
               <span>支付卡号: {{scope.row.cardNo}}</span>
             </div>
             <el-button type="text" slot="reference">账单</el-button>

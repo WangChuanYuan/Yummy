@@ -24,4 +24,7 @@ public class OrderBill {
 
     // 会员折扣后费用
     private double finalFee;
+
+    // 订单实际费用，退订，取消等情况
+    private double actualFee;
 }

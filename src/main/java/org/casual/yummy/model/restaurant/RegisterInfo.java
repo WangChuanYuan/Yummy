@@ -21,9 +21,6 @@ public class RegisterInfo {
 
     private String email;
 
-    @Enumerated(value = EnumType.STRING)
-    private RestaurantType type;
-
     private String location;
 
     private String detailLocation;
@@ -31,4 +28,7 @@ public class RegisterInfo {
     private double lng;
 
     private double lat;
+
+    @Enumerated(value = EnumType.STRING)
+    private RestaurantType type;
 }

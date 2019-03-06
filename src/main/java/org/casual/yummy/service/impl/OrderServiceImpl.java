@@ -204,7 +204,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 支付订单，扣除相应费用
+     * 支付订单，扣除相应费用，设置订单实际消费
      * 费用转交平台，在用户确认订单或退订时结算给门店
      */
     @Override
@@ -231,6 +231,7 @@ public class OrderServiceImpl implements OrderService {
         if (null == manager) return new ResultMsg("支付失败,平台无法结算", Code.FAILURE);
         manager.setBalance(manager.getBalance() + fee);
 
+        order.getBill().setActualFee(fee);
         order.setStatus(OrderStatus.PAYED);
 
         orderDAO.saveAndFlush(order);
@@ -319,7 +320,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 退订订单，并按照规则退款
+     * 退订订单，并按照规则退款，更新订单实际消费
      * 平台结算，将实际收益转交门店
      */
     @Override
@@ -347,13 +348,15 @@ public class OrderServiceImpl implements OrderService {
         bankCard.setBalance(bankCard.getBalance() + fee * ratio);
 
         // 平台结算
-        double restaurantIncome = fee * (1 - ratio) * (1 - ORDER_TAX);
+        double actualFee = fee * (1 - ratio);
+        double restaurantIncome = actualFee * (1 - ORDER_TAX);
         Manager manager = managerDAO.findById(DEFAULT_MANAGER).orElse(null);
         if (null == manager) return new ResultMsg("支付失败,平台无法结算", Code.FAILURE);
         manager.setBalance(manager.getBalance() - restaurantIncome);
         Restaurant restaurant = order.getRestaurant();
         restaurant.getMarketInfo().setBalance(restaurant.getMarketInfo().getBalance() + restaurantIncome);
 
+        order.getBill().setActualFee(actualFee);
         order.setStatus(OrderStatus.UNSUBSCRIBED);
 
         orderDAO.saveAndFlush(order);

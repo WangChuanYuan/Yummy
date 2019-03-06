@@ -63,7 +63,7 @@ export default {
           this.$router.push('/bookCenter');
           break;
         case 'memberCenter':
-          this.$router.push('/memberCenter');
+          this.$router.push('/memberCenter/info');
           break;
         case 'register':
           this.$router.push('/register');

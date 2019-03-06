@@ -27,10 +27,13 @@
               <i class="el-icon-tickets"></i>
               <span>我的订单</span>
             </el-menu-item>
-            <el-menu-item index="/memberCenter/statistics">
-              <i class="el-icon-news"></i>
-              <span>统计信息</span>
-            </el-menu-item>
+            <el-submenu index="/memberCenter/statistic">
+              <template slot="title">
+                <i class="el-icon-news"></i>
+                <span>统计信息</span>
+              </template>
+              <el-menu-item index="/memberCenter/consume">消费统计</el-menu-item>
+            </el-submenu>
           </el-menu>
         </el-aside>
         <el-main>
