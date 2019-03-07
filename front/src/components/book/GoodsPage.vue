@@ -32,40 +32,46 @@
         </el-col>
       </el-row>
     </el-header>
-    <el-main style="padding: 0">
+    <el-main style="padding: 20px 0 0 0">
       <el-container>
-        <el-main style="padding-right: 0">
-          <el-container>
-            <el-header class="clear-fix">
-              <el-radio-group v-model="sort" style="float: left">
-                <el-radio-button label="goods">单品</el-radio-button>
-                <el-radio-button label="combos">套餐</el-radio-button>
-              </el-radio-group>
+        <el-header class="clear-fix">
+          <el-radio-group v-model="sort" style="float: left">
+            <el-radio-button label="goods">单品</el-radio-button>
+            <el-radio-button label="combos">套餐</el-radio-button>
+          </el-radio-group>
+        </el-header>
+        <el-container>
+          <el-main v-show="sort === 'goods'" style="padding: 0">
+            <el-header>
+              <CategorySelector class="center" title="商品分类" :categories="categories" :width="800" label="name" value="cgid" @select="selectCategory"/>
             </el-header>
-            <el-main v-show="sort === 'goods'">
-              <el-header>
-                <CategorySelector class="center" title="商品分类" :categories="categories" :width="800" label="name" value="cgid" @select="selectCategory"/>
-              </el-header>
-              <el-main>
-                <el-row>
-                  <el-col :span="6" v-for="item in goods" :key="item.gid">
-                    <GoodsCard aim="purchase" :goods="item"></GoodsCard>
-                  </el-col>
-                </el-row>
-              </el-main>
-            </el-main>
-            <el-main v-show="sort === 'combos'">
+            <el-main>
               <el-row>
-                <el-col :span="6" v-for="item in combos" :key="item.cid">
-                  <ComboCard aim="purchase" :combo="item"></ComboCard>
+                <el-col :span="6" v-for="item in goods" :key="item.gid">
+                  <GoodsCard aim="purchase" :goods="item"></GoodsCard>
                 </el-col>
               </el-row>
             </el-main>
-          </el-container>
-        </el-main>
-        <el-aside width="280px">
-          <!-- 优惠栏 -->
-        </el-aside>
+          </el-main>
+          <el-main v-show="sort === 'combos'" style="padding: 0">
+            <el-row>
+              <el-col :span="7" v-for="item in combos" :key="item.cid">
+                <ComboCard aim="purchase" :combo="item"></ComboCard>
+              </el-col>
+            </el-row>
+          </el-main>
+          <el-aside width="330px">
+            <div class="promotion">
+              <div class="promotion-banner">
+                <span>满减优惠</span>
+              </div>
+              <div v-for="item in promotions" :key="item.pid" class="promotion-content">
+                <span>----- 满 {{item.quotaRequired}} 减 <span style="color: red">{{item.quotaOffered}}</span> -----</span>
+                <br/>
+              </div>
+            </div>
+          </el-aside>
+        </el-container>
       </el-container>
     </el-main>
   </el-container>
@@ -108,16 +114,23 @@ export default {
       categories: [],
       cgid: '', // 实际为Number类型，但选择全部时返回的是''
       goods: [],
-      combos: []
+      combos: [],
+      promotions: []
     };
   },
   mounted () {
     Api.get('/get_restaurant', {id: this.$route.params.id}).then((data) => {
       if (data) this.restaurant = data;
-    }).catch(() => {});
+    }).catch(() => {
+    });
     Api.get('/get_categories', {restaurant: this.$route.params.id}).then((data) => {
       if (data) this.categories = data;
-    }).catch(() => {});
+    }).catch(() => {
+    });
+    Api.get('/get_promotions', {restaurant: this.$route.params.id}).then((data) => {
+      if (data) this.promotions = data;
+    }).catch(() => {
+    });
     this.getGoods();
     this.getCombos();
   },
@@ -131,12 +144,14 @@ export default {
       if (this.cgid) params['cgid'] = this.cgid;
       Api.get('/get_selling_goods', params).then((data) => {
         if (data) this.goods = data;
-      }).catch(() => {});
+      }).catch(() => {
+      });
     },
     getCombos () {
       Api.get('/get_selling_combos', {rid: this.$route.params.id}).then((data) => {
         if (data) this.combos = data;
-      }).catch(() => {});
+      }).catch(() => {
+      });
     }
   }
 };
@@ -166,5 +181,24 @@ export default {
     width: 100px;
     border-radius: 100px;
     border: 1px dashed var(--theme-golden);
+  }
+
+  .promotion {
+    margin-right: 150px;
+    width: 260px;
+    border: 1px solid var(--theme-medium-grey);
+  }
+
+  .promotion-banner {
+    height: 30px;
+    background: var(--theme-blue);
+    color: white;
+    font-size: 20px;
+  }
+
+  .promotion-content {
+    font-size: 16px;
+    font-weight: bold;
+    background: white;
   }
 </style>
