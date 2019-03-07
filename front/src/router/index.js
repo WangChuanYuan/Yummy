@@ -15,6 +15,7 @@ import MemberAddress from '@/components/member/MemberAddress';
 import MemberOrders from '@/components/member/MemberOrders';
 import MemberPay from '@/components/member/MemberPay';
 import MemberConsume from '@/components/member/statistic/MemberConsume';
+import MemberUsage from '@/components/member/statistic/MemberUsage';
 import RestaurantPage from '@/components/book/RestaurantPage';
 import GoodsPage from '@/components/book/GoodsPage';
 import OrderConfirmer from '@/components/order/OrderConfirmer';
@@ -109,6 +110,11 @@ export default new Router({
           path: 'consume',
           name: 'member-consume',
           component: MemberConsume
+        },
+        {
+          path: 'usage',
+          name: 'member-usage',
+          component: MemberUsage
         }
       ]
     },

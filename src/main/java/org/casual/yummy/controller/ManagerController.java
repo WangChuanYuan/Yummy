@@ -25,7 +25,7 @@ public class ManagerController {
     }
 
     @PostMapping("/check_registration")
-    public ResultMsg checkRegistration (@RequestBody Map param) {
+    public ResultMsg checkRegistration(@RequestBody Map param) {
         Long rgid = (long) (int) param.get("rgid");
         RegStatus status = RegStatus.valueOf((String) param.get("status"));
         return managerService.checkRegistration(rgid, status);

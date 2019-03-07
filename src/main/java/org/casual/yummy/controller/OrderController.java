@@ -2,21 +2,48 @@ package org.casual.yummy.controller;
 
 import org.casual.yummy.dto.CartDTO;
 import org.casual.yummy.dto.OrderDTO;
+import org.casual.yummy.model.order.OrderStatus;
+import org.casual.yummy.model.restaurant.RestaurantType;
 import org.casual.yummy.service.OrderService;
 import org.casual.yummy.utils.JsonUtil;
 import org.casual.yummy.utils.message.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @GetMapping("/get_orders")
+    @Transactional
+    public List<OrderDTO> getOrders(String mid, String rid, RestaurantType restaurantType,
+                                    @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime from, @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime to,
+                                    Double finalFeeLowerLimit, Double finalFeeUpperLimit, Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
+        return orderService.getOrders(mid, rid, restaurantType, from, to, finalFeeLowerLimit, finalFeeUpperLimit, actualFeeLowerLimit, actualFeeUpperLimit)
+                .stream().map(OrderDTO::new).collect(Collectors.toList());
+    }
+
+    @GetMapping("/get_consumed_orders")
+    @Transactional
+    public List<OrderDTO> getConsumedOrders(String mid, String rid, RestaurantType restaurantType,
+                                            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime from, @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime to,
+                                            Double finalFeeLowerLimit, Double finalFeeUpperLimit, Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
+        return orderService.getOrders(mid, rid, restaurantType, from, to, finalFeeLowerLimit, finalFeeUpperLimit, actualFeeLowerLimit, actualFeeUpperLimit)
+                .stream().filter(order -> {
+                    OrderStatus status = order.getStatus();
+                    return status == OrderStatus.FINISHED || status == OrderStatus.UNSUBSCRIBED;
+                }).map(OrderDTO::new).collect(Collectors.toList());
+    }
 
     @GetMapping("/get_member_orders")
     public List<OrderDTO> getMemberOrders(@RequestParam String mid) {

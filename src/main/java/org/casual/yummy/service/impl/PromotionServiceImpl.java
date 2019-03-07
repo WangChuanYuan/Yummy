@@ -41,7 +41,7 @@ public class PromotionServiceImpl implements PromotionService {
     @Transactional
     public ResultMsg<Promotion> modifyPromotion(Promotion promotion) {
         try {
-           Promotion pm = promotionDAO.findById(promotion.getPid()).orElse(null);
+            Promotion pm = promotionDAO.findById(promotion.getPid()).orElse(null);
             if (null != pm) {
                 pm.setQuotaRequired(promotion.getQuotaRequired());
                 pm.setQuotaOffered(promotion.getQuotaOffered());

@@ -18,7 +18,7 @@ export default {
       type: String,
       default: 'line' // line || bar || pie
     },
-    'data': {
+    'chartData': {
       type: Array,
       default: function () {
         return [];
@@ -60,14 +60,19 @@ export default {
   mounted () {
     this.drawChart();
   },
+  watch: {
+    chartData (val) {
+      this.drawChart();
+    }
+  },
   computed: {
     xAxisData () {
-      return this.data.map(function (item) {
+      return this.chartData.map(function (item) {
         return item['key'];
       });
     },
     yAxisData () {
-      return this.data.map(function (item) {
+      return this.chartData.map(function (item) {
         return item['value'];
       });
     }
@@ -77,13 +82,13 @@ export default {
       let chart = echarts.init(document.getElementById(this.id));
       switch (this.type) {
         case 'line':
-          chart.setOption(this.generatorLineOption());
+          chart.setOption(this.generatorLineOption(), true);
           break;
         case 'bar':
-          chart.setOption(this.generatorBarOption());
+          chart.setOption(this.generatorBarOption(), true);
           break;
         case 'pie':
-          chart.setOption(this.generatorPieOption());
+          chart.setOption(this.generatorPieOption(), true);
           break;
         default:
           console.error(`The type of chart ${this.type} is invalid`);
@@ -95,7 +100,7 @@ export default {
         title: {
           text: this.titleText,
           subtext: this.subText,
-          x: 'center'
+          left: 'center'
         },
         xAxis: {
           type: 'category',
@@ -117,7 +122,7 @@ export default {
         title: {
           text: this.titleText,
           subtext: this.subText,
-          x: 'center'
+          left: 'center'
         },
         color: ['#3398DB'],
         tooltip: {
@@ -168,7 +173,7 @@ export default {
         title: {
           text: this.titleText,
           subtext: this.subText,
-          x: 'center'
+          left: 'center'
         },
         tooltip: {
           trigger: 'item',

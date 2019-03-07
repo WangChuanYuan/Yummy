@@ -43,10 +43,8 @@ public class ManagerServiceImpl implements ManagerService {
                 manager.setId(DEFAULT_MANAGER).setPassword(password);
                 Manager savedManager = managerDAO.saveAndFlush(defaultManager);
                 return new ResultMsg<>("登录成功", Code.SUCCESS, savedManager);
-            }
-            else return new ResultMsg<>("账号不存在", Code.FAILURE);
-        }
-        else if (!manager.getPassword().equals(password))
+            } else return new ResultMsg<>("账号不存在", Code.FAILURE);
+        } else if (!manager.getPassword().equals(password))
             return new ResultMsg<>("密码错误", Code.WRONG_PASS);
         else
             return new ResultMsg<>("登录成功", Code.SUCCESS, manager);

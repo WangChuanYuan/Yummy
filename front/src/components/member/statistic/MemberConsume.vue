@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>消费统计</h3>
+    <h3>消费额统计</h3>
     <hr/>
     <el-date-picker
       v-model="dates"
@@ -9,26 +9,121 @@
       range-separator="至"
       start-placeholder="起始日期"
       end-placeholder="结束日期"
-      placeholder="选择日期">
+      placeholder="选择日期"
+      style="width: 250px">
     </el-date-picker>
     <el-select v-model="restaurantType" clearable placeholder="选择餐厅类型" :value="types.DELICACY.value">
       <el-option v-for="type in types" :key="type.value" :value="type.value" :label="type.label"/>
     </el-select>
+    <el-input type="number" v-model="actualFeeLowerLimit" style="width: 150px" placeholder="消费金额"></el-input>
+    <span>-</span>
+    <el-input type="number" v-model="actualFeeUpperLimit" style="width: 150px" placeholder="消费金额"></el-input>
+    <el-button type="primary" size="mini" @click="getData">查询</el-button>
+    <el-container>
+      <el-aside>
+        <el-table :data="consumedOrders" height="400">
+          <el-table-column prop="orderTime" label="下单时间" width="100"/>
+          <el-table-column label="消费类型" width="60">
+            <template slot-scope="scope">
+              <span>{{scope.row.status === status.FINISHED.value ? '点餐' : '退订'}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="消费金额" width="50">
+            <template slot-scope="scope">
+              <span>{{scope.row.bill.actualFee}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="rname" label="门店"/>
+        </el-table>
+      </el-aside>
+      <el-main>
+        <el-row>
+          <el-col :span="12">
+            <LinearChart type="bar" :chart-data="consumeOfOrderStatus"/>
+          </el-col>
+          <el-col :span="12">
+            <LinearChart type="pie" :chart-data="consumeOfRestaurantType"/>
+          </el-col>
+        </el-row>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
 <script>
-import {RestaurantType} from '../../../assets/js/attrib';
+import Api from '../../../assets/js/api';
+import {OrderStatus, RestaurantType} from '../../../assets/js/attrib';
+import LinearChart from '../../charts/LinearChart';
 
 export default {
   name: 'MemberConsume',
+  components: {LinearChart},
   data () {
     return {
+      status: OrderStatus,
       types: RestaurantType,
       /* conditions */
       dates: [],
-      restaurantType: ''
+      restaurantType: '',
+      actualFeeLowerLimit: '',
+      actualFeeUpperLimit: '',
+      /* data */
+      consumedOrders: [],
+      consumeOfOrderStatus: [],
+      consumeOfRestaurantType: []
     };
+  },
+  mounted () {
+    this.getData();
+  },
+  methods: {
+    getParam () {
+      let param = {mid: sessionStorage.getItem('id')};
+      if (this.dates && this.dates[0]) {
+        param.from = this.dates[0];
+      }
+      if (this.dates && this.dates[1]) {
+        param.to = this.dates[1];
+      }
+      if (this.restaurantType) {
+        param.restaurantType = this.restaurantType;
+      }
+      if (param.feeLowerLimit) param.feeLowerLimit = this.feeLowerLimit;
+      if (param.feeUpperLimit) param.feeUpperLimit = this.feeUpperLimit;
+      return param;
+    },
+    getData () {
+      this.getConsumedOrders();
+      this.getConsumeOfOrderStatus();
+      this.getConsumeOfRestaurantType();
+    },
+    getConsumedOrders () {
+      Api.get('/get_consumed_orders', this.getParam()).then((data) => {
+        if (data) this.consumedOrders = data;
+      }).catch(() => {});
+    },
+    getConsumeOfOrderStatus () {
+      Api.get('/consume_of_order_status', this.getParam()).then((data) => {
+        if (data) {
+          this.consumeOfOrderStatus = data.map(
+            item => {
+              item.key = (item.key === this.status.FINISHED.value ? '点餐' : '退订');
+              return item;
+            });
+        }
+      }).catch(() => {});
+    },
+    getConsumeOfRestaurantType () {
+      Api.get('/consume_of_restaurant_type', this.getParam()).then((data) => {
+        if (data) {
+          this.consumeOfRestaurantType = data.map(
+            item => {
+              item.key = this.types[item.key].label;
+              return item;
+            });
+        }
+      }).catch(() => {});
+    }
   }
 };
 </script>

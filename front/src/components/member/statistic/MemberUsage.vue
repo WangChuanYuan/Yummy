@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>订单统计</h3>
+    <h3>订单数统计</h3>
     <hr/>
     <el-date-picker
       v-model="dates"
@@ -9,22 +9,121 @@
       range-separator="至"
       start-placeholder="起始日期"
       end-placeholder="结束日期"
-      placeholder="选择日期">
+      placeholder="选择日期"
+      style="width: 250px">
     </el-date-picker>
-    <LinearChart/>
+    <el-select v-model="restaurantType" clearable placeholder="选择餐厅类型" :value="types.DELICACY.value">
+      <el-option v-for="type in types" :key="type.value" :value="type.value" :label="type.label"/>
+    </el-select>
+    <el-input type="number" v-model="finalFeeLowerLimit" style="width: 150px" placeholder="订单金额"></el-input>
+    <span>-</span>
+    <el-input type="number" v-model="finalFeeUpperLimit" style="width: 150px" placeholder="订单金额"></el-input>
+    <el-button type="primary" size="mini" @click="getData">查询</el-button>
+    <el-container>
+      <el-aside>
+        <el-table :data="consumedOrders" height="400">
+          <el-table-column prop="orderTime" label="下单时间" width="100"/>
+          <el-table-column label="订单状态" width="60">
+            <template slot-scope="scope">
+              <span>{{status[scope.row.status].label}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="订单金额" width="50">
+            <template slot-scope="scope">
+              <span>{{scope.row.bill.finalFee}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="rname" label="门店"/>
+        </el-table>
+      </el-aside>
+      <el-main>
+        <el-row>
+          <el-col :span="12">
+            <LinearChart type="bar" :chart-data="usageOfOrderStatus"/>
+          </el-col>
+          <el-col :span="12">
+            <LinearChart type="pie" :chart-data="usageOfRestaurantType"/>
+          </el-col>
+        </el-row>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
 <script>
+import Api from '../../../assets/js/api';
+import {OrderStatus, RestaurantType} from '../../../assets/js/attrib';
 import LinearChart from '../../charts/LinearChart';
 
 export default {
-  name: 'MemberStatistic',
+  name: 'MemberConsume',
   components: {LinearChart},
   data () {
     return {
-      dates: []
+      status: OrderStatus,
+      types: RestaurantType,
+      /* conditions */
+      dates: [],
+      restaurantType: '',
+      finalFeeLowerLimit: '',
+      finalFeeUpperLimit: '',
+      /* data */
+      orders: [],
+      usageOfOrderStatus: [],
+      usageOfRestaurantType: []
     };
+  },
+  mounted () {
+    this.getData();
+  },
+  methods: {
+    getParam () {
+      let param = {mid: sessionStorage.getItem('id')};
+      if (this.dates && this.dates[0]) {
+        param.from = this.dates[0];
+      }
+      if (this.dates && this.dates[1]) {
+        param.to = this.dates[1];
+      }
+      if (this.restaurantType) {
+        param.restaurantType = this.restaurantType;
+      }
+      if (param.finalFeeLowerLimit) param.finalFeeLowerLimit = this.finalFeeLowerLimit;
+      if (param.finalFeeUpperLimit) param.finalFeeUpperLimit = this.finalFeeUpperLimit;
+      return param;
+    },
+    getData () {
+      this.getUsageOrders();
+      this.getUsageOfOrderStatus();
+      this.getUsageOfRestaurantType();
+    },
+    getConsumedOrders () {
+      Api.get('/get_orders', this.getParam()).then((data) => {
+        if (data) this.orders = data;
+      }).catch(() => {});
+    },
+    getConsumeOfOrderStatus () {
+      Api.get('/usage_of_order_status', this.getParam()).then((data) => {
+        if (data) {
+          this.usageOfOrderStatus = data.map(
+            item => {
+              item.key = this.status[item.key].label;
+              return item;
+            });
+        }
+      }).catch(() => {});
+    },
+    getConsumeOfRestaurantType () {
+      Api.get('/usage_of_restaurant_type', this.getParam()).then((data) => {
+        if (data) {
+          this.usageOfRestaurantType = data.map(
+            item => {
+              item.key = this.types[item.key].label;
+              return item;
+            });
+        }
+      }).catch(() => {});
+    }
   }
 };
 </script>

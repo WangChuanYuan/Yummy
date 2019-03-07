@@ -33,6 +33,7 @@
                 <span>统计信息</span>
               </template>
               <el-menu-item index="/memberCenter/consume">消费统计</el-menu-item>
+              <el-menu-item index="/memberCenter/usage">订单统计</el-menu-item>
             </el-submenu>
           </el-menu>
         </el-aside>

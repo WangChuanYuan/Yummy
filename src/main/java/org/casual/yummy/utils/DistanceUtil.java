@@ -17,8 +17,8 @@ public class DistanceUtil {
         double b = radLng1 - radLng2;
         return 2 * Math.asin(
                 Math.sqrt(
-                        Math.pow(Math.sin(a/2), 2) +
-                                Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b/2), 2)
+                        Math.pow(Math.sin(a / 2), 2) +
+                                Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)
                 )
         ) * EARTH_RADIUS;
     }

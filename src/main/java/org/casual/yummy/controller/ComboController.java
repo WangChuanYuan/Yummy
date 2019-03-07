@@ -6,8 +6,8 @@ import org.casual.yummy.model.goods.Combo;
 import org.casual.yummy.model.goods.SaleInfo;
 import org.casual.yummy.service.ComboService;
 import org.casual.yummy.service.FileUploadService;
-import org.casual.yummy.utils.message.Code;
 import org.casual.yummy.utils.JsonUtil;
+import org.casual.yummy.utils.message.Code;
 import org.casual.yummy.utils.message.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -93,7 +93,7 @@ public class ComboController {
         List<ComboDTO> comboDTOS = new ArrayList<>();
         Pageable pageable = null;
         if (null != page && null != size) {
-             pageable = PageRequest.of(page - 1, size);
+            pageable = PageRequest.of(page - 1, size);
         }
         comboService.getSellingCombos(rid, pageable).parallelStream().forEach(item -> {
             comboDTOS.add(new ComboDTO(item));

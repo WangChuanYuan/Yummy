@@ -19,15 +19,18 @@ import org.casual.yummy.model.order.Order;
 import org.casual.yummy.model.order.OrderBill;
 import org.casual.yummy.model.order.OrderStatus;
 import org.casual.yummy.model.restaurant.Restaurant;
+import org.casual.yummy.model.restaurant.RestaurantType;
 import org.casual.yummy.service.OrderService;
-import org.casual.yummy.utils.message.Code;
 import org.casual.yummy.utils.DistanceUtil;
+import org.casual.yummy.utils.message.Code;
 import org.casual.yummy.utils.message.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Predicate;
 import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -41,9 +44,7 @@ import java.util.stream.Collectors;
 
 import static org.casual.yummy.utils.rules.ManagerRule.DEFAULT_MANAGER;
 import static org.casual.yummy.utils.rules.MemberRule.*;
-import static org.casual.yummy.utils.rules.RestaurantRule.AUTO_CONFIRM_MINUTES_AFTER_PREDICTED;
-import static org.casual.yummy.utils.rules.RestaurantRule.MAX_OVER_DELIVERY_MINUTES;
-import static org.casual.yummy.utils.rules.RestaurantRule.ORDER_TAX;
+import static org.casual.yummy.utils.rules.RestaurantRule.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -189,7 +190,8 @@ public class OrderServiceImpl implements OrderService {
             for (Promotion promotion : sortedPromotions) {
                 if (promotion.getQuotaRequired() <= total)
                     favour = promotion.getQuotaOffered();
-                else break;;
+                else break;
+                ;
             }
             total -= favour;
             double finalFee = total * LEVEL_FAVOUR[member.getLevel()];
@@ -377,7 +379,7 @@ public class OrderServiceImpl implements OrderService {
         managerDAO.saveAndFlush(manager);
         restaurantDAO.saveAndFlush(restaurant);
         modifyGoodsStock(order, 1);
-        return new ResultMsg("退订成功，退还"+ new DecimalFormat("0.00%").format(ratio) +"费用:" + fee, Code.SUCCESS);
+        return new ResultMsg("退订成功，退还" + new DecimalFormat("0.00%").format(ratio) + "费用:" + fee, Code.SUCCESS);
     }
 
     @Override
@@ -390,6 +392,63 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public List<OrderDTO> getRestaurantOrders(String rid) {
         return orderDAO.findRestaurantOrders(rid).stream().map(OrderDTO::new).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public List<Order> getOrders(String mid, String rid, RestaurantType restaurantType, LocalDateTime from, LocalDateTime to,
+                                 Double finalFeeLowerLimit, Double finalFeeUpperLimit, Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
+        Specification<Order> specification = (Specification<Order>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> conditions = new ArrayList<>();
+            Predicate memberCondition = null;
+            if (null != mid) {
+                memberCondition = criteriaBuilder.equal(root.join("member").get("id").as(String.class), mid);
+                conditions.add(memberCondition);
+            }
+            Predicate restaurantCondition = null;
+            if (null != rid) {
+                restaurantCondition = criteriaBuilder.equal(root.join("restaurant").get("id").as(String.class), rid);
+                conditions.add(restaurantCondition);
+            }
+            Predicate restaurantTypeCondition = null;
+            if (null != restaurantType) {
+                restaurantTypeCondition = criteriaBuilder.equal(root.join("restaurant").get("registerInfo").get("type").as(RestaurantType.class), restaurantType);
+                conditions.add(restaurantTypeCondition);
+            }
+            Predicate timeFromCondition = null;
+            if (null != from) {
+                timeFromCondition = criteriaBuilder.greaterThanOrEqualTo(root.get("orderTime").as(LocalDateTime.class), from);
+                conditions.add(timeFromCondition);
+            }
+            Predicate timeToCondition = null;
+            if (null != to) {
+                timeToCondition = criteriaBuilder.lessThanOrEqualTo(root.get("orderTime").as(LocalDateTime.class), to);
+                conditions.add(timeToCondition);
+            }
+            Predicate finalFeeLowerLimitCondition = null;
+            if (null != finalFeeLowerLimit) {
+                finalFeeLowerLimitCondition = criteriaBuilder.greaterThanOrEqualTo(root.get("bill").get("finalFee").as(Double.class), finalFeeLowerLimit);
+                conditions.add(finalFeeLowerLimitCondition);
+            }
+            Predicate finalFeeUpperLimitCondition = null;
+            if (null != to) {
+                finalFeeUpperLimitCondition = criteriaBuilder.lessThanOrEqualTo(root.get("bill").get("finalFee").as(Double.class), finalFeeUpperLimit);
+                conditions.add(finalFeeUpperLimitCondition);
+            }
+            Predicate actualFeeLowerLimitCondition = null;
+            if (null != finalFeeLowerLimit) {
+                actualFeeLowerLimitCondition = criteriaBuilder.greaterThanOrEqualTo(root.get("bill").get("actualFee").as(Double.class), actualFeeLowerLimit);
+                conditions.add(actualFeeLowerLimitCondition);
+            }
+            Predicate actualFeeUpperLimitCondition = null;
+            if (null != to) {
+                actualFeeUpperLimitCondition = criteriaBuilder.lessThanOrEqualTo(root.get("bill").get("actualFee").as(Double.class), actualFeeUpperLimit);
+                conditions.add(actualFeeUpperLimitCondition);
+            }
+            Predicate[] predicates = new Predicate[conditions.size()];
+            return criteriaBuilder.and(conditions.toArray(predicates));
+        };
+        return orderDAO.findAll(specification);
     }
 
     /**

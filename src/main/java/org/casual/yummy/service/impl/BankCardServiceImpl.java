@@ -45,8 +45,7 @@ public class BankCardServiceImpl implements BankCardService {
                 member.getBankCards().add(newCard);
                 memberDAO.saveAndFlush(member);
                 return new ResultMsg<>("绑定银行卡成功", Code.SUCCESS, newCard);
-            }
-            else if (bankCard.getPassword().equals(queriedCard.getPassword())) {
+            } else if (bankCard.getPassword().equals(queriedCard.getPassword())) {
                 List<BankCard> boundCards = member.getBankCards();
                 // 是否已绑定
                 for (BankCard card : boundCards) {
@@ -57,10 +56,8 @@ public class BankCardServiceImpl implements BankCardService {
                 boundCards.add(queriedCard);
                 memberDAO.saveAndFlush(member);
                 return new ResultMsg<>("绑定银行卡成功", Code.SUCCESS, queriedCard);
-            }
-            else return new ResultMsg<>("绑定银行卡失败，密码错误", Code.FAILURE);
-        }
-        else return new ResultMsg<>("绑定银行卡失败，用户不存在", Code.FAILURE);
+            } else return new ResultMsg<>("绑定银行卡失败，密码错误", Code.FAILURE);
+        } else return new ResultMsg<>("绑定银行卡失败，用户不存在", Code.FAILURE);
     }
 
     @Override
@@ -77,7 +74,6 @@ public class BankCardServiceImpl implements BankCardService {
                 }
             }
             return new ResultMsg("解绑银行卡失败，该卡未被绑定", Code.FAILURE);
-        }
-        else return new ResultMsg("解绑银行卡失败，用户不存在", Code.FAILURE);
+        } else return new ResultMsg("解绑银行卡失败，用户不存在", Code.FAILURE);
     }
 }
