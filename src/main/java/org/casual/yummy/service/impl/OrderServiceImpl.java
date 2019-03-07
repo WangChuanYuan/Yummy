@@ -9,6 +9,7 @@ import org.casual.yummy.model.AccountState;
 import org.casual.yummy.model.Anchor;
 import org.casual.yummy.model.goods.Combo;
 import org.casual.yummy.model.goods.Goods;
+import org.casual.yummy.model.goods.Promotion;
 import org.casual.yummy.model.goods.SaleInfo;
 import org.casual.yummy.model.manager.Manager;
 import org.casual.yummy.model.member.Address;
@@ -67,6 +68,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ComboDAO comboDAO;
+
+    @Autowired
+    private PromotionDAO promotionDAO;
 
     @Autowired
     private OrderDAO orderDAO;
@@ -144,7 +148,7 @@ public class OrderServiceImpl implements OrderService {
                             Code.FAILURE);
             }
 
-            // Step2: 判断是否达到起送价格
+            // Step2: 判断是否达到起送价格，不包括满减优惠与会员折扣
             double goodsTotal = cart.getGoods().parallelStream().mapToDouble(g -> g.getNum() * g.getPrice()).sum();
             double combosTotal = cart.getCombos().parallelStream().mapToDouble(c -> c.getNum() * c.getPrice()).sum();
             double deliveryExp = restaurant.getMarketInfo().getDeliveryExp();
@@ -179,10 +183,19 @@ public class OrderServiceImpl implements OrderService {
                 combo2num.put(combo, num);
             }
 
+            // Step4: 计算满减优惠与会员折扣
+            List<Promotion> sortedPromotions = promotionDAO.findCurrentPromotions(restaurant.getId());
+            double favour = 0;
+            for (Promotion promotion : sortedPromotions) {
+                if (promotion.getQuotaRequired() <= total)
+                    favour = promotion.getQuotaOffered();
+                else break;;
+            }
+            total -= favour;
+            double finalFee = total * LEVEL_FAVOUR[member.getLevel()];
 
             OrderBill bill = new OrderBill();
-            double finalFee = total * LEVEL_FAVOUR[member.getLevel()];
-            bill.setGoodsTotal(goodsTotal).setCombosTotal(combosTotal).setDeliveryExp(deliveryExp).setTotal(total).setFinalFee(finalFee);
+            bill.setGoodsTotal(goodsTotal).setCombosTotal(combosTotal).setDeliveryExp(deliveryExp).setFavour(favour).setTotal(total).setFinalFee(finalFee).setActualFee(0);
 
             Order order = new Order();
             order.setMember(member).setRestaurant(restaurant).setAddress(address)

@@ -8,6 +8,7 @@
       <span>套餐费: {{bills[rid].combosTotal}}</span>
       <span>配送费: {{bills[rid].deliveryExp}}</span>
       <br/>
+      <span>满减优惠: {{bills[rid].favour}}</span>
       <span>总费用: {{bills[rid].total}}</span>
       <span>会员优惠价: {{bills[rid].finalFee}}</span>
       <div>

@@ -9,8 +9,5 @@ import java.util.List;
 
 public interface GoodsDAO extends JpaRepository<Goods, Long>, JpaSpecificationExecutor<Goods> {
 
-//    @Query("select goods from Goods goods where goods.restaurant.id = :rid and goods.saleInfo.startDate <= current_date and goods.saleInfo.endDate >= current_date ")
-//    List<Goods> findSellingGoods(@Param("rid") String rid);
-
     List<Goods> findByGidIn(Collection<Long> gids);
 }

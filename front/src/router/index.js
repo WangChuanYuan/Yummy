@@ -26,6 +26,7 @@ import GoodsManager from '@/components/restaurant/GoodsManager';
 import GoodsEditor from '@/components/restaurant/GoodsEditor';
 import ComboManager from '@/components/restaurant/ComboManager';
 import ComboEditor from '@/components/restaurant/ComboEditor';
+import PromotionManager from '@/components/restaurant/PromotionManager';
 import OrderManager from '@/components/restaurant/OrderManager';
 import RegistrationChecker from '@/components/manager/RegistrationChecker';
 
@@ -157,6 +158,11 @@ export default new Router({
           component: ComboEditor,
           props: true
           // props: (route) => ({gid: route.query.gid, aim: route.query.aim})
+        },
+        {
+          path: 'promotion',
+          name: 'promotion',
+          component: PromotionManager
         },
         {
           path: 'orders',

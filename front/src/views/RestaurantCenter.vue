@@ -32,6 +32,10 @@
             <el-menu-item index="combo">套餐管理</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
+        <el-menu-item index="promotion">
+          <i class="el-icon-sold-out"></i>
+          <span>优惠管理</span>
+        </el-menu-item>
         <el-menu-item index="orders">
           <i class="el-icon-tickets"></i>
           <span>订单管理</span>
@@ -83,6 +87,9 @@ export default {
           break;
         case 'combo':
           this.$router.push('/restaurantCenter/combo');
+          break;
+        case 'promotion':
+          this.$router.push('/restaurantCenter/promotion');
           break;
         case 'orders':
           this.$router.push('/restaurantCenter/orders');

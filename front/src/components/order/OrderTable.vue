@@ -56,6 +56,7 @@
               <span>套餐费: {{scope.row.bill.combosTotal}}</span>
               <span>配送费: {{scope.row.bill.deliveryExp}}</span>
               <br/>
+              <span>满减优惠: {{scope.row.bill.favour}}</span>
               <span>总费用: {{scope.row.bill.total}}</span>
               <span>会员优惠价: {{scope.row.bill.finalFee}}</span>
               <br/>

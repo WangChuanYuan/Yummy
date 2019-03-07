@@ -20,6 +20,9 @@ public class OrderBill {
 
     private double combosTotal;
 
+    // 满减优惠额
+    private double favour;
+
     private double total;
 
     // 会员折扣后费用
