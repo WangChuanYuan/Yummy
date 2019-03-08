@@ -19,17 +19,18 @@ public class StatisticController {
     private StatisticService statisticService;
 
     @GetMapping("/consume_of_order_status")
-    public List<LinearDataDTO<OrderStatus, Double>> consumeOfOrderStatus(String mid, RestaurantType restaurantType, String dateFrom, String dateTo,
+    public List<LinearDataDTO<OrderStatus, Double>> consumeOfOrderStatus(String mid, RestaurantType restaurantType,
+                                                                         String dateFrom, String dateTo,
                                                                          Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
         LocalDateTime from = null, to = null;
         if (null != dateFrom) from = LocalDate.parse(dateFrom).atStartOfDay();
         if (null != dateTo) to = LocalDate.parse(dateTo).atStartOfDay();
-        System.out.println(from);
         return statisticService.consumeOfOrderStatus(mid, restaurantType, from, to, actualFeeLowerLimit, actualFeeUpperLimit);
     }
 
     @GetMapping("/consume_of_restaurant_type")
-    public List<LinearDataDTO<RestaurantType, Double>> consumeOfRestaurantType(String mid, RestaurantType restaurantType, String dateFrom, String dateTo,
+    public List<LinearDataDTO<RestaurantType, Double>> consumeOfRestaurantType(String mid, RestaurantType restaurantType,
+                                                                               String dateFrom, String dateTo,
                                                                                Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
         LocalDateTime from = null, to = null;
         if (null != dateFrom) from = LocalDate.parse(dateFrom).atStartOfDay();
@@ -37,21 +38,64 @@ public class StatisticController {
         return statisticService.consumeOfRestaurantType(mid, restaurantType, from, to, actualFeeLowerLimit, actualFeeUpperLimit);
     }
 
-    @GetMapping("/usage_of_order_status")
-    public List<LinearDataDTO<OrderStatus, Integer>> usageOfOrderStatus(String mid, RestaurantType restaurantType, String dateFrom, String dateTo,
+    @GetMapping("/income_of_date")
+    public List<LinearDataDTO<LocalDate, Double>> incomeOfDate(String rid, Integer memberLevel,
+                                                               String dateFrom, String dateTo,
+                                                               Double finalFeeLowerLimit, Double finalFeeUpperLimit) {
+        LocalDateTime from = null, to = null;
+        if (null != dateFrom) from = LocalDate.parse(dateFrom).atStartOfDay();
+        if (null != dateTo) to = LocalDate.parse(dateTo).atStartOfDay();
+        return statisticService.incomeOfDate(rid, memberLevel, from, to, finalFeeLowerLimit, finalFeeUpperLimit);
+    }
+
+    @GetMapping("/income_of_order_status")
+    public List<LinearDataDTO<OrderStatus, Double>> incomeOfOrderStatus(String rid, Integer memberLevel,
+                                                                        String dateFrom, String dateTo,
                                                                         Double finalFeeLowerLimit, Double finalFeeUpperLimit) {
         LocalDateTime from = null, to = null;
         if (null != dateFrom) from = LocalDate.parse(dateFrom).atStartOfDay();
         if (null != dateTo) to = LocalDate.parse(dateTo).atStartOfDay();
-        return statisticService.usageOfOrderStatus(mid, restaurantType, from, to, finalFeeLowerLimit, finalFeeUpperLimit);
+        return statisticService.incomeOfOrderStatus(rid, memberLevel, from, to, finalFeeLowerLimit, finalFeeUpperLimit);
+    }
+
+    @GetMapping("/income_of_member_level")
+    public List<LinearDataDTO<Integer, Double>> incomeOfMemberLevel(String rid, Integer memberLevel,
+                                                                    String dateFrom, String dateTo,
+                                                                    Double finalFeeLowerLimit, Double finalFeeUpperLimit) {
+        LocalDateTime from = null, to = null;
+        if (null != dateFrom) from = LocalDate.parse(dateFrom).atStartOfDay();
+        if (null != dateTo) to = LocalDate.parse(dateTo).atStartOfDay();
+        return statisticService.incomeOfMemberLevel(rid, memberLevel, from, to, finalFeeLowerLimit, finalFeeUpperLimit);
+    }
+
+    @GetMapping("/usage_of_order_status")
+    public List<LinearDataDTO<OrderStatus, Integer>> usageOfOrderStatus(String mid, String rid,
+                                                                        RestaurantType restaurantType, Integer memberLevel,
+                                                                        String dateFrom, String dateTo,
+                                                                        Double finalFeeLowerLimit, Double finalFeeUpperLimit) {
+        LocalDateTime from = null, to = null;
+        if (null != dateFrom) from = LocalDate.parse(dateFrom).atStartOfDay();
+        if (null != dateTo) to = LocalDate.parse(dateTo).atStartOfDay();
+        return statisticService.usageOfOrderStatus(mid, rid, restaurantType, memberLevel, from, to, finalFeeLowerLimit, finalFeeUpperLimit);
     }
 
     @GetMapping("/usage_of_restaurant_type")
-    public List<LinearDataDTO<RestaurantType, Integer>> usageOfRestaurantType(String mid, RestaurantType restaurantType, String dateFrom, String dateTo,
+    public List<LinearDataDTO<RestaurantType, Integer>> usageOfRestaurantType(String mid, RestaurantType restaurantType,
+                                                                              String dateFrom, String dateTo,
                                                                               Double finalFeeLowerLimit, Double finalFeeUpperLimit) {
         LocalDateTime from = null, to = null;
         if (null != dateFrom) from = LocalDate.parse(dateFrom).atStartOfDay();
         if (null != dateTo) to = LocalDate.parse(dateTo).atStartOfDay();
         return statisticService.usageOfRestaurantType(mid, restaurantType, from, to, finalFeeLowerLimit, finalFeeUpperLimit);
+    }
+
+    @GetMapping("/usage_of_member_level")
+    public List<LinearDataDTO<Integer, Integer>> usageOfRestaurantType(String rid, Integer memberLevel,
+                                                                       String dateFrom, String dateTo,
+                                                                       Double finalFeeLowerLimit, Double finalFeeUpperLimit) {
+        LocalDateTime from = null, to = null;
+        if (null != dateFrom) from = LocalDate.parse(dateFrom).atStartOfDay();
+        if (null != dateTo) to = LocalDate.parse(dateTo).atStartOfDay();
+        return statisticService.usageOfMemberLevel(rid, memberLevel, from, to, finalFeeLowerLimit, finalFeeUpperLimit);
     }
 }

@@ -7,6 +7,7 @@ import echarts from 'echarts/lib/echarts';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/chart/bar';
 import 'echarts/lib/chart/pie';
+import 'echarts/lib/component/title';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
 import uuidv1 from 'uuid/v1';
@@ -99,8 +100,13 @@ export default {
       return {
         title: {
           text: this.titleText,
-          subtext: this.subText,
-          left: 'center'
+          // subtext: this.subText,
+          left: 'center',
+          top: 20
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b} : {c}'
         },
         xAxis: {
           type: 'category',
@@ -112,7 +118,8 @@ export default {
         series: [
           {
             data: this.yAxisData,
-            type: 'line'
+            type: 'line',
+            smooth: true
           }
         ]
       };
@@ -121,8 +128,9 @@ export default {
       return {
         title: {
           text: this.titleText,
-          subtext: this.subText,
-          left: 'center'
+          // subtext: this.subText,
+          left: 'center',
+          top: 20
         },
         color: ['#3398DB'],
         tooltip: {
@@ -172,8 +180,9 @@ export default {
       return {
         title: {
           text: this.titleText,
-          subtext: this.subText,
-          left: 'center'
+          // subtext: this.subText,
+          left: 'center',
+          top: 20
         },
         tooltip: {
           trigger: 'item',

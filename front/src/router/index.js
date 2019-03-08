@@ -29,6 +29,7 @@ import ComboManager from '@/components/restaurant/ComboManager';
 import ComboEditor from '@/components/restaurant/ComboEditor';
 import PromotionManager from '@/components/restaurant/PromotionManager';
 import OrderManager from '@/components/restaurant/OrderManager';
+import RestaurantStatistic from '@/components/restaurant/RestaurantStatistic';
 import RegistrationChecker from '@/components/manager/RegistrationChecker';
 
 Vue.use(Router);
@@ -174,6 +175,11 @@ export default new Router({
           path: 'orders',
           name: 'orders',
           component: OrderManager
+        },
+        {
+          path: 'statistic',
+          name: 'statistic',
+          component: RestaurantStatistic
         }
       ]
     },

@@ -40,7 +40,7 @@
           <i class="el-icon-tickets"></i>
           <span>订单管理</span>
         </el-menu-item>
-        <el-menu-item index="statistics">
+        <el-menu-item index="statistic">
           <i class="el-icon-news"></i>
           <span>统计信息</span>
         </el-menu-item>
@@ -94,7 +94,8 @@ export default {
         case 'orders':
           this.$router.push('/restaurantCenter/orders');
           break;
-        case 'statistics':
+        case 'statistic':
+          this.$router.push('/restaurantCenter/statistic');
           break;
         case 'logout':
           this.logout();

@@ -2,7 +2,6 @@ package org.casual.yummy.controller;
 
 import org.casual.yummy.dto.CartDTO;
 import org.casual.yummy.dto.OrderDTO;
-import org.casual.yummy.model.order.OrderStatus;
 import org.casual.yummy.model.restaurant.RestaurantType;
 import org.casual.yummy.service.OrderService;
 import org.casual.yummy.utils.JsonUtil;
@@ -24,30 +23,16 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping("/get_orders")
-    public List<OrderDTO> getOrders(String mid, String rid, RestaurantType restaurantType,
+    public List<OrderDTO> getOrders(String mid, String rid,
+                                    RestaurantType restaurantType, Integer memberLevel,
                                     String dateFrom, String dateTo,
                                     Double finalFeeLowerLimit, Double finalFeeUpperLimit,
                                     Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
         LocalDateTime from = null, to = null;
         if (null != dateFrom) from = LocalDate.parse(dateFrom).atStartOfDay();
         if (null != dateTo) to = LocalDate.parse(dateTo).atStartOfDay();
-        return orderService.getOrders(mid, rid, restaurantType, from, to, finalFeeLowerLimit, finalFeeUpperLimit, actualFeeLowerLimit, actualFeeUpperLimit)
+        return orderService.getOrders(mid, rid, restaurantType, memberLevel, from, to, finalFeeLowerLimit, finalFeeUpperLimit, actualFeeLowerLimit, actualFeeUpperLimit)
                 .stream().map(OrderDTO::new).collect(Collectors.toList());
-    }
-
-    @GetMapping("/get_consumed_orders")
-    public List<OrderDTO> getConsumedOrders(String mid, String rid, RestaurantType restaurantType,
-                                            String dateFrom, String dateTo,
-                                            Double finalFeeLowerLimit, Double finalFeeUpperLimit,
-                                            Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
-        LocalDateTime from = null, to = null;
-        if (null != dateFrom) from = LocalDate.parse(dateFrom).atStartOfDay();
-        if (null != dateTo) to = LocalDate.parse(dateTo).atStartOfDay();
-        return orderService.getOrders(mid, rid, restaurantType, from, to, finalFeeLowerLimit, finalFeeUpperLimit, actualFeeLowerLimit, actualFeeUpperLimit)
-                .stream().filter(order -> {
-                    OrderStatus status = order.getStatus();
-                    return status == OrderStatus.FINISHED || status == OrderStatus.UNSUBSCRIBED;
-                }).map(OrderDTO::new).collect(Collectors.toList());
     }
 
     @GetMapping("/get_member_orders")

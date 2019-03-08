@@ -26,7 +26,7 @@ public interface OrderService {
 
     ResultMsg unsubscribeOrder(Long oid);
 
-    List<Order> getOrders(String mid, String rid, RestaurantType restaurantType, LocalDateTime from, LocalDateTime to,
+    List<Order> getOrders(String mid, String rid, RestaurantType restaurantType, Integer memberLevel, LocalDateTime from, LocalDateTime to,
                           Double finalFeeLowerLimit, Double finalFeeUpperLimit, Double actualFeeLowerLimit, Double actualFeeUpperLimit);
 
     List<OrderDTO> getMemberOrders(String mid);

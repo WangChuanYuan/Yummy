@@ -39,10 +39,10 @@
       <el-main>
         <el-row>
           <el-col :span="12">
-            <LinearChart type="pie" :chart-data="consumeOfOrderStatus"/>
+            <LinearChart type="pie" :chart-data="consumeOfOrderStatus" title-text="消费额-消费类型"/>
           </el-col>
           <el-col :span="12">
-            <LinearChart type="pie" :chart-data="consumeOfRestaurantType"/>
+            <LinearChart type="pie" :chart-data="consumeOfRestaurantType" title-text="消费额-门店类型"/>
           </el-col>
         </el-row>
       </el-main>
@@ -98,8 +98,14 @@ export default {
       this.getConsumeOfRestaurantType();
     },
     getConsumedOrders () {
-      Api.get('/get_consumed_orders', this.getParam()).then((data) => {
-        if (data) this.consumedOrders = data;
+      Api.get('/get_orders', this.getParam()).then((data) => {
+        if (data) {
+          let consumedOrders = [];
+          data.map(order => {
+            if (order.status === this.status.FINISHED.value || order.status === this.status.UNSUBSCRIBED.value) consumedOrders.push(order);
+          });
+          this.consumedOrders = consumedOrders;
+        }
       }).catch(() => {});
     },
     getConsumeOfOrderStatus () {

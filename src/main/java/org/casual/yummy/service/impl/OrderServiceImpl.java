@@ -396,7 +396,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public List<Order> getOrders(String mid, String rid, RestaurantType restaurantType, LocalDateTime from, LocalDateTime to,
+    public List<Order> getOrders(String mid, String rid, RestaurantType restaurantType, Integer memberLevel, LocalDateTime from, LocalDateTime to,
                                  Double finalFeeLowerLimit, Double finalFeeUpperLimit, Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
         Specification<Order> specification = (Specification<Order>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> conditions = new ArrayList<>();
@@ -414,6 +414,11 @@ public class OrderServiceImpl implements OrderService {
             if (null != restaurantType) {
                 restaurantTypeCondition = criteriaBuilder.equal(root.join("restaurant").get("registerInfo").get("type").as(RestaurantType.class), restaurantType);
                 conditions.add(restaurantTypeCondition);
+            }
+            Predicate memberLevelCondition = null;
+            if (null != memberLevel) {
+                memberLevelCondition = criteriaBuilder.equal(root.join("member").get("level"), memberLevel);
+                conditions.add(memberLevelCondition);
             }
             Predicate timeFromCondition = null;
             if (null != from) {
