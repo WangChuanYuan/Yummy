@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +23,8 @@ public class StatisticServiceImpl implements StatisticService {
     @Autowired
     private OrderService orderService;
 
-    public List<LinearDataDTO<OrderStatus, Double>> consumeOfOrderStatus(String mid, RestaurantType type, LocalDate from, LocalDate to, Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
-        List<Order> orders = orderService.getOrders(mid, null, type, from.atStartOfDay(), to.atStartOfDay(), null, null, actualFeeLowerLimit, actualFeeUpperLimit);
+    public List<LinearDataDTO<OrderStatus, Double>> consumeOfOrderStatus(String mid, RestaurantType type, LocalDateTime from, LocalDateTime to, Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
+        List<Order> orders = orderService.getOrders(mid, null, type, from, to, null, null, actualFeeLowerLimit, actualFeeUpperLimit);
         Map<OrderStatus, List<Order>> consumeOrders = orders.parallelStream().filter(order -> {
             OrderStatus status = order.getStatus();
             return status == OrderStatus.FINISHED || status == OrderStatus.UNSUBSCRIBED;
@@ -38,8 +38,8 @@ public class StatisticServiceImpl implements StatisticService {
         return consumes;
     }
 
-    public List<LinearDataDTO<RestaurantType, Double>> consumeOfRestaurantType(String mid, RestaurantType type, LocalDate from, LocalDate to, Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
-        List<Order> orders = orderService.getOrders(mid, null, type, from.atStartOfDay(), to.atStartOfDay(), null, null, actualFeeLowerLimit, actualFeeUpperLimit);
+    public List<LinearDataDTO<RestaurantType, Double>> consumeOfRestaurantType(String mid, RestaurantType type, LocalDateTime from, LocalDateTime to, Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
+        List<Order> orders = orderService.getOrders(mid, null, type, from, to, null, null, actualFeeLowerLimit, actualFeeUpperLimit);
         Map<RestaurantType, List<Order>> consumeOrders = orders.parallelStream().collect(Collectors.groupingBy(o -> o.getRestaurant().getRegisterInfo().getType()));
 
         List<LinearDataDTO<RestaurantType, Double>> consumes = new ArrayList<>();
@@ -50,8 +50,8 @@ public class StatisticServiceImpl implements StatisticService {
         return consumes;
     }
 
-    public List<LinearDataDTO<OrderStatus, Integer>> usageOfOrderStatus(String mid, RestaurantType type, LocalDate from, LocalDate to, Double finalFeeLowerLimit, Double finalFeeUpperLimit) {
-        List<Order> orders = orderService.getOrders(mid, null, type, from.atStartOfDay(), to.atStartOfDay(), finalFeeLowerLimit, finalFeeUpperLimit, null, null);
+    public List<LinearDataDTO<OrderStatus, Integer>> usageOfOrderStatus(String mid, RestaurantType type, LocalDateTime from, LocalDateTime to, Double finalFeeLowerLimit, Double finalFeeUpperLimit) {
+        List<Order> orders = orderService.getOrders(mid, null, type, from, to, finalFeeLowerLimit, finalFeeUpperLimit, null, null);
         Map<OrderStatus, List<Order>> usedOrders = orders.parallelStream().collect(Collectors.groupingBy(Order::getStatus));
 
         List<LinearDataDTO<OrderStatus, Integer>> usages = new ArrayList<>();
@@ -61,8 +61,8 @@ public class StatisticServiceImpl implements StatisticService {
         return usages;
     }
 
-    public List<LinearDataDTO<RestaurantType, Integer>> usageOfRestaurantType(String mid, RestaurantType type, LocalDate from, LocalDate to, Double finalFeeLowerLimit, Double finalFeeUpperLimit) {
-        List<Order> orders = orderService.getOrders(mid, null, type, from.atStartOfDay(), to.atStartOfDay(), finalFeeLowerLimit, finalFeeUpperLimit, null, null);
+    public List<LinearDataDTO<RestaurantType, Integer>> usageOfRestaurantType(String mid, RestaurantType type, LocalDateTime from, LocalDateTime to, Double finalFeeLowerLimit, Double finalFeeUpperLimit) {
+        List<Order> orders = orderService.getOrders(mid, null, type, from, to, finalFeeLowerLimit, finalFeeUpperLimit, null, null);
         Map<RestaurantType, List<Order>> usedOrders = orders.parallelStream().collect(Collectors.groupingBy(o -> o.getRestaurant().getRegisterInfo().getType()));
 
         List<LinearDataDTO<RestaurantType, Integer>> usages = new ArrayList<>();

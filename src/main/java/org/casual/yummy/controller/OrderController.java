@@ -8,10 +8,9 @@ import org.casual.yummy.service.OrderService;
 import org.casual.yummy.utils.JsonUtil;
 import org.casual.yummy.utils.message.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -25,19 +24,25 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping("/get_orders")
-    @Transactional
     public List<OrderDTO> getOrders(String mid, String rid, RestaurantType restaurantType,
-                                    @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime from, @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime to,
-                                    Double finalFeeLowerLimit, Double finalFeeUpperLimit, Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
+                                    String dateFrom, String dateTo,
+                                    Double finalFeeLowerLimit, Double finalFeeUpperLimit,
+                                    Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
+        LocalDateTime from = null, to = null;
+        if (null != dateFrom) from = LocalDate.parse(dateFrom).atStartOfDay();
+        if (null != dateTo) to = LocalDate.parse(dateTo).atStartOfDay();
         return orderService.getOrders(mid, rid, restaurantType, from, to, finalFeeLowerLimit, finalFeeUpperLimit, actualFeeLowerLimit, actualFeeUpperLimit)
                 .stream().map(OrderDTO::new).collect(Collectors.toList());
     }
 
     @GetMapping("/get_consumed_orders")
-    @Transactional
     public List<OrderDTO> getConsumedOrders(String mid, String rid, RestaurantType restaurantType,
-                                            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime from, @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime to,
-                                            Double finalFeeLowerLimit, Double finalFeeUpperLimit, Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
+                                            String dateFrom, String dateTo,
+                                            Double finalFeeLowerLimit, Double finalFeeUpperLimit,
+                                            Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
+        LocalDateTime from = null, to = null;
+        if (null != dateFrom) from = LocalDate.parse(dateFrom).atStartOfDay();
+        if (null != dateTo) to = LocalDate.parse(dateTo).atStartOfDay();
         return orderService.getOrders(mid, rid, restaurantType, from, to, finalFeeLowerLimit, finalFeeUpperLimit, actualFeeLowerLimit, actualFeeUpperLimit)
                 .stream().filter(order -> {
                     OrderStatus status = order.getStatus();

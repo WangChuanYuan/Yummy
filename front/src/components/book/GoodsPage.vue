@@ -43,7 +43,8 @@
         <el-container>
           <el-main v-show="sort === 'goods'" style="padding: 0">
             <el-header>
-              <CategorySelector class="center" title="商品分类" :categories="categories" :width="800" label="name" value="cgid" @select="selectCategory"/>
+              <CategorySelector class="center" title="商品分类" :categories="categories" :width="800" label="name"
+                                value="cgid" @select="selectCategory"/>
             </el-header>
             <el-main>
               <el-row>
@@ -65,9 +66,13 @@
               <div class="promotion-banner">
                 <span>满减优惠</span>
               </div>
-              <div v-for="item in promotions" :key="item.pid" class="promotion-content">
-                <span>----- 满 {{item.quotaRequired}} 减 <span style="color: red">{{item.quotaOffered}}</span> -----</span>
-                <br/>
+              <div class="promotion-content" v-if="promotions && promotions.length === 0">----- 暂无 -----</div>
+              <div v-else>
+                <div v-for="item in promotions" :key="item.pid" class="promotion-content">
+                  <span>----- 满 {{item.quotaRequired}} 减 <span
+                    style="color: red">{{item.quotaOffered}}</span> -----</span>
+                  <br/>
+                </div>
               </div>
             </div>
           </el-aside>

@@ -427,22 +427,22 @@ public class OrderServiceImpl implements OrderService {
             }
             Predicate finalFeeLowerLimitCondition = null;
             if (null != finalFeeLowerLimit) {
-                finalFeeLowerLimitCondition = criteriaBuilder.greaterThanOrEqualTo(root.get("bill").get("finalFee").as(Double.class), finalFeeLowerLimit);
+                finalFeeLowerLimitCondition = criteriaBuilder.greaterThanOrEqualTo(root.get("bill").get("finalFee"), finalFeeLowerLimit);
                 conditions.add(finalFeeLowerLimitCondition);
             }
             Predicate finalFeeUpperLimitCondition = null;
-            if (null != to) {
-                finalFeeUpperLimitCondition = criteriaBuilder.lessThanOrEqualTo(root.get("bill").get("finalFee").as(Double.class), finalFeeUpperLimit);
+            if (null != finalFeeUpperLimit) {
+                finalFeeUpperLimitCondition = criteriaBuilder.lessThanOrEqualTo(root.get("bill").get("finalFee"), finalFeeUpperLimit);
                 conditions.add(finalFeeUpperLimitCondition);
             }
             Predicate actualFeeLowerLimitCondition = null;
-            if (null != finalFeeLowerLimit) {
-                actualFeeLowerLimitCondition = criteriaBuilder.greaterThanOrEqualTo(root.get("bill").get("actualFee").as(Double.class), actualFeeLowerLimit);
+            if (null != actualFeeLowerLimit) {
+                actualFeeLowerLimitCondition = criteriaBuilder.greaterThanOrEqualTo(root.get("bill").get("actualFee"), actualFeeLowerLimit);
                 conditions.add(actualFeeLowerLimitCondition);
             }
             Predicate actualFeeUpperLimitCondition = null;
-            if (null != to) {
-                actualFeeUpperLimitCondition = criteriaBuilder.lessThanOrEqualTo(root.get("bill").get("actualFee").as(Double.class), actualFeeUpperLimit);
+            if (null != actualFeeUpperLimit) {
+                actualFeeUpperLimitCondition = criteriaBuilder.lessThanOrEqualTo(root.get("bill").get("actualFee"), actualFeeUpperLimit);
                 conditions.add(actualFeeUpperLimitCondition);
             }
             Predicate[] predicates = new Predicate[conditions.size()];

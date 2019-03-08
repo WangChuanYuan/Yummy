@@ -21,7 +21,7 @@
     <el-button type="primary" size="mini" @click="getData">查询</el-button>
     <el-container>
       <el-aside>
-        <el-table :data="consumedOrders" height="400">
+        <el-table :data="orders" height="400">
           <el-table-column prop="orderTime" label="下单时间" width="100"/>
           <el-table-column label="订单状态" width="60">
             <template slot-scope="scope">
@@ -39,7 +39,7 @@
       <el-main>
         <el-row>
           <el-col :span="12">
-            <LinearChart type="bar" :chart-data="usageOfOrderStatus"/>
+            <LinearChart type="pie" :chart-data="usageOfOrderStatus"/>
           </el-col>
           <el-col :span="12">
             <LinearChart type="pie" :chart-data="usageOfRestaurantType"/>
@@ -80,29 +80,29 @@ export default {
     getParam () {
       let param = {mid: sessionStorage.getItem('id')};
       if (this.dates && this.dates[0]) {
-        param.from = this.dates[0];
+        param.dateFrom = this.dates[0];
       }
       if (this.dates && this.dates[1]) {
-        param.to = this.dates[1];
+        param.dateTo = this.dates[1];
       }
       if (this.restaurantType) {
         param.restaurantType = this.restaurantType;
       }
-      if (param.finalFeeLowerLimit) param.finalFeeLowerLimit = this.finalFeeLowerLimit;
-      if (param.finalFeeUpperLimit) param.finalFeeUpperLimit = this.finalFeeUpperLimit;
+      if (this.finalFeeLowerLimit) param.finalFeeLowerLimit = this.finalFeeLowerLimit;
+      if (this.finalFeeUpperLimit) param.finalFeeUpperLimit = this.finalFeeUpperLimit;
       return param;
     },
     getData () {
-      this.getUsageOrders();
+      this.getUsageOfOrders();
       this.getUsageOfOrderStatus();
       this.getUsageOfRestaurantType();
     },
-    getConsumedOrders () {
+    getUsageOfOrders () {
       Api.get('/get_orders', this.getParam()).then((data) => {
         if (data) this.orders = data;
       }).catch(() => {});
     },
-    getConsumeOfOrderStatus () {
+    getUsageOfOrderStatus () {
       Api.get('/usage_of_order_status', this.getParam()).then((data) => {
         if (data) {
           this.usageOfOrderStatus = data.map(
@@ -113,7 +113,7 @@ export default {
         }
       }).catch(() => {});
     },
-    getConsumeOfRestaurantType () {
+    getUsageOfRestaurantType () {
       Api.get('/usage_of_restaurant_type', this.getParam()).then((data) => {
         if (data) {
           this.usageOfRestaurantType = data.map(

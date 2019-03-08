@@ -39,7 +39,7 @@
       <el-main>
         <el-row>
           <el-col :span="12">
-            <LinearChart type="bar" :chart-data="consumeOfOrderStatus"/>
+            <LinearChart type="pie" :chart-data="consumeOfOrderStatus"/>
           </el-col>
           <el-col :span="12">
             <LinearChart type="pie" :chart-data="consumeOfRestaurantType"/>
@@ -80,16 +80,16 @@ export default {
     getParam () {
       let param = {mid: sessionStorage.getItem('id')};
       if (this.dates && this.dates[0]) {
-        param.from = this.dates[0];
+        param.dateFrom = this.dates[0];
       }
       if (this.dates && this.dates[1]) {
-        param.to = this.dates[1];
+        param.dateTo = this.dates[1];
       }
       if (this.restaurantType) {
         param.restaurantType = this.restaurantType;
       }
-      if (param.feeLowerLimit) param.feeLowerLimit = this.feeLowerLimit;
-      if (param.feeUpperLimit) param.feeUpperLimit = this.feeUpperLimit;
+      if (this.actualFeeLowerLimit) param.actualFeeLowerLimit = this.actualFeeLowerLimit;
+      if (this.actualFeeUpperLimit) param.actualFeeUpperLimit = this.actualFeeUpperLimit;
       return param;
     },
     getData () {
