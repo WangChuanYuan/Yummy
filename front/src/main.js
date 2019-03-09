@@ -14,6 +14,30 @@ import store from './store';
 
 Vue.config.productionTip = false;
 
+router.beforeEach((to, from, next) => {
+  if (to.meta.requireAuth) {
+    let userJson = sessionStorage.getItem('user');
+    let isValid = false;
+    if (userJson) {
+      let user = JSON.parse(userJson);
+      isValid = (user.role === to.meta.role);
+    }
+    if (isValid) {
+      next();
+    } else {
+      if (to.meta.role === 'MANAGER') {
+        next({
+          path: '/manager'
+        });
+      } else {
+        next({
+          path: '/'
+        });
+      }
+    }
+  } else next();
+});
+
 Vue.use(ElementUI);
 Vue.use(VueCookies);
 Vue.use(vRegion);

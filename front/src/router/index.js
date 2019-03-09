@@ -40,12 +40,18 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
+      meta: {
+        requireAuth: false
+      }
     },
     {
       path: '/register',
       name: 'register',
-      component: Register
+      component: Register,
+      meta: {
+        requireAuth: false
+      }
     },
     {
       path: '/bookCenter',
@@ -54,12 +60,20 @@ export default new Router({
         {
           path: '',
           name: 'restaurantPage',
-          component: RestaurantPage
+          component: RestaurantPage,
+          meta: {
+            requireAuth: true,
+            role: 'MEMBER'
+          }
         },
         {
           path: '/bookCenter/:id',
           name: 'goodsPage',
-          component: GoodsPage
+          component: GoodsPage,
+          meta: {
+            requireAuth: true,
+            role: 'MEMBER'
+          }
         }
       ]
     },
@@ -70,12 +84,20 @@ export default new Router({
         {
           path: '',
           name: 'orderChecker',
-          component: OrderConfirmer
+          component: OrderConfirmer,
+          meta: {
+            requireAuth: true,
+            role: 'MEMBER'
+          }
         },
         {
           path: 'result',
           name: 'orderResult',
           component: OrderResult,
+          meta: {
+            requireAuth: true,
+            role: 'MEMBER'
+          },
           props: true
         }
       ]
@@ -86,37 +108,65 @@ export default new Router({
       children: [
         {
           path: '',
-          name: 'memberCenter'
+          name: 'memberCenter',
+          meta: {
+            requireAuth: true,
+            role: 'MEMBER'
+          }
         },
         {
           path: 'info',
           name: 'member-info',
-          component: MemberInfo
+          component: MemberInfo,
+          meta: {
+            requireAuth: true,
+            role: 'MEMBER'
+          }
         },
         {
           path: 'pay',
           name: 'member-pay',
-          component: MemberPay
+          component: MemberPay,
+          meta: {
+            requireAuth: true,
+            role: 'MEMBER'
+          }
         },
         {
           path: 'address',
           name: 'member-address',
-          component: MemberAddress
+          component: MemberAddress,
+          meta: {
+            requireAuth: true,
+            role: 'MEMBER'
+          }
         },
         {
           path: 'orders',
           name: 'member-orders',
-          component: MemberOrders
+          component: MemberOrders,
+          meta: {
+            requireAuth: true,
+            role: 'MEMBER'
+          }
         },
         {
           path: 'consume',
           name: 'member-consume',
-          component: MemberConsume
+          component: MemberConsume,
+          meta: {
+            requireAuth: true,
+            role: 'MEMBER'
+          }
         },
         {
           path: 'usage',
           name: 'member-usage',
-          component: MemberUsage
+          component: MemberUsage,
+          meta: {
+            requireAuth: true,
+            role: 'MEMBER'
+          }
         }
       ]
     },
@@ -126,68 +176,115 @@ export default new Router({
       children: [
         {
           path: '',
-          name: 'restaurantCenter'
+          name: 'restaurantCenter',
+          meta: {
+            requireAuth: true,
+            role: 'RESTAURANT'
+          }
         },
         {
           path: 'registerInfo',
           name: 'registerInfo',
-          component: RegisterInfo
+          component: RegisterInfo,
+          meta: {
+            requireAuth: true,
+            role: 'RESTAURANT'
+          }
         },
         {
           path: 'marketInfo',
           name: 'marketInfo',
-          component: MarketInfo
+          component: MarketInfo,
+          meta: {
+            requireAuth: true,
+            role: 'RESTAURANT'
+          }
         },
         {
           path: 'category',
           name: 'category',
-          component: CategoryManager
+          component: CategoryManager,
+          meta: {
+            requireAuth: true,
+            role: 'RESTAURANT'
+          }
         },
         {
           path: 'goods',
           name: 'goods',
-          component: GoodsManager
+          component: GoodsManager,
+          meta: {
+            requireAuth: true,
+            role: 'RESTAURANT'
+          }
         },
         {
           path: 'editGoods',
           name: 'editGoods',
           component: GoodsEditor,
+          meta: {
+            requireAuth: true,
+            role: 'RESTAURANT'
+          },
           props: true
           // props: (route) => ({gid: route.query.gid, aim: route.query.aim})
         },
         {
           path: 'combo',
           name: 'combo',
-          component: ComboManager
+          component: ComboManager,
+          meta: {
+            requireAuth: true,
+            role: 'RESTAURANT'
+          }
         },
         {
           path: 'editCombo',
           name: 'editCombo',
           component: ComboEditor,
+          meta: {
+            requireAuth: true,
+            role: 'RESTAURANT'
+          },
           props: true
           // props: (route) => ({gid: route.query.gid, aim: route.query.aim})
         },
         {
           path: 'promotion',
           name: 'promotion',
-          component: PromotionManager
+          component: PromotionManager,
+          meta: {
+            requireAuth: true,
+            role: 'RESTAURANT'
+          }
         },
         {
           path: 'orders',
           name: 'restaurant-orders',
-          component: OrderManager
+          component: OrderManager,
+          meta: {
+            requireAuth: true,
+            role: 'RESTAURANT'
+          }
         },
         {
           path: 'statistic',
           name: 'restaurant-statistic',
-          component: RestaurantStatistic
+          component: RestaurantStatistic,
+          meta: {
+            requireAuth: true,
+            role: 'RESTAURANT'
+          }
         }
       ]
     },
     {
       path: '/manager',
       name: 'manager',
-      component: ManagerLogin
+      component: ManagerLogin,
+      meta: {
+        requireAuth: false
+      }
     },
     {
       path: '/managerCenter',
@@ -195,17 +292,29 @@ export default new Router({
       children: [
         {
           path: '',
-          name: 'managerCenter'
+          name: 'managerCenter',
+          meta: {
+            requireAuth: true,
+            role: 'MANAGER'
+          }
         },
         {
           path: 'registration',
           name: 'manager-registration',
-          component: RegistrationChecker
+          component: RegistrationChecker,
+          meta: {
+            requireAuth: true,
+            role: 'MANAGER'
+          }
         },
         {
           path: 'statistic',
           name: 'manger-statistic',
-          component: StatisticViewer
+          component: StatisticViewer,
+          meta: {
+            requireAuth: true,
+            role: 'MANAGER'
+          }
         }
       ]
     }
