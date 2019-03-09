@@ -1,6 +1,7 @@
 package org.casual.yummy.service.impl;
 
 import org.casual.yummy.dao.MemberDAO;
+import org.casual.yummy.dto.LinearDataDTO;
 import org.casual.yummy.model.AccountState;
 import org.casual.yummy.model.Role;
 import org.casual.yummy.model.member.Member;
@@ -13,6 +14,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -80,5 +87,18 @@ public class MemberServiceImpl implements MemberService {
             memberDAO.flush();
             return new ResultMsg<>("注销成功", Code.SUCCESS, member);
         } else return new ResultMsg<>("注销失败", Code.FAILURE);
+    }
+
+    @Override
+    public List<LinearDataDTO<Integer, Integer>> memberNumOfLevel() {
+        List<Member> members = memberDAO.findAll();
+        Map<Integer, List<Member>> layeredMembers = members.parallelStream().collect(Collectors.groupingBy(Member::getLevel));
+        List<LinearDataDTO<Integer, Integer>> counts = new ArrayList<>();
+        Arrays.stream(new Integer[]{0, 1, 2, 3, 4, 5}).forEach(level -> {
+            List<Member> membersOfLevel = layeredMembers.get(level);
+            int total = (null == membersOfLevel ? 0 : membersOfLevel.size());
+            counts.add(new LinearDataDTO<>(level, total));
+        });
+        return counts;
     }
 }

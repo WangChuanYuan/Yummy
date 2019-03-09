@@ -6,7 +6,6 @@ import org.casual.yummy.model.order.OrderStatus;
 import org.casual.yummy.model.restaurant.RestaurantType;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface StatisticService {
@@ -22,6 +21,8 @@ public interface StatisticService {
     List<LinearDataDTO<Integer, Double>> incomeOfMemberLevel(ConditionDTO condition);
 
     List<LinearDataDTO<RestaurantType, Double>> incomeOfRestaurantType(ConditionDTO conditionDTO);
+
+    List<LinearDataDTO<LocalDate, Integer>> orderNumOfDate(ConditionDTO conditionDTO);
 
     List<LinearDataDTO<OrderStatus, Integer>> orderNumOfOrderStatus(ConditionDTO condition);
 

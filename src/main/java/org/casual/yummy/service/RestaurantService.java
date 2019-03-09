@@ -1,5 +1,6 @@
 package org.casual.yummy.service;
 
+import org.casual.yummy.dto.LinearDataDTO;
 import org.casual.yummy.model.restaurant.RegisterInfo;
 import org.casual.yummy.model.restaurant.Restaurant;
 import org.casual.yummy.model.restaurant.RestaurantType;
@@ -20,4 +21,6 @@ public interface RestaurantService {
     Restaurant getRestaurantById(String rid);
 
     List<Restaurant> getRestaurants(RestaurantType type, String location);
+
+    List<LinearDataDTO<RestaurantType, Integer>> restaurantNumOfType();
 }

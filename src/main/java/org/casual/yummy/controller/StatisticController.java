@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -50,21 +49,33 @@ public class StatisticController {
         return statisticService.incomeOfMemberLevel(conditionDTO);
     }
 
+    @GetMapping("/income_of_restaurant_type")
+    public List<LinearDataDTO<RestaurantType, Double>> incomeOfRestaurantType(String condition) {
+        ConditionDTO conditionDTO = (null == condition) ? new ConditionDTO() : JsonUtil.json2pojo(condition, ConditionDTO.class);
+        return statisticService.incomeOfRestaurantType(conditionDTO);
+    }
+
+    @GetMapping("/order_num_of_date")
+    public List<LinearDataDTO<LocalDate, Integer>> orderNumOfDate(String condition) {
+        ConditionDTO conditionDTO = (null == condition) ? new ConditionDTO() : JsonUtil.json2pojo(condition, ConditionDTO.class);
+        return statisticService.orderNumOfDate(conditionDTO);
+    }
+
     @GetMapping("/order_num_of_order_status")
-    public List<LinearDataDTO<OrderStatus, Integer>> usageOfOrderStatus(String condition) {
+    public List<LinearDataDTO<OrderStatus, Integer>> orderNumOfOrderStatus(String condition) {
         ConditionDTO conditionDTO = new ConditionDTO();
         if (null != condition) conditionDTO = JsonUtil.json2pojo(condition, ConditionDTO.class);
         return statisticService.orderNumOfOrderStatus(conditionDTO);
     }
 
     @GetMapping("/order_num_of_restaurant_type")
-    public List<LinearDataDTO<RestaurantType, Integer>> usageOfRestaurantType(String condition) {
+    public List<LinearDataDTO<RestaurantType, Integer>> orderNumOfRestaurantType(String condition) {
         ConditionDTO conditionDTO = (null == condition) ? new ConditionDTO() : JsonUtil.json2pojo(condition, ConditionDTO.class);
         return statisticService.orderNumOfRestaurantType(conditionDTO);
     }
 
     @GetMapping("/order_num_of_member_level")
-    public List<LinearDataDTO<Integer, Integer>> usageOfMemberLevel(String condition) {
+    public List<LinearDataDTO<Integer, Integer>> orderNumOfMemberLevel(String condition) {
         ConditionDTO conditionDTO = (null == condition) ? new ConditionDTO() : JsonUtil.json2pojo(condition, ConditionDTO.class);
         return statisticService.orderNumOfMemberLevel(conditionDTO);
     }

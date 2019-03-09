@@ -2,6 +2,7 @@ package org.casual.yummy.service.impl;
 
 import org.casual.yummy.dao.RegistrationDAO;
 import org.casual.yummy.dao.RestaurantDAO;
+import org.casual.yummy.dto.LinearDataDTO;
 import org.casual.yummy.model.AccountState;
 import org.casual.yummy.model.manager.RegStatus;
 import org.casual.yummy.model.manager.Registration;
@@ -21,6 +22,8 @@ import javax.persistence.criteria.Predicate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
@@ -109,5 +112,16 @@ public class RestaurantServiceImpl implements RestaurantService {
             return criteriaBuilder.and(conditions.toArray(predicates));
         };
         return restaurantDAO.findAll(specification);
+    }
+
+    @Override
+    public List<LinearDataDTO<RestaurantType, Integer>> restaurantNumOfType() {
+        List<Restaurant> restaurants = restaurantDAO.findAll();
+        Map<RestaurantType, List<Restaurant>> layeredRestaurants = restaurants.parallelStream().collect(Collectors.groupingBy(r -> r.getRegisterInfo().getType()));
+        List<LinearDataDTO<RestaurantType, Integer>> counts = new ArrayList<>();
+        for (Map.Entry<RestaurantType, List<Restaurant>> entry : layeredRestaurants.entrySet()) {
+            counts.add(new LinearDataDTO<>(entry.getKey(), entry.getValue().size()));
+        }
+        return counts;
     }
 }

@@ -81,7 +81,6 @@ public class StatisticServiceImpl implements StatisticService {
         return income;
     }
 
-
     @Override
     public List<LinearDataDTO<OrderStatus, Double>> incomeOfOrderStatus(ConditionDTO conditionDTO) {
         List<Order> orders = orderService.getOrders(conditionDTO);
@@ -133,15 +132,34 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     @Override
+    public List<LinearDataDTO<LocalDate, Integer>> orderNumOfDate(ConditionDTO conditionDTO) {
+        List<Order> orders = orderService.getOrders(conditionDTO);
+        Map<LocalDate, List<Order>> soldOrders = orders.parallelStream().collect(Collectors.groupingBy(o -> o.getOrderTime().toLocalDate()));
+
+        LocalDate start = soldOrders.keySet().stream().min(LocalDate::compareTo).orElse(null);
+        LocalDate end = soldOrders.keySet().stream().max(LocalDate::compareTo).orElse(null);
+
+        if (null == start || null == end) return new ArrayList<>();
+
+        List<LinearDataDTO<LocalDate, Integer>> counts = new ArrayList<>();
+        for (LocalDate cursor = start; !cursor.isAfter(end); cursor = cursor.plusDays(1)) {
+            List<Order> orderOfDay = soldOrders.get(cursor);
+            int total = (null == orderOfDay ? 0 : orderOfDay.size());
+            counts.add(new LinearDataDTO<>(LocalDate.parse(cursor.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))), total));
+        }
+        return counts;
+    }
+
+    @Override
     public List<LinearDataDTO<OrderStatus, Integer>> orderNumOfOrderStatus(ConditionDTO conditionDTO) {
         List<Order> orders = orderService.getOrders(conditionDTO);
         Map<OrderStatus, List<Order>> usedOrders = orders.parallelStream().collect(Collectors.groupingBy(Order::getStatus));
 
-        List<LinearDataDTO<OrderStatus, Integer>> usages = new ArrayList<>();
+        List<LinearDataDTO<OrderStatus, Integer>> counts = new ArrayList<>();
         for (Map.Entry<OrderStatus, List<Order>> entry : usedOrders.entrySet()) {
-            usages.add(new LinearDataDTO<>(entry.getKey(), entry.getValue().size()));
+            counts.add(new LinearDataDTO<>(entry.getKey(), entry.getValue().size()));
         }
-        return usages;
+        return counts;
     }
 
     @Override
@@ -149,11 +167,11 @@ public class StatisticServiceImpl implements StatisticService {
         List<Order> orders = orderService.getOrders(conditionDTO);
         Map<RestaurantType, List<Order>> usedOrders = orders.parallelStream().collect(Collectors.groupingBy(o -> o.getRestaurant().getRegisterInfo().getType()));
 
-        List<LinearDataDTO<RestaurantType, Integer>> usages = new ArrayList<>();
+        List<LinearDataDTO<RestaurantType, Integer>> counts = new ArrayList<>();
         for (Map.Entry<RestaurantType, List<Order>> entry : usedOrders.entrySet()) {
-            usages.add(new LinearDataDTO<>(entry.getKey(), entry.getValue().size()));
+            counts.add(new LinearDataDTO<>(entry.getKey(), entry.getValue().size()));
         }
-        return usages;
+        return counts;
     }
 
     @Override
@@ -161,10 +179,12 @@ public class StatisticServiceImpl implements StatisticService {
         List<Order> orders = orderService.getOrders(conditionDTO);
         Map<Integer, List<Order>> usedOrders = orders.parallelStream().collect(Collectors.groupingBy(o -> o.getMember().getLevel()));
 
-        List<LinearDataDTO<Integer, Integer>> usages = new ArrayList<>();
-        for (Map.Entry<Integer, List<Order>> entry : usedOrders.entrySet()) {
-            usages.add(new LinearDataDTO<>(entry.getKey(), entry.getValue().size()));
-        }
-        return usages;
+        List<LinearDataDTO<Integer, Integer>> counts = new ArrayList<>();
+        Arrays.stream(new Integer[]{0, 1, 2, 3, 4, 5}).forEach(level -> {
+            List<Order> ordersOfLevel = usedOrders.get(level);
+            int total = (null == ordersOfLevel ? 0 : ordersOfLevel.size());
+            counts.add(new LinearDataDTO<>(level, total));
+        });
+        return counts;
     }
 }

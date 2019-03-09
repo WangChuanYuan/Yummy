@@ -1,5 +1,6 @@
 package org.casual.yummy.controller;
 
+import org.casual.yummy.dto.LinearDataDTO;
 import org.casual.yummy.model.member.Member;
 import org.casual.yummy.service.MemberService;
 import org.casual.yummy.utils.message.Code;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -21,6 +23,11 @@ public class MemberController {
     @GetMapping("/get_member")
     public Member getMember(@RequestParam String id) {
         return memberService.getMemberById(id);
+    }
+
+    @GetMapping("/member_num_of_level")
+    public List<LinearDataDTO<Integer, Integer>> memberNumOfLevel() {
+        return memberService.memberNumOfLevel();
     }
 
     @PostMapping("/upload_member_avatar")

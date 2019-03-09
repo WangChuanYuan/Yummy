@@ -1,5 +1,6 @@
 package org.casual.yummy.controller;
 
+import org.casual.yummy.dto.LinearDataDTO;
 import org.casual.yummy.model.AccountState;
 import org.casual.yummy.model.Role;
 import org.casual.yummy.model.restaurant.MarketInfo;
@@ -39,6 +40,11 @@ public class RestaurantController {
     @GetMapping("/get_restaurants")
     public List<Restaurant> getRestaurants(@RequestParam(required = false) RestaurantType type, @RequestParam(required = false) String location) {
         return restaurantService.getRestaurants(type, location);
+    }
+
+    @GetMapping("/restaurant_num_of_type")
+    public List<LinearDataDTO<RestaurantType, Integer>> getRestaurants() {
+        return restaurantService.restaurantNumOfType();
     }
 
     @PostMapping("/register_restaurant")
