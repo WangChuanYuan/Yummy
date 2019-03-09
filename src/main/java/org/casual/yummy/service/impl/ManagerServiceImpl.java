@@ -3,6 +3,8 @@ package org.casual.yummy.service.impl;
 import org.casual.yummy.dao.ManagerDAO;
 import org.casual.yummy.dao.RegistrationDAO;
 import org.casual.yummy.dao.RestaurantDAO;
+import org.casual.yummy.model.AccountState;
+import org.casual.yummy.model.Role;
 import org.casual.yummy.model.manager.Manager;
 import org.casual.yummy.model.manager.RegStatus;
 import org.casual.yummy.model.manager.Registration;
@@ -40,7 +42,7 @@ public class ManagerServiceImpl implements ManagerService {
         if (null == manager) {
             if (id.equals(DEFAULT_MANAGER)) {
                 Manager defaultManager = new Manager();
-                manager.setId(DEFAULT_MANAGER).setPassword(password);
+                defaultManager.setId(DEFAULT_MANAGER).setPassword(password).setRole(Role.MANAGER).setAccountState(AccountState.VALID);
                 Manager savedManager = managerDAO.saveAndFlush(defaultManager);
                 return new ResultMsg<>("登录成功", Code.SUCCESS, savedManager);
             } else return new ResultMsg<>("账号不存在", Code.FAILURE);

@@ -15,7 +15,7 @@ import store from './store';
 Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requireAuth) {
+  if (to.meta && to.meta.requireAuth) {
     let userJson = sessionStorage.getItem('user');
     let isValid = false;
     if (userJson) {

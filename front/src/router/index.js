@@ -9,6 +9,7 @@ import BookCenter from '@/views/BookCenter';
 import OrderChecker from '@/views/OrderChecker';
 import ManagerLogin from '@/views/ManagerLogin';
 import ManagerCenter from '@/views/ManagerCenter';
+import NotFound from '@/views/NotFound';
 
 import MemberInfo from '@/components/member/MemberInfo';
 import MemberAddress from '@/components/member/MemberAddress';
@@ -317,6 +318,15 @@ export default new Router({
           }
         }
       ]
+    },
+    {
+      path: '/404',
+      name: '404',
+      component: NotFound
+    },
+    {
+      path: '*',
+      redirect: '/404'
     }
   ]
 });
