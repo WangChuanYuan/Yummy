@@ -36,11 +36,11 @@
           <i class="el-icon-sold-out"></i>
           <span>优惠管理</span>
         </el-menu-item>
-        <el-menu-item index="orders">
+        <el-menu-item index="restaurant-orders">
           <i class="el-icon-tickets"></i>
           <span>订单管理</span>
         </el-menu-item>
-        <el-menu-item index="statistic">
+        <el-menu-item index="restaurant-statistic">
           <i class="el-icon-news"></i>
           <span>统计信息</span>
         </el-menu-item>
@@ -91,10 +91,10 @@ export default {
         case 'promotion':
           this.$router.push('/restaurantCenter/promotion');
           break;
-        case 'orders':
+        case 'restaurant-orders':
           this.$router.push('/restaurantCenter/orders');
           break;
-        case 'statistic':
+        case 'restaurant-statistic':
           this.$router.push('/restaurantCenter/statistic');
           break;
         case 'logout':

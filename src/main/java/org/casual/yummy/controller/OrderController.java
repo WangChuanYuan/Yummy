@@ -1,6 +1,7 @@
 package org.casual.yummy.controller;
 
 import org.casual.yummy.dto.CartDTO;
+import org.casual.yummy.dto.ConditionDTO;
 import org.casual.yummy.dto.OrderDTO;
 import org.casual.yummy.model.restaurant.RestaurantType;
 import org.casual.yummy.service.OrderService;
@@ -23,16 +24,10 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping("/get_orders")
-    public List<OrderDTO> getOrders(String mid, String rid,
-                                    RestaurantType restaurantType, Integer memberLevel,
-                                    String dateFrom, String dateTo,
-                                    Double finalFeeLowerLimit, Double finalFeeUpperLimit,
-                                    Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
-        LocalDateTime from = null, to = null;
-        if (null != dateFrom) from = LocalDate.parse(dateFrom).atStartOfDay();
-        if (null != dateTo) to = LocalDate.parse(dateTo).atStartOfDay();
-        return orderService.getOrders(mid, rid, restaurantType, memberLevel, from, to, finalFeeLowerLimit, finalFeeUpperLimit, actualFeeLowerLimit, actualFeeUpperLimit)
-                .stream().map(OrderDTO::new).collect(Collectors.toList());
+    public List<OrderDTO> getOrders(String condition) {
+        ConditionDTO conditionDTO = null;
+        if (null != condition) conditionDTO = JsonUtil.json2pojo(condition, ConditionDTO.class);
+        return orderService.getOrders(conditionDTO).stream().map(OrderDTO::new).collect(Collectors.toList());
     }
 
     @GetMapping("/get_member_orders")

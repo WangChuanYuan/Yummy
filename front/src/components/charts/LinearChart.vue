@@ -69,7 +69,7 @@ export default {
   computed: {
     xAxisData () {
       return this.chartData.map(function (item) {
-        return item['key'];
+        return item['key'].toString();
       });
     },
     yAxisData () {

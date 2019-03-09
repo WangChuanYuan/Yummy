@@ -1,10 +1,7 @@
 package org.casual.yummy.service.impl;
 
 import org.casual.yummy.dao.*;
-import org.casual.yummy.dto.CartDTO;
-import org.casual.yummy.dto.ComboDTO;
-import org.casual.yummy.dto.GoodsDTO;
-import org.casual.yummy.dto.OrderDTO;
+import org.casual.yummy.dto.*;
 import org.casual.yummy.model.AccountState;
 import org.casual.yummy.model.Anchor;
 import org.casual.yummy.model.goods.Combo;
@@ -396,59 +393,60 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public List<Order> getOrders(String mid, String rid, RestaurantType restaurantType, Integer memberLevel, LocalDateTime from, LocalDateTime to,
-                                 Double finalFeeLowerLimit, Double finalFeeUpperLimit, Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
+    public List<Order> getOrders(ConditionDTO condition) {
         Specification<Order> specification = (Specification<Order>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> conditions = new ArrayList<>();
             Predicate memberCondition = null;
-            if (null != mid) {
-                memberCondition = criteriaBuilder.equal(root.join("member").get("id").as(String.class), mid);
-                conditions.add(memberCondition);
-            }
-            Predicate restaurantCondition = null;
-            if (null != rid) {
-                restaurantCondition = criteriaBuilder.equal(root.join("restaurant").get("id").as(String.class), rid);
-                conditions.add(restaurantCondition);
-            }
-            Predicate restaurantTypeCondition = null;
-            if (null != restaurantType) {
-                restaurantTypeCondition = criteriaBuilder.equal(root.join("restaurant").get("registerInfo").get("type").as(RestaurantType.class), restaurantType);
-                conditions.add(restaurantTypeCondition);
-            }
-            Predicate memberLevelCondition = null;
-            if (null != memberLevel) {
-                memberLevelCondition = criteriaBuilder.equal(root.join("member").get("level"), memberLevel);
-                conditions.add(memberLevelCondition);
-            }
-            Predicate timeFromCondition = null;
-            if (null != from) {
-                timeFromCondition = criteriaBuilder.greaterThanOrEqualTo(root.get("orderTime").as(LocalDateTime.class), from);
-                conditions.add(timeFromCondition);
-            }
-            Predicate timeToCondition = null;
-            if (null != to) {
-                timeToCondition = criteriaBuilder.lessThanOrEqualTo(root.get("orderTime").as(LocalDateTime.class), to);
-                conditions.add(timeToCondition);
-            }
-            Predicate finalFeeLowerLimitCondition = null;
-            if (null != finalFeeLowerLimit) {
-                finalFeeLowerLimitCondition = criteriaBuilder.greaterThanOrEqualTo(root.get("bill").get("finalFee"), finalFeeLowerLimit);
-                conditions.add(finalFeeLowerLimitCondition);
-            }
-            Predicate finalFeeUpperLimitCondition = null;
-            if (null != finalFeeUpperLimit) {
-                finalFeeUpperLimitCondition = criteriaBuilder.lessThanOrEqualTo(root.get("bill").get("finalFee"), finalFeeUpperLimit);
-                conditions.add(finalFeeUpperLimitCondition);
-            }
-            Predicate actualFeeLowerLimitCondition = null;
-            if (null != actualFeeLowerLimit) {
-                actualFeeLowerLimitCondition = criteriaBuilder.greaterThanOrEqualTo(root.get("bill").get("actualFee"), actualFeeLowerLimit);
-                conditions.add(actualFeeLowerLimitCondition);
-            }
-            Predicate actualFeeUpperLimitCondition = null;
-            if (null != actualFeeUpperLimit) {
-                actualFeeUpperLimitCondition = criteriaBuilder.lessThanOrEqualTo(root.get("bill").get("actualFee"), actualFeeUpperLimit);
-                conditions.add(actualFeeUpperLimitCondition);
+            if (null != condition) {
+                if (null != condition.mid) {
+                    memberCondition = criteriaBuilder.equal(root.join("member").get("id").as(String.class), condition.mid);
+                    conditions.add(memberCondition);
+                }
+                Predicate restaurantCondition = null;
+                if (null != condition.rid) {
+                    restaurantCondition = criteriaBuilder.equal(root.join("restaurant").get("id").as(String.class), condition.rid);
+                    conditions.add(restaurantCondition);
+                }
+                Predicate restaurantTypeCondition = null;
+                if (null != condition.restaurantType) {
+                    restaurantTypeCondition = criteriaBuilder.equal(root.join("restaurant").get("registerInfo").get("type").as(RestaurantType.class), condition.restaurantType);
+                    conditions.add(restaurantTypeCondition);
+                }
+                Predicate memberLevelCondition = null;
+                if (null != condition.memberLevel) {
+                    memberLevelCondition = criteriaBuilder.equal(root.join("member").get("level"), condition.memberLevel);
+                    conditions.add(memberLevelCondition);
+                }
+                Predicate timeFromCondition = null;
+                if (null != condition.dateFrom) {
+                    timeFromCondition = criteriaBuilder.greaterThanOrEqualTo(root.get("orderTime").as(LocalDateTime.class), condition.dateFrom.atStartOfDay());
+                    conditions.add(timeFromCondition);
+                }
+                Predicate timeToCondition = null;
+                if (null != condition.dateTo) {
+                    timeToCondition = criteriaBuilder.lessThanOrEqualTo(root.get("orderTime").as(LocalDateTime.class), condition.dateTo.atStartOfDay());
+                    conditions.add(timeToCondition);
+                }
+                Predicate finalFeeLowerLimitCondition = null;
+                if (null != condition.finalFeeLowerLimit) {
+                    finalFeeLowerLimitCondition = criteriaBuilder.greaterThanOrEqualTo(root.get("bill").get("finalFee"), condition.finalFeeLowerLimit);
+                    conditions.add(finalFeeLowerLimitCondition);
+                }
+                Predicate finalFeeUpperLimitCondition = null;
+                if (null != condition.finalFeeUpperLimit) {
+                    finalFeeUpperLimitCondition = criteriaBuilder.lessThanOrEqualTo(root.get("bill").get("finalFee"), condition.finalFeeUpperLimit);
+                    conditions.add(finalFeeUpperLimitCondition);
+                }
+                Predicate actualFeeLowerLimitCondition = null;
+                if (null != condition.actualFeeLowerLimit) {
+                    actualFeeLowerLimitCondition = criteriaBuilder.greaterThanOrEqualTo(root.get("bill").get("actualFee"), condition.actualFeeLowerLimit);
+                    conditions.add(actualFeeLowerLimitCondition);
+                }
+                Predicate actualFeeUpperLimitCondition = null;
+                if (null != condition.actualFeeUpperLimit) {
+                    actualFeeUpperLimitCondition = criteriaBuilder.lessThanOrEqualTo(root.get("bill").get("actualFee"), condition.actualFeeUpperLimit);
+                    conditions.add(actualFeeUpperLimitCondition);
+                }
             }
             Predicate[] predicates = new Predicate[conditions.size()];
             return criteriaBuilder.and(conditions.toArray(predicates));

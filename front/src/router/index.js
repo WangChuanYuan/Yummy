@@ -31,6 +31,7 @@ import PromotionManager from '@/components/restaurant/PromotionManager';
 import OrderManager from '@/components/restaurant/OrderManager';
 import RestaurantStatistic from '@/components/restaurant/RestaurantStatistic';
 import RegistrationChecker from '@/components/manager/RegistrationChecker';
+import StatisticViewer from '@/components/manager/StatisticViewer';
 
 Vue.use(Router);
 
@@ -173,12 +174,12 @@ export default new Router({
         },
         {
           path: 'orders',
-          name: 'orders',
+          name: 'restaurant-orders',
           component: OrderManager
         },
         {
           path: 'statistic',
-          name: 'statistic',
+          name: 'restaurant-statistic',
           component: RestaurantStatistic
         }
       ]
@@ -197,9 +198,14 @@ export default new Router({
           name: 'managerCenter'
         },
         {
-          path: 'registrations',
-          name: 'registrations',
+          path: 'registration',
+          name: 'manager-registration',
           component: RegistrationChecker
+        },
+        {
+          path: 'statistic',
+          name: 'manger-statistic',
+          component: StatisticViewer
         }
       ]
     }

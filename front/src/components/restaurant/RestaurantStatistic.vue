@@ -42,24 +42,24 @@
           </el-table>
         </el-aside>
         <el-main>
-          <LinearChart :chart-data="incomeOfDate" height="500" width="700" title-text="日收入"></LinearChart>
+          <LinearChart :chart-data="incomeOfDate" :height="500" :width="700" title-text="日收入"></LinearChart>
         </el-main>
       </el-container>
     </el-row>
     <el-row>
-      <el-col :span="12">
+      <el-col :span="10" :offset="2">
         <LinearChart type="pie" :chart-data="incomeOfOrderStatus" title-text="营收额-收入类型"/>
       </el-col>
       <el-col :span="12">
-        <LinearChart type="bar" :chart-data="incomeOfMemberLevel" width="500" title-text="营收额-会员等级" y-text="营收额"/>
+        <LinearChart type="bar" :chart-data="incomeOfMemberLevel" :width="500" title-text="营收额-会员等级" y-text="营收额"/>
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="12">
-        <LinearChart type="pie" :chart-data="usageOfOrderStatus" title-text="订单数-订单结果"/>
+      <el-col :span="10" :offset="2">
+        <LinearChart type="pie" :chart-data="orderNumOfOrderStatus" title-text="订单数-订单结果"/>
       </el-col>
       <el-col :span="12">
-        <LinearChart type="bar" :chart-data="usageOfMemberLevel" width="500" title-text="订单数-会员等级" y-text="订单数"/>
+        <LinearChart type="bar" :chart-data="orderNumOfMemberLevel" :width="500" title-text="订单数-会员等级" y-text="订单数"/>
       </el-col>
     </el-row>
   </div>
@@ -87,8 +87,8 @@ export default {
       incomeOfDate: [],
       incomeOfOrderStatus: [],
       incomeOfMemberLevel: [],
-      usageOfOrderStatus: [],
-      usageOfMemberLevel: []
+      orderNumOfOrderStatus: [],
+      orderNumOfMemberLevel: []
     };
   },
   mounted () {
@@ -115,17 +115,21 @@ export default {
       this.getIncomeOfDate();
       this.getIncomeOfOrderStatus();
       this.getIncomeOfMemberLevel();
-      this.getUsageOfOrderStatus();
-      this.getUsageOfMemberLevel();
+      this.getOrderNumOfOrderStatus();
+      this.getOrderNumOfMemberLevel();
     },
     getOrders () {
-      Api.get('/get_orders', this.getParam()).then((data) => {
+      Api.get('/get_orders', {
+        condition: JSON.stringify(this.getParam())
+      }).then((data) => {
         if (data) this.orders = data;
       }).catch(() => {
       });
     },
     getIncomeOfDate () {
-      Api.get('/income_of_date', this.getParam()).then((data) => {
+      Api.get('/income_of_date', {
+        condition: JSON.stringify(this.getParam())
+      }).then((data) => {
         if (data) {
           this.incomeOfDate = data;
         }
@@ -133,7 +137,9 @@ export default {
       });
     },
     getIncomeOfOrderStatus () {
-      Api.get('/income_of_order_status', this.getParam()).then((data) => {
+      Api.get('/income_of_order_status', {
+        condition: JSON.stringify(this.getParam())
+      }).then((data) => {
         if (data) {
           this.incomeOfOrderStatus = data.map(
             item => {
@@ -145,17 +151,21 @@ export default {
       });
     },
     getIncomeOfMemberLevel () {
-      Api.get('/income_of_member_level', this.getParam()).then((data) => {
+      Api.get('/income_of_member_level', {
+        condition: JSON.stringify(this.getParam())
+      }).then((data) => {
         if (data) {
           this.incomeOfMemberLevel = data;
         }
       }).catch(() => {
       });
     },
-    getUsageOfOrderStatus () {
-      Api.get('/usage_of_order_status', this.getParam()).then((data) => {
+    getOrderNumOfOrderStatus () {
+      Api.get('/order_num_of_order_status', {
+        condition: JSON.stringify(this.getParam())
+      }).then((data) => {
         if (data) {
-          this.usageOfOrderStatus = data.map(
+          this.orderNumOfOrderStatus = data.map(
             item => {
               item.key = this.status[item.key].label;
               return item;
@@ -164,10 +174,12 @@ export default {
       }).catch(() => {
       });
     },
-    getUsageOfMemberLevel () {
-      Api.get('/usage_of_member_level', this.getParam()).then((data) => {
+    getOrderNumOfMemberLevel () {
+      Api.get('/order_num_of_member_level', {
+        condition: JSON.stringify(this.getParam())
+      }).then((data) => {
         if (data) {
-          this.usageOfMemberLevel = data;
+          this.orderNumOfMemberLevel = data;
         }
       }).catch(() => {
       });

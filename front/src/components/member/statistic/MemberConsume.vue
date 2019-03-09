@@ -98,7 +98,9 @@ export default {
       this.getConsumeOfRestaurantType();
     },
     getConsumedOrders () {
-      Api.get('/get_orders', this.getParam()).then((data) => {
+      Api.get('/get_orders', {
+        condition: JSON.stringify(this.getParam())
+      }).then((data) => {
         if (data) {
           let consumedOrders = [];
           data.map(order => {
@@ -109,7 +111,9 @@ export default {
       }).catch(() => {});
     },
     getConsumeOfOrderStatus () {
-      Api.get('/consume_of_order_status', this.getParam()).then((data) => {
+      Api.get('/consume_of_order_status', {
+        condition: JSON.stringify(this.getParam())
+      }).then((data) => {
         if (data) {
           this.consumeOfOrderStatus = data.map(
             item => {
@@ -120,7 +124,9 @@ export default {
       }).catch(() => {});
     },
     getConsumeOfRestaurantType () {
-      Api.get('/consume_of_restaurant_type', this.getParam()).then((data) => {
+      Api.get('/consume_of_restaurant_type', {
+        condition: JSON.stringify(this.getParam())
+      }).then((data) => {
         if (data) {
           this.consumeOfRestaurantType = data.map(
             item => {

@@ -14,21 +14,13 @@
           <i class="el-icon-info"></i>
           <span>后台管理</span>
         </el-menu-item>
-        <el-menu-item index="registrations">
+        <el-menu-item index="manager-registration">
             <i class="el-icon-edit-outline"></i>
             <span>门店管理</span>
         </el-menu-item>
-        <el-menu-item index="statistics-restaurants">
-          <i class="el-icon-news"></i>
-          <span>餐厅数据</span>
-        </el-menu-item>
-        <el-menu-item index="statistics-members">
-          <i class="el-icon-message"></i>
-          <span>会员数据</span>
-        </el-menu-item>
-        <el-menu-item index="statistics-finance">
+        <el-menu-item index="manager-statistic">
           <i class="el-icon-view"></i>
-          <span>财务数据</span>
+          <span>数据统计</span>
         </el-menu-item>
         <el-menu-item index="logout">
           <i class="el-icon-circle-close-outline"></i>
@@ -51,14 +43,11 @@ export default {
   methods: {
     navigation (key) {
       switch (key) {
-        case 'registrations':
-          this.$router.push('/managerCenter/registrations');
+        case 'manager-registration':
+          this.$router.push('/managerCenter/registration');
           break;
-        case 'statistics-restaurants':
-          break;
-        case 'statistics-members':
-          break;
-        case 'statistics-finance':
+        case 'manager-statistic':
+          this.$router.push('/managerCenter/statistic');
           break;
         case 'logout':
           this.logout();

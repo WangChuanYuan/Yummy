@@ -39,10 +39,10 @@
       <el-main>
         <el-row>
           <el-col :span="12">
-            <LinearChart type="pie" :chart-data="usageOfOrderStatus" title-text="订单数-订单结果"/>
+            <LinearChart type="pie" :chart-data="orderNumOfOrderStatus" title-text="订单数-订单结果"/>
           </el-col>
           <el-col :span="12">
-            <LinearChart type="pie" :chart-data="usageOfRestaurantType" title-text="订单数-门店类型"/>
+            <LinearChart type="pie" :chart-data="orderNumOfRestaurantType" title-text="订单数-门店类型"/>
           </el-col>
         </el-row>
       </el-main>
@@ -69,8 +69,8 @@ export default {
       finalFeeUpperLimit: '',
       /* data */
       orders: [],
-      usageOfOrderStatus: [],
-      usageOfRestaurantType: []
+      orderNumOfOrderStatus: [],
+      orderNumOfRestaurantType: []
     };
   },
   mounted () {
@@ -93,19 +93,23 @@ export default {
       return param;
     },
     getData () {
-      this.getUsageOfOrders();
-      this.getUsageOfOrderStatus();
-      this.getUsageOfRestaurantType();
+      this.getOrders();
+      this.getOrderNumOfOrderStatus();
+      this.getOrderNumOfRestaurantType();
     },
-    getUsageOfOrders () {
-      Api.get('/get_orders', this.getParam()).then((data) => {
+    getOrders () {
+      Api.get('/get_orders', {
+        condition: JSON.stringify(this.getParam())
+      }).then((data) => {
         if (data) this.orders = data;
       }).catch(() => {});
     },
-    getUsageOfOrderStatus () {
-      Api.get('/usage_of_order_status', this.getParam()).then((data) => {
+    getOrderNumOfOrderStatus () {
+      Api.get('/order_num_of_order_status', {
+        condition: JSON.stringify(this.getParam())
+      }).then((data) => {
         if (data) {
-          this.usageOfOrderStatus = data.map(
+          this.orderNumOfOrderStatus = data.map(
             item => {
               item.key = this.status[item.key].label;
               return item;
@@ -113,10 +117,12 @@ export default {
         }
       }).catch(() => {});
     },
-    getUsageOfRestaurantType () {
-      Api.get('/usage_of_restaurant_type', this.getParam()).then((data) => {
+    getOrderNumOfRestaurantType () {
+      Api.get('/order_num_of_restaurant_type', {
+        condition: JSON.stringify(this.getParam())
+      }).then((data) => {
         if (data) {
-          this.usageOfRestaurantType = data.map(
+          this.orderNumOfRestaurantType = data.map(
             item => {
               item.key = this.types[item.key].label;
               return item;

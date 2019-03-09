@@ -1,5 +1,6 @@
 package org.casual.yummy.service.impl;
 
+import org.casual.yummy.dto.ConditionDTO;
 import org.casual.yummy.dto.LinearDataDTO;
 import org.casual.yummy.model.order.Order;
 import org.casual.yummy.model.order.OrderStatus;
@@ -11,9 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,8 +29,8 @@ public class StatisticServiceImpl implements StatisticService {
     private OrderService orderService;
 
     @Override
-    public List<LinearDataDTO<OrderStatus, Double>> consumeOfOrderStatus(String mid, RestaurantType type, LocalDateTime from, LocalDateTime to, Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
-        List<Order> orders = orderService.getOrders(mid, null, type, null, from, to, null, null, actualFeeLowerLimit, actualFeeUpperLimit);
+    public List<LinearDataDTO<OrderStatus, Double>> consumeOfOrderStatus(ConditionDTO conditionDTO) {
+        List<Order> orders = orderService.getOrders(conditionDTO);
         Map<OrderStatus, List<Order>> consumedOrders = orders.parallelStream().filter(order -> {
             OrderStatus status = order.getStatus();
             return status == OrderStatus.FINISHED || status == OrderStatus.UNSUBSCRIBED;
@@ -44,8 +45,8 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     @Override
-    public List<LinearDataDTO<RestaurantType, Double>> consumeOfRestaurantType(String mid, RestaurantType type, LocalDateTime from, LocalDateTime to, Double actualFeeLowerLimit, Double actualFeeUpperLimit) {
-        List<Order> orders = orderService.getOrders(mid, null, type, null, from, to, null, null, actualFeeLowerLimit, actualFeeUpperLimit);
+    public List<LinearDataDTO<RestaurantType, Double>> consumeOfRestaurantType(ConditionDTO conditionDTO) {
+        List<Order> orders = orderService.getOrders(conditionDTO);
         Map<RestaurantType, List<Order>> consumedOrders = orders.parallelStream().collect(Collectors.groupingBy(o -> o.getRestaurant().getRegisterInfo().getType()));
 
         List<LinearDataDTO<RestaurantType, Double>> consumes = new ArrayList<>();
@@ -57,8 +58,8 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     @Override
-    public List<LinearDataDTO<LocalDate, Double>> incomeOfDate(String rid, Integer memberLevel, LocalDateTime from, LocalDateTime to, Double finalFeeLowerLimit, Double finalFeeUpperLimit) {
-        List<Order> orders = orderService.getOrders(null, rid, null, memberLevel, from, to, finalFeeLowerLimit, finalFeeUpperLimit, null, null);
+    public List<LinearDataDTO<LocalDate, Double>> incomeOfDate(ConditionDTO conditionDTO) {
+        List<Order> orders = orderService.getOrders(conditionDTO);
         Map<LocalDate, List<Order>> soldOrders = orders.parallelStream().collect(Collectors.groupingBy(o -> o.getOrderTime().toLocalDate()));
 
         LocalDate start = soldOrders.keySet().stream().min(LocalDate::compareTo).orElse(null);
@@ -71,7 +72,9 @@ public class StatisticServiceImpl implements StatisticService {
             List<Order> orderOfDay = soldOrders.get(cursor);
             double total = 0;
             if (null != orderOfDay) {
-                total = orderOfDay.parallelStream().mapToDouble(o -> o.getBill().getActualFee() * (1 - ORDER_TAX)).sum();
+                total = orderOfDay.parallelStream().mapToDouble(
+                        o -> o.getBill().getActualFee() * (null == conditionDTO.rid ? ORDER_TAX : 1 - ORDER_TAX)
+                ).sum();
             }
             income.add(new LinearDataDTO<>(LocalDate.parse(cursor.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))), total));
         }
@@ -80,8 +83,8 @@ public class StatisticServiceImpl implements StatisticService {
 
 
     @Override
-    public List<LinearDataDTO<OrderStatus, Double>> incomeOfOrderStatus(String rid, Integer memberLevel, LocalDateTime from, LocalDateTime to, Double finalFeeLowerLimit, Double finalFeeUpperLimit) {
-        List<Order> orders = orderService.getOrders(null, rid, null, memberLevel, from, to, finalFeeLowerLimit, finalFeeUpperLimit, null, null);
+    public List<LinearDataDTO<OrderStatus, Double>> incomeOfOrderStatus(ConditionDTO conditionDTO) {
+        List<Order> orders = orderService.getOrders(conditionDTO);
         Map<OrderStatus, List<Order>> soldOrders = orders.parallelStream().filter(order -> {
             OrderStatus status = order.getStatus();
             return status == OrderStatus.FINISHED || status == OrderStatus.UNSUBSCRIBED;
@@ -89,28 +92,49 @@ public class StatisticServiceImpl implements StatisticService {
 
         List<LinearDataDTO<OrderStatus, Double>> income = new ArrayList<>();
         for (Map.Entry<OrderStatus, List<Order>> entry : soldOrders.entrySet()) {
-            double total = entry.getValue().parallelStream().mapToDouble(o -> o.getBill().getActualFee() * (1 - ORDER_TAX)).sum();
+            double total = entry.getValue().parallelStream().mapToDouble(
+                    o -> o.getBill().getActualFee() * (null == conditionDTO.rid ? ORDER_TAX : 1 - ORDER_TAX)
+            ).sum();
             income.add(new LinearDataDTO<>(entry.getKey(), total));
         }
         return income;
     }
 
     @Override
-    public List<LinearDataDTO<Integer, Double>> incomeOfMemberLevel(String rid, Integer memberLevel, LocalDateTime from, LocalDateTime to, Double finalFeeLowerLimit, Double finalFeeUpperLimit) {
-        List<Order> orders = orderService.getOrders(null, rid, null, memberLevel, from, to, finalFeeLowerLimit, finalFeeUpperLimit, null, null);
+    public List<LinearDataDTO<Integer, Double>> incomeOfMemberLevel(ConditionDTO conditionDTO) {
+        List<Order> orders = orderService.getOrders(conditionDTO);
         Map<Integer, List<Order>> soldOrders = orders.parallelStream().collect(Collectors.groupingBy(o -> o.getMember().getLevel()));
 
         List<LinearDataDTO<Integer, Double>> income = new ArrayList<>();
-        for (Map.Entry<Integer, List<Order>> entry : soldOrders.entrySet()) {
-            double total = entry.getValue().parallelStream().mapToDouble(o -> o.getBill().getActualFee() * (1 - ORDER_TAX)).sum();
+        Arrays.stream(new Integer[]{0, 1, 2, 3, 4, 5}).forEach(level -> {
+            List<Order> ordersOfLevel = soldOrders.get(level);
+            double total = (null == ordersOfLevel ? 0 :
+                    ordersOfLevel.parallelStream().mapToDouble(
+                            o -> o.getBill().getActualFee() * (null == conditionDTO.rid ? ORDER_TAX : 1 - ORDER_TAX)
+                    ).sum());
+            income.add(new LinearDataDTO<>(level, total));
+        });
+        return income;
+    }
+
+    @Override
+    public List<LinearDataDTO<RestaurantType, Double>> incomeOfRestaurantType(ConditionDTO conditionDTO) {
+        List<Order> orders = orderService.getOrders(conditionDTO);
+        Map<RestaurantType, List<Order>> soldOrders = orders.parallelStream().collect(Collectors.groupingBy(o -> o.getRestaurant().getRegisterInfo().getType()));
+
+        List<LinearDataDTO<RestaurantType, Double>> income = new ArrayList<>();
+        for (Map.Entry<RestaurantType, List<Order>> entry : soldOrders.entrySet()) {
+            double total = entry.getValue().parallelStream().mapToDouble(
+                    o -> o.getBill().getActualFee() * (null == conditionDTO.rid ? ORDER_TAX : 1 - ORDER_TAX)
+            ).sum();
             income.add(new LinearDataDTO<>(entry.getKey(), total));
         }
         return income;
     }
 
     @Override
-    public List<LinearDataDTO<OrderStatus, Integer>> usageOfOrderStatus(String mid, String rid, RestaurantType type, Integer memberLevel, LocalDateTime from, LocalDateTime to, Double finalFeeLowerLimit, Double finalFeeUpperLimit) {
-        List<Order> orders = orderService.getOrders(mid, rid, type, memberLevel, from, to, finalFeeLowerLimit, finalFeeUpperLimit, null, null);
+    public List<LinearDataDTO<OrderStatus, Integer>> orderNumOfOrderStatus(ConditionDTO conditionDTO) {
+        List<Order> orders = orderService.getOrders(conditionDTO);
         Map<OrderStatus, List<Order>> usedOrders = orders.parallelStream().collect(Collectors.groupingBy(Order::getStatus));
 
         List<LinearDataDTO<OrderStatus, Integer>> usages = new ArrayList<>();
@@ -121,8 +145,8 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     @Override
-    public List<LinearDataDTO<RestaurantType, Integer>> usageOfRestaurantType(String mid, RestaurantType type, LocalDateTime from, LocalDateTime to, Double finalFeeLowerLimit, Double finalFeeUpperLimit) {
-        List<Order> orders = orderService.getOrders(mid, null, type, null, from, to, finalFeeLowerLimit, finalFeeUpperLimit, null, null);
+    public List<LinearDataDTO<RestaurantType, Integer>> orderNumOfRestaurantType(ConditionDTO conditionDTO) {
+        List<Order> orders = orderService.getOrders(conditionDTO);
         Map<RestaurantType, List<Order>> usedOrders = orders.parallelStream().collect(Collectors.groupingBy(o -> o.getRestaurant().getRegisterInfo().getType()));
 
         List<LinearDataDTO<RestaurantType, Integer>> usages = new ArrayList<>();
@@ -133,8 +157,8 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     @Override
-    public List<LinearDataDTO<Integer, Integer>> usageOfMemberLevel(String rid, Integer memberLevel, LocalDateTime from, LocalDateTime to, Double finalFeeLowerLimit, Double finalFeeUpperLimit) {
-        List<Order> orders = orderService.getOrders(null, rid, null, memberLevel, from, to, finalFeeLowerLimit, finalFeeUpperLimit, null, null);
+    public List<LinearDataDTO<Integer, Integer>> orderNumOfMemberLevel(ConditionDTO conditionDTO) {
+        List<Order> orders = orderService.getOrders(conditionDTO);
         Map<Integer, List<Order>> usedOrders = orders.parallelStream().collect(Collectors.groupingBy(o -> o.getMember().getLevel()));
 
         List<LinearDataDTO<Integer, Integer>> usages = new ArrayList<>();
