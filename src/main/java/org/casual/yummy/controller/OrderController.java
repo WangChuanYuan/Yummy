@@ -4,6 +4,7 @@ import org.casual.yummy.dto.CartDTO;
 import org.casual.yummy.dto.ConditionDTO;
 import org.casual.yummy.dto.OrderDTO;
 import org.casual.yummy.service.OrderService;
+import org.casual.yummy.utils.DTOConverter;
 import org.casual.yummy.utils.JsonUtil;
 import org.casual.yummy.utils.message.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,14 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private DTOConverter converter;
+
     @GetMapping("/get_orders")
     public List<OrderDTO> getOrders(String condition) {
         ConditionDTO conditionDTO = null;
         if (null != condition) conditionDTO = JsonUtil.json2pojo(condition, ConditionDTO.class);
-        return orderService.getOrders(conditionDTO).stream().map(OrderDTO::new).collect(Collectors.toList());
+        return orderService.getOrders(conditionDTO).stream().map(order -> converter.convert(order)).collect(Collectors.toList());
     }
 
     @GetMapping("/get_member_orders")

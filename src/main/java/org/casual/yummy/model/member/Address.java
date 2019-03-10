@@ -23,7 +23,7 @@ public class Address {
 
     private String name;
 
-	@Enumerated(value = EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private Sex sex;
 
     @Embedded

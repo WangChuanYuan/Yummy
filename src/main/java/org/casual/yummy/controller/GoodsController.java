@@ -7,6 +7,7 @@ import org.casual.yummy.model.goods.SaleInfo;
 import org.casual.yummy.service.CategoryService;
 import org.casual.yummy.service.FileUploadService;
 import org.casual.yummy.service.GoodsService;
+import org.casual.yummy.utils.DTOConverter;
 import org.casual.yummy.utils.message.Code;
 import org.casual.yummy.utils.message.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class GoodsController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private DTOConverter converter;
 
     @PostMapping("/add_goods")
     public ResultMsg addGoods(@RequestParam MultipartFile avatar, @RequestParam String name, @RequestParam String description,
@@ -91,7 +95,7 @@ public class GoodsController {
 
     @GetMapping("/get_goods")
     public GoodsDTO getGoods(@RequestParam Long gid) {
-        return new GoodsDTO(goodsService.getGoodsById(gid));
+        return converter.convert(goodsService.getGoodsById(gid));
     }
 
     @GetMapping("/get_selling_goods")
@@ -104,7 +108,7 @@ public class GoodsController {
             pageable = PageRequest.of(page - 1, size);
         }
         goodsService.getSellingGoods(rid, cgid, pageable).parallelStream().forEach(item -> {
-            goodsDTOS.add(new GoodsDTO(item));
+            goodsDTOS.add(converter.convert(item));
         });
         return goodsDTOS;
     }

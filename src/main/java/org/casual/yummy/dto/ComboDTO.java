@@ -26,6 +26,8 @@ public class ComboDTO {
 
     private double price;
 
+    private long todayLeft;
+
     private long dailySupply;
 
     private long stock;

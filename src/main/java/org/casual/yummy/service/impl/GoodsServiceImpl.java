@@ -40,14 +40,14 @@ public class GoodsServiceImpl implements GoodsService {
         try {
             Restaurant restaurant = restaurantDAO.findById(rid).orElse(null);
 
-            if (null != restaurant && restaurant.getAccountState() == AccountState.VALID) {
+            if (null != restaurant) {
                 goods.setRestaurant(restaurant);
                 Category category = categoryDAO.findById(cgid).orElse(null);
                 if (null == category) return new ResultMsg<>("分类不存在", Code.FAILURE);
                 goods.setCategory(category);
                 Goods savedGoods = goodsDAO.saveAndFlush(goods);
                 return new ResultMsg<>("添加商品成功", Code.SUCCESS, savedGoods);
-            } else return new ResultMsg<>("餐厅不存在或已注销", Code.FAILURE);
+            } else return new ResultMsg<>("餐厅不存在", Code.FAILURE);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResultMsg<>("添加商品失败", Code.FAILURE);

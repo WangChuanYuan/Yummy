@@ -22,6 +22,9 @@
               <el-form-item label="图像">
                 <img :src="scope.row.avatar" style="height: 40px; width: 40px"/>
               </el-form-item>
+              <el-form-item label="今日剩余">
+                <span>{{scope.row.todayLeft}}</span>
+              </el-form-item>
               <el-form-item label="类别">
                 <span>{{scope.row.category}}</span>
               </el-form-item>
@@ -65,6 +68,9 @@
             <el-form label-position="left" inline>
               <el-form-item label="图像">
                 <img :src="scope.row.avatar" style="height: 40px; width: 40px"/>
+              </el-form-item>
+              <el-form-item label="今日剩余">
+                <span>{{scope.row.todayLeft}}</span>
               </el-form-item>
               <el-form-item label="库存">
                 <span>{{scope.row.stock}}</span>

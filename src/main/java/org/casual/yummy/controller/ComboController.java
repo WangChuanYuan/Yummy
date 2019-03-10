@@ -6,6 +6,7 @@ import org.casual.yummy.model.goods.Combo;
 import org.casual.yummy.model.goods.SaleInfo;
 import org.casual.yummy.service.ComboService;
 import org.casual.yummy.service.FileUploadService;
+import org.casual.yummy.utils.DTOConverter;
 import org.casual.yummy.utils.JsonUtil;
 import org.casual.yummy.utils.message.Code;
 import org.casual.yummy.utils.message.ResultMsg;
@@ -31,6 +32,9 @@ public class ComboController {
 
     @Autowired
     private ComboService comboService;
+
+    @Autowired
+    private DTOConverter converter;
 
     @PostMapping("/add_combo")
     public ResultMsg addGoods(@RequestParam MultipartFile avatar, @RequestParam String name, @RequestParam String description,
@@ -85,7 +89,7 @@ public class ComboController {
 
     @GetMapping("/get_combo")
     public ComboDTO getCombo(@RequestParam Long cid) {
-        return new ComboDTO(comboService.getComboById(cid));
+        return converter.convert(comboService.getComboById(cid));
     }
 
     @GetMapping("/get_selling_combos")
@@ -96,7 +100,7 @@ public class ComboController {
             pageable = PageRequest.of(page - 1, size);
         }
         comboService.getSellingCombos(rid, pageable).parallelStream().forEach(item -> {
-            comboDTOS.add(new ComboDTO(item));
+            comboDTOS.add(converter.convert(item));
         });
         return comboDTOS;
     }
@@ -105,7 +109,7 @@ public class ComboController {
     public List<GoodsDTO> getComboGoods(@RequestParam Long cid) {
         List<GoodsDTO> res = new ArrayList<>();
         comboService.getComboItems(cid).parallelStream().forEach(comboItem -> {
-            res.add(new GoodsDTO(comboItem));
+            res.add(converter.convert(comboItem));
         });
         return res;
     }

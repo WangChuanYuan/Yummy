@@ -103,7 +103,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             }
             Predicate locationCondition = null;
             if (null != location) {
-                locationCondition = criteriaBuilder.like(root.get("registerInfo").get("location").as(String.class), location);
+                locationCondition = criteriaBuilder.like(root.get("registerInfo").get("location").as(String.class), '%' + location + '%');
                 conditions.add(locationCondition);
             }
             Predicate validCondition = criteriaBuilder.equal(root.get("accountState").as(AccountState.class), AccountState.VALID);

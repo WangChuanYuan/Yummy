@@ -7,6 +7,7 @@ import org.casual.yummy.model.order.Order;
 import org.casual.yummy.model.order.OrderBill;
 import org.casual.yummy.utils.message.ResultMsg;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,10 @@ public interface OrderService {
     List<OrderDTO> getMemberOrders(String mid);
 
     List<OrderDTO> getRestaurantOrders(String rid);
+
+    Map<Long, Integer> countSoldGoods(LocalDate from, LocalDate to);
+
+    Map<Long, Integer> countSoldCombos(LocalDate from, LocalDate to);
 
     void autoDealWithOrders();
 }

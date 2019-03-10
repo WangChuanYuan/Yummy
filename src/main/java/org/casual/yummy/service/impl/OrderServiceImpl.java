@@ -18,6 +18,7 @@ import org.casual.yummy.model.order.OrderStatus;
 import org.casual.yummy.model.restaurant.Restaurant;
 import org.casual.yummy.model.restaurant.RestaurantType;
 import org.casual.yummy.service.OrderService;
+import org.casual.yummy.utils.DTOConverter;
 import org.casual.yummy.utils.DistanceUtil;
 import org.casual.yummy.utils.message.Code;
 import org.casual.yummy.utils.message.ResultMsg;
@@ -72,6 +73,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderDAO orderDAO;
+
+    @Autowired
+    private DTOConverter converter;
 
     private void modifyGoodsStock(Order order, int direction) {
         Map<Goods, Integer> goods2num = order.getGoods();
@@ -154,31 +158,39 @@ public class OrderServiceImpl implements OrderService {
             if (total < restaurant.getMarketInfo().getLeastExp())
                 return new ResultMsg<>("下单失败，未达到" + restaurant.getRegisterInfo().getName() + "门店起送价格", Code.FAILURE);
 
-            // Step3: 判断库存是否足够
-            Map<Long, Integer> gid2num = cart.getGoods().parallelStream().collect(
+            // Step3: 判断今日库存以及总库存是否足够
+            Map<Long, Integer> goodsSoldNumToday = countSoldGoods(now.toLocalDate(), now.toLocalDate().plusDays(1));
+            Map<Long, Integer> gid2BuyNum = cart.getGoods().parallelStream().collect(
                     Collectors.toMap(GoodsDTO::getGid, GoodsDTO::getNum, (oldValue, newValue) -> newValue)
             );
-            List<Goods> goodsToBuy = goodsDAO.findByGidIn(gid2num.keySet());
-            Map<Goods, Integer> goods2num = new HashMap<>();
+            List<Goods> goodsToBuy = goodsDAO.findByGidIn(gid2BuyNum.keySet());
+            Map<Goods, Integer> goods2BuyNum = new HashMap<>();
             for (Goods goods : goodsToBuy) {
-                int num = gid2num.get(goods.getGid());
+                int num = gid2BuyNum.get(goods.getGid());
+                long dailySupply = goods.getSaleInfo().getDailySupply();
+                if (dailySupply < num + goodsSoldNumToday.getOrDefault(goods.getGid(), 0))
+                    return new ResultMsg<>("下单失败,商品" + goods.getSaleInfo().getName() + "今日已售空", Code.FAILURE);
                 long stock = goods.getSaleInfo().getStock();
                 if (stock < num)
                     return new ResultMsg<>("下单失败,商品" + goods.getSaleInfo().getName() + "库存不足", Code.FAILURE);
-                goods2num.put(goods, num);
+                goods2BuyNum.put(goods, num);
             }
 
-            Map<Long, Integer> cid2num = cart.getCombos().parallelStream().collect(
+            Map<Long, Integer> combosSoldNumToday = countSoldCombos(now.toLocalDate(), now.toLocalDate().plusDays(1));
+            Map<Long, Integer> cid2BuyNum = cart.getCombos().parallelStream().collect(
                     Collectors.toMap(ComboDTO::getCid, ComboDTO::getNum, (oldValue, newValue) -> newValue)
             );
-            List<Combo> combosToBuy = comboDAO.findByCidIn(cid2num.keySet());
-            Map<Combo, Integer> combo2num = new HashMap<>();
+            List<Combo> combosToBuy = comboDAO.findByCidIn(cid2BuyNum.keySet());
+            Map<Combo, Integer> combo2BuyNum = new HashMap<>();
             for (Combo combo : combosToBuy) {
-                int num = cid2num.get(combo.getCid());
+                int num = cid2BuyNum.get(combo.getCid());
+                long dailySupply = combo.getSaleInfo().getDailySupply();
+                if (dailySupply < num + combosSoldNumToday.getOrDefault(combo.getCid(), 0))
+                    return new ResultMsg<>("下单失败,套餐" + combo.getSaleInfo().getName() + "今日已售空", Code.FAILURE);
                 long stock = combo.getSaleInfo().getStock();
                 if (stock < num)
                     return new ResultMsg<>("下单失败,套餐" + combo.getSaleInfo().getName() + "库存不足", Code.FAILURE);
-                combo2num.put(combo, num);
+                combo2BuyNum.put(combo, num);
             }
 
             // Step4: 计算满减优惠与会员折扣
@@ -198,7 +210,7 @@ public class OrderServiceImpl implements OrderService {
 
             Order order = new Order();
             order.setMember(member).setRestaurant(restaurant).setAddress(address)
-                    .setBankCard(bankCard).setGoods(goods2num).setCombos(combo2num)
+                    .setBankCard(bankCard).setGoods(goods2BuyNum).setCombos(combo2BuyNum)
                     .setBill(bill).setOrderTime(now).setPredictedArrivalTime(LocalDateTime.of(LocalDate.now(), predictedArrivalTime))
                     .setStatus(OrderStatus.ORDERED).setTip(tip);
 
@@ -382,13 +394,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public List<OrderDTO> getMemberOrders(String mid) {
-        return orderDAO.findMemberOrders(mid).stream().map(OrderDTO::new).collect(Collectors.toList());
+        return orderDAO.findMemberOrders(mid).stream().map(order -> converter.convert(order)).collect(Collectors.toList());
     }
 
     @Override
     @Transactional
     public List<OrderDTO> getRestaurantOrders(String rid) {
-        return orderDAO.findRestaurantOrders(rid).stream().map(OrderDTO::new).collect(Collectors.toList());
+        return orderDAO.findRestaurantOrders(rid).stream().map(order -> converter.convert(order)).collect(Collectors.toList());
     }
 
     @Override
@@ -452,6 +464,44 @@ public class OrderServiceImpl implements OrderService {
             return criteriaBuilder.and(conditions.toArray(predicates));
         };
         return orderDAO.findAll(specification);
+    }
+
+    @Override
+    @Transactional
+    public Map<Long, Integer> countSoldGoods(LocalDate from, LocalDate to) {
+        ConditionDTO condition = new ConditionDTO();
+        condition.setDateFrom(from).setDateTo(to);
+        List<Order> orders = getOrders(condition);
+        Map<Long, Integer> counts = new HashMap<>();
+        for (Order order : orders) {
+            if (order.getStatus() == OrderStatus.DISPATCHED || order.getStatus() == OrderStatus.FINISHED) {
+                order.getGoods().entrySet().parallelStream().forEach(et -> {
+                    Long gid = et.getKey().getGid();
+                    counts.put(gid,
+                            counts.containsKey(gid) ? counts.get(gid) + et.getValue() : et.getValue());
+                });
+            }
+        }
+        return counts;
+    }
+
+    @Override
+    @Transactional
+    public Map<Long, Integer> countSoldCombos(LocalDate from, LocalDate to) {
+        ConditionDTO condition = new ConditionDTO();
+        condition.setDateFrom(from).setDateTo(to);
+        List<Order> orders = getOrders(condition);
+        Map<Long, Integer> counts = new HashMap<>();
+        for (Order order : orders) {
+            if (order.getStatus() == OrderStatus.DISPATCHED || order.getStatus() == OrderStatus.FINISHED) {
+                order.getCombos().entrySet().parallelStream().forEach(et -> {
+                    Long cid = et.getKey().getCid();
+                    counts.put(cid,
+                            counts.containsKey(cid) ? counts.get(cid) + et.getValue() : et.getValue());
+                });
+            }
+        }
+        return counts;
     }
 
     /**

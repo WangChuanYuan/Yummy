@@ -4,7 +4,7 @@
       <el-row class="banner">
         <el-col :span="12" class="banner-block-wrapper">
           <div class="banner-block">
-            <el-popover placement="right" trigger="hover">
+            <el-popover placement="right" trigger="hover" content="欢迎">
               <img class="avatar" slot="reference" :src="restaurant.avatar"/>
             </el-popover>
           </div>
@@ -54,9 +54,9 @@
               </el-row>
             </el-main>
           </el-main>
-          <el-main v-show="sort === 'combos'" style="padding: 0">
+          <el-main v-show="sort === 'combos'">
             <el-row>
-              <el-col :span="7" v-for="item in combos" :key="item.cid">
+              <el-col :span="6" v-for="item in combos" :key="item.cid">
                 <ComboCard aim="purchase" :combo="item"></ComboCard>
               </el-col>
             </el-row>

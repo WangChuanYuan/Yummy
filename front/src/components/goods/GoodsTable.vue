@@ -12,6 +12,9 @@
     <el-table-column type="expand">
       <template slot-scope="scope">
         <el-form label-position="left" inline>
+          <el-form-item label="今日剩余">
+            <span>{{scope.row.todayLeft}}</span>
+          </el-form-item>
           <el-form-item label="库存">
             <span>{{scope.row.stock}}</span>
           </el-form-item>

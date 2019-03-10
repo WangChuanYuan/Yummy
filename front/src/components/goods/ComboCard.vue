@@ -18,8 +18,8 @@
           <span>{{inCombo.price}}</span>
         </div>
         <div class="omission" style="font-size: 13px">
-          <span>每日供应:</span>
-          <span>{{inCombo.dailySupply}}</span>
+          <span>今日剩余:</span>
+          <span>{{inCombo.todayLeft}}</span>
           <br/>
           <span>库存总量:</span>
           <span>{{inCombo.stock}}</span>

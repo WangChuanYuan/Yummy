@@ -31,10 +31,7 @@ public class StatisticServiceImpl implements StatisticService {
     @Override
     public List<LinearDataDTO<OrderStatus, Double>> consumeOfOrderStatus(ConditionDTO conditionDTO) {
         List<Order> orders = orderService.getOrders(conditionDTO);
-        Map<OrderStatus, List<Order>> consumedOrders = orders.parallelStream().filter(order -> {
-            OrderStatus status = order.getStatus();
-            return status == OrderStatus.FINISHED || status == OrderStatus.UNSUBSCRIBED;
-        }).collect(Collectors.groupingBy(Order::getStatus));
+        Map<OrderStatus, List<Order>> consumedOrders = orders.parallelStream().filter(order -> order.getBill().getActualFee() > 0).collect(Collectors.groupingBy(Order::getStatus));
 
         List<LinearDataDTO<OrderStatus, Double>> consumes = new ArrayList<>();
         for (Map.Entry<OrderStatus, List<Order>> entry : consumedOrders.entrySet()) {
