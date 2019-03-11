@@ -24,7 +24,7 @@ public class Combo {
     @Embedded
     private SaleInfo saleInfo;
 
-    @OneToMany(mappedBy = "combo", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "combo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<ComboItem> items;
 

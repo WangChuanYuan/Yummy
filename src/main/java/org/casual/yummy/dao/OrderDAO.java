@@ -12,10 +12,12 @@ import java.util.List;
 
 public interface OrderDAO extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
 
-    @Query("select o from Order o where o.member.id = :mid order by o.orderTime desc")
+    @Query("select distinct o from Order o left join fetch o.member m left join fetch o.restaurant r left join fetch o.bankCard b left join fetch o.address a left join fetch o.goods g left join fetch o.combos c " +
+            "where o.member.id = :mid order by o.orderTime desc")
     List<Order> findMemberOrders(@Param("mid") String mid);
 
-    @Query("select o from Order o where o.restaurant.id = :rid order by o.orderTime desc")
+    @Query("select distinct o from Order o left join fetch o.member m left join fetch o.restaurant r left join fetch o.bankCard b left join fetch o.address a left join fetch o.goods g left join fetch o.combos c " +
+            "where o.restaurant.id = :rid order by o.orderTime desc")
     List<Order> findRestaurantOrders(@Param("rid") String rid);
 
     @Query("update Order o set o.status = org.casual.yummy.model.order.OrderStatus.CANCELED " +

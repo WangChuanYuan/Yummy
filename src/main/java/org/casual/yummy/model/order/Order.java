@@ -43,13 +43,13 @@ public class Order {
     @JoinColumn(name = "bankcard", referencedColumnName = "cardNo")
     private BankCard bankCard;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @MapKeyJoinColumn(name = "goods")
     @Column(name = "num")
     @CollectionTable(name = "Order_Goods", joinColumns = {@JoinColumn(name = "order_", referencedColumnName = "oid")})
     private Map<Goods, Integer> goods;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @MapKeyJoinColumn(name = "combo")
     @Column(name = "num")
     @CollectionTable(name = "Order_Combos", joinColumns = {@JoinColumn(name = "order_", referencedColumnName = "oid")})

@@ -30,6 +30,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import java.text.DecimalFormat;
 import java.time.Duration;
@@ -462,6 +463,13 @@ public class OrderServiceImpl implements OrderService {
                     conditions.add(actualFeeUpperLimitCondition);
                 }
             }
+            root.fetch("member", JoinType.LEFT);
+            root.fetch("restaurant", JoinType.LEFT);
+            root.fetch("bankCard", JoinType.LEFT);
+            root.fetch("address", JoinType.LEFT);
+            root.fetch("goods", JoinType.LEFT);
+            root.fetch("combos", JoinType.LEFT);
+            criteriaQuery.distinct(true);
             Predicate[] predicates = new Predicate[conditions.size()];
             return criteriaBuilder.and(conditions.toArray(predicates));
         };
