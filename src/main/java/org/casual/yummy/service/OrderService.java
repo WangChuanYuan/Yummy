@@ -36,5 +36,7 @@ public interface OrderService {
 
     Map<Long, Integer> countSoldCombos(LocalDate from, LocalDate to);
 
-    void autoDealWithOrders();
+    void autoCancelOrders();
+
+    void autoConfirmOrders();
 }

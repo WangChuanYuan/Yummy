@@ -23,8 +23,7 @@ public interface OrderDAO extends JpaRepository<Order, Long>, JpaSpecificationEx
     @Modifying
     void autoCancelOverdueOrders(@Param(value = "deadline") LocalDateTime deadline);
 
-    @Query("update Order o set o.status = org.casual.yummy.model.order.OrderStatus.FINISHED " +
-            "where o.status = org.casual.yummy.model.order.OrderStatus.DISPATCHED and o.predictedArrivalTime <= :arrivalTime ")
+    @Query("select o.oid from Order o where o.status = org.casual.yummy.model.order.OrderStatus.DISPATCHED and o.predictedArrivalTime <= :arrivalTime ")
     @Modifying
-    void autoConfirmArrivedOrders(@Param(value = "arrivalTime") LocalDateTime arrivalTime);
+    List<Long> findUnconfirmedArrivedOrders(@Param(value = "arrivalTime") LocalDateTime arrivalTime);
 }

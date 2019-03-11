@@ -164,7 +164,7 @@ export default {
           Api.post(url, this.registerInfo).then((data) => {
             if (data.code === Code.SUCCESS) {
               if (this.aim === 'add') {
-                let msg = '申请成功，申请结果将在审核通过后邮件通知\n请记住您的注册码:' + data.value.id;
+                let msg = '申请成功，申请结果将在审核通过后邮件通知 \n 请记住您的注册码:' + data.value.id;
                 this.$alert(msg, '注册申请成功', {
                   confirmButtonText: '确定',
                   callback: action => {

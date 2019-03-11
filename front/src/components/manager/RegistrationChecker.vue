@@ -25,7 +25,7 @@
             <el-popover
               placement="left"
               trigger="hover">
-              <div v-if="scope.row.restaurant">
+              <div v-if="scope.row.restaurant.accountState !== 'UNACTIVATED'">
                 <h3>门店当前信息</h3>
                 <el-form>
                   <el-form-item label="门店名称">
@@ -44,8 +44,8 @@
                     {{scope.row.restaurant.registerInfo.detailLocation}}
                   </el-form-item>
                 </el-form>
+                <hr/>
               </div>
-              <hr/>
               <div>
                 <h3>新信息</h3>
                 <el-form style="color: red">

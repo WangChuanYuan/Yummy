@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span>请在2分钟内完成支付，否则订单将自动取消</span>
+    <span>请在{{timeLimit}}分钟内完成支付，否则订单将自动取消</span>
     <div v-for="rid in Object.keys(bills)" :key="rid" class="bill center">
       <span>店家号: {{rid}}</span>
       <hr style="border:1px dashed var(--theme-blue)" size=1>
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import {ORDER_PAY_MINUTES_LIMIT} from '../../assets/js/attrib';
+
 export default {
   name: 'OrderResult',
   props: {
@@ -29,6 +31,11 @@ export default {
         return {};
       }
     }
+  },
+  data () {
+    return {
+      timeLimit: ORDER_PAY_MINUTES_LIMIT
+    };
   }
 };
 </script>

@@ -23,7 +23,9 @@ import org.casual.yummy.utils.DistanceUtil;
 import org.casual.yummy.utils.message.Code;
 import org.casual.yummy.utils.message.ResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -463,7 +465,7 @@ public class OrderServiceImpl implements OrderService {
             Predicate[] predicates = new Predicate[conditions.size()];
             return criteriaBuilder.and(conditions.toArray(predicates));
         };
-        return orderDAO.findAll(specification);
+        return orderDAO.findAll(specification, new Sort(Sort.Direction.DESC, "orderTime"));
     }
 
     @Override
@@ -504,17 +506,23 @@ public class OrderServiceImpl implements OrderService {
         return counts;
     }
 
-    /**
-     * 后台定时处理一些订单事务，每隔一分钟运行一次
-     * 下单规定时间段后未支付自动取消
-     * 订单预期送达时间规定时间段后未确认自动确认收取
-     */
     @Override
     @Transactional
     @Scheduled(cron = "0 0/1 * * * ?")
-    public void autoDealWithOrders() {
+    @Async
+    public void autoCancelOrders() {
         LocalDateTime now = LocalDateTime.now();
         orderDAO.autoCancelOverdueOrders(now.minusMinutes(ORDER_PAY_MINUTES_LIMIT));
-        orderDAO.autoConfirmArrivedOrders(now.minusMinutes(AUTO_CONFIRM_MINUTES_AFTER_PREDICTED));
     }
+
+    @Override
+    @Transactional
+    @Scheduled(cron = "0 0/1 * * * ?")
+    @Async
+    public void autoConfirmOrders() {
+        LocalDateTime now = LocalDateTime.now();
+        List<Long> unconfirmedOrdersId = orderDAO.findUnconfirmedArrivedOrders(now.minusMinutes(AUTO_CONFIRM_MINUTES_AFTER_PREDICTED));
+        unconfirmedOrdersId.parallelStream().forEach(this::confirmOrder);
+    }
+
 }

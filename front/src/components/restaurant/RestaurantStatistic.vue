@@ -30,7 +30,7 @@
             </el-table-column>
             <el-table-column label="营收金额" width="50">
               <template slot-scope="scope">
-                <span>{{scope.row.bill.actualFee * 0.92}}</span>
+                <span>{{scope.row.bill.actualFee * (1 - tax)}}</span>
               </template>
             </el-table-column>
             <el-table-column label="订单结果" width="60">
@@ -67,7 +67,7 @@
 
 <script>
 import Api from '../../assets/js/api';
-import {OrderStatus, RestaurantType} from '../../assets/js/attrib';
+import {ORDER_TAX, OrderStatus, RestaurantType} from '../../assets/js/attrib';
 import LinearChart from '../charts/LinearChart';
 
 export default {
@@ -75,6 +75,7 @@ export default {
   components: {LinearChart},
   data () {
     return {
+      tax: ORDER_TAX,
       status: OrderStatus,
       types: RestaurantType,
       /* conditions */
