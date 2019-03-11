@@ -60,7 +60,7 @@ public class StatisticServiceImpl implements StatisticService {
         Map<LocalDate, List<Order>> soldOrders = orders.parallelStream().collect(Collectors.groupingBy(o -> o.getOrderTime().toLocalDate()));
 
         LocalDate start = soldOrders.keySet().stream().min(LocalDate::compareTo).orElse(null);
-        LocalDate end = soldOrders.keySet().stream().max(LocalDate::compareTo).orElse(null);
+        LocalDate end = LocalDate.now();
 
         if (null == start || null == end) return new ArrayList<>();
 
@@ -134,7 +134,7 @@ public class StatisticServiceImpl implements StatisticService {
         Map<LocalDate, List<Order>> soldOrders = orders.parallelStream().collect(Collectors.groupingBy(o -> o.getOrderTime().toLocalDate()));
 
         LocalDate start = soldOrders.keySet().stream().min(LocalDate::compareTo).orElse(null);
-        LocalDate end = soldOrders.keySet().stream().max(LocalDate::compareTo).orElse(null);
+        LocalDate end = LocalDate.now();
 
         if (null == start || null == end) return new ArrayList<>();
 

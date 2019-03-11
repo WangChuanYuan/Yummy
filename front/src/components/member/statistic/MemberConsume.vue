@@ -104,7 +104,7 @@ export default {
         if (data) {
           let consumedOrders = [];
           data.map(order => {
-            if (order.status === this.status.FINISHED.value || order.status === this.status.UNSUBSCRIBED.value) consumedOrders.push(order);
+            if (order.bill.actualFee > 0) consumedOrders.push(order);
           });
           this.consumedOrders = consumedOrders;
         }

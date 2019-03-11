@@ -355,12 +355,12 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderDAO.findById(oid).orElse(null);
         if (null == order) return new ResultMsg("退订失败，订单不存在", Code.FAILURE);
         if (order.getStatus() != OrderStatus.PAYED
-                || order.getStatus() != OrderStatus.DISPATCHED)
+                && order.getStatus() != OrderStatus.DISPATCHED)
             return new ResultMsg("退订失败，订单状态异常", Code.FAILURE);
 
         // 按规则退款
-        int waitMinutes = (int) Duration.between(LocalDateTime.now(), order.getOrderTime()).toMinutes();
-        int predictedMinutes = (int) Duration.between(order.getOrderTime(), order.getPredictedArrivalTime()).toMinutes();
+        int waitMinutes = Math.abs((int) Duration.between(order.getOrderTime(), LocalDateTime.now()).toMinutes());
+        int predictedMinutes = Math.abs((int) Duration.between(order.getOrderTime(), order.getPredictedArrivalTime()).toMinutes());
         double ratio = 1.0;
         if (waitMinutes <= predictedMinutes + MAX_OVER_DELIVERY_MINUTES) { // 未超出规定延期最长时间，比例退还金额
             for (int i = 0; i < UNSUBSCRIBED_MINUTES_RANGE.length; i++) {

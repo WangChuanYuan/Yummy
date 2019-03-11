@@ -26,4 +26,12 @@ public interface OrderDAO extends JpaRepository<Order, Long>, JpaSpecificationEx
     @Query("select o.oid from Order o where o.status = org.casual.yummy.model.order.OrderStatus.DISPATCHED and o.predictedArrivalTime <= :arrivalTime ")
     @Modifying
     List<Long> findUnconfirmedArrivedOrders(@Param(value = "arrivalTime") LocalDateTime arrivalTime);
+
+    @Query("select coalesce(sum(g), 0) from Order o join o.goods g where key(g).gid = ?1 and o.orderTime >= ?2 and o.orderTime <= ?3 and (" +
+            "o.status = org.casual.yummy.model.order.OrderStatus.DISPATCHED or o.status = org.casual.yummy.model.order.OrderStatus.FINISHED)")
+    Integer countSoldGoods(Long gid, LocalDateTime from, LocalDateTime to);
+
+    @Query("select coalesce(sum(c), 0) from Order o join o.combos c where key(c).cid = ?1 and o.orderTime >= ?2 and o.orderTime <= ?3 and (" +
+            "o.status = org.casual.yummy.model.order.OrderStatus.DISPATCHED or o.status = org.casual.yummy.model.order.OrderStatus.FINISHED)")
+    Integer countSoldCombo(Long gid, LocalDateTime from, LocalDateTime to);
 }

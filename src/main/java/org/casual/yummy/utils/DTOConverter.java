@@ -1,5 +1,6 @@
 package org.casual.yummy.utils;
 
+import org.casual.yummy.dao.OrderDAO;
 import org.casual.yummy.dto.ComboDTO;
 import org.casual.yummy.dto.GoodsDTO;
 import org.casual.yummy.dto.OrderDTO;
@@ -7,29 +8,25 @@ import org.casual.yummy.model.goods.Combo;
 import org.casual.yummy.model.goods.ComboItem;
 import org.casual.yummy.model.goods.Goods;
 import org.casual.yummy.model.order.Order;
-import org.casual.yummy.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.Map;
 
 @Component
 public class DTOConverter {
 
     @Autowired
-    private OrderService orderService;
+    private OrderDAO orderDAO;
 
     private Integer goodsTodaySold(Long gid) {
         LocalDate today = LocalDate.now();
-        Map<Long, Integer> goodsSold = orderService.countSoldGoods(today, today.plusDays(1));
-        return goodsSold.getOrDefault(gid, 0);
+        return orderDAO.countSoldGoods(gid, today.atStartOfDay(), today.plusDays(1).atStartOfDay());
     }
 
     private Integer comboTodaySold(Long cid) {
         LocalDate today = LocalDate.now();
-        Map<Long, Integer> combosSold = orderService.countSoldCombos(today, today.plusDays(1));
-        return combosSold.getOrDefault(cid, 0);
+        return orderDAO.countSoldCombo(cid, today.atStartOfDay(), today.plusDays(1).atStartOfDay());
     }
 
     public GoodsDTO convert(ComboItem item) {
