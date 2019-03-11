@@ -2,6 +2,7 @@ package org.casual.yummy.service.impl;
 
 import org.casual.yummy.dao.CategoryDAO;
 import org.casual.yummy.dao.RestaurantDAO;
+import org.casual.yummy.model.AccountState;
 import org.casual.yummy.model.goods.Category;
 import org.casual.yummy.model.restaurant.Restaurant;
 import org.casual.yummy.service.CategoryService;
@@ -27,8 +28,12 @@ public class CategoryServiceImpl implements CategoryService {
     public ResultMsg<Category> addCategory(String rid, Category category) {
         try {
             Restaurant restaurant = restaurantDAO.findById(rid).orElse(null);
-            category.setRestaurant(restaurant);
+            if (null == restaurant) return new ResultMsg<>("餐厅不存在", Code.FAILURE);
+            if (restaurant.getAccountState() == AccountState.UNACTIVATED) return new ResultMsg<>("账号未激活", Code.FAILURE);
+            if (restaurant.getAccountState() == AccountState.ACTIVATED)
+                return new ResultMsg<>("请先完整餐厅信息", Code.FAILURE);
 
+            category.setRestaurant(restaurant);
             Category savedCategory = categoryDAO.saveAndFlush(category);
             return new ResultMsg<>("新增分类成功", Code.SUCCESS, savedCategory);
         } catch (Exception e) {

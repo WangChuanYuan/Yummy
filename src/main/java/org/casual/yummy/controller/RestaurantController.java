@@ -52,8 +52,8 @@ public class RestaurantController {
         String password = (String) param.get("password");
         RegisterInfo registerInfo = JsonUtil.obj2pojo(param, RegisterInfo.class);
         Restaurant restaurant = new Restaurant(registerInfo, new MarketInfo());
-        /* 完整经营信息后，账号生效 */
-        restaurant.setPassword(password).setAccountState(AccountState.INVALID).setRole(Role.RESTAURANT);
+        /* 经理审批后，账号激活 */
+        restaurant.setPassword(password).setAccountState(AccountState.UNACTIVATED).setRole(Role.RESTAURANT);
         return restaurantService.register(restaurant);
     }
 
@@ -71,6 +71,8 @@ public class RestaurantController {
                                       @RequestParam @DateTimeFormat(pattern = "HH:mm:ss") LocalTime endHour) {
         Restaurant restaurant = restaurantService.getRestaurantById(rid);
         if (null == restaurant) return new ResultMsg("餐厅不存在", Code.FAILURE);
+        if (restaurant.getAccountState() == AccountState.UNACTIVATED) return new ResultMsg("账号未激活", Code.FAILURE);
+        if (restaurant.getAccountState() == AccountState.INVALID) return new ResultMsg("账号已注销", Code.FAILURE);
 
         MarketInfo marketInfo = restaurant.getMarketInfo();
         if (null != avatar) {

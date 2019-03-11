@@ -5,6 +5,7 @@ import org.casual.yummy.dao.ComboItemDAO;
 import org.casual.yummy.dao.GoodsDAO;
 import org.casual.yummy.dao.RestaurantDAO;
 import org.casual.yummy.dto.GoodsDTO;
+import org.casual.yummy.model.AccountState;
 import org.casual.yummy.model.goods.Combo;
 import org.casual.yummy.model.goods.ComboItem;
 import org.casual.yummy.model.goods.Goods;
@@ -61,12 +62,15 @@ public class ComboServiceImpl implements ComboService {
     @Override
     @Transactional
     public ResultMsg<Combo> addCombo(String rid, SaleInfo saleInfo, List<GoodsDTO> goodsDTOS) {
+        Restaurant restaurant = restaurantDAO.findById(rid).orElse(null);
+        if (null == restaurant) return new ResultMsg<>("餐厅不存在", Code.FAILURE);
+        if (restaurant.getAccountState() == AccountState.UNACTIVATED) return new ResultMsg<>("账号未激活", Code.FAILURE);
+        if (restaurant.getAccountState() == AccountState.ACTIVATED)
+            return new ResultMsg<>("请先完整餐厅信息", Code.FAILURE);
+
         Combo combo = new Combo();
         combo.setSaleInfo(saleInfo);
-
-        Restaurant restaurant = restaurantDAO.findById(rid).orElse(null);
         combo.setRestaurant(restaurant);
-
         addComboItems(combo, goodsDTOS);
 
         try {

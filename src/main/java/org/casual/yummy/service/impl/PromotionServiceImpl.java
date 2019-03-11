@@ -2,6 +2,7 @@ package org.casual.yummy.service.impl;
 
 import org.casual.yummy.dao.PromotionDAO;
 import org.casual.yummy.dao.RestaurantDAO;
+import org.casual.yummy.model.AccountState;
 import org.casual.yummy.model.goods.Promotion;
 import org.casual.yummy.model.restaurant.Restaurant;
 import org.casual.yummy.service.PromotionService;
@@ -27,8 +28,12 @@ public class PromotionServiceImpl implements PromotionService {
     public ResultMsg<Promotion> addPromotion(String rid, Promotion promotion) {
         try {
             Restaurant restaurant = restaurantDAO.findById(rid).orElse(null);
-            promotion.setRestaurant(restaurant);
+            if (null == restaurant) return new ResultMsg<>("餐厅不存在", Code.FAILURE);
+            if (restaurant.getAccountState() == AccountState.UNACTIVATED) return new ResultMsg<>("账号未激活", Code.FAILURE);
+            if (restaurant.getAccountState() == AccountState.ACTIVATED)
+                return new ResultMsg<>("请先完整餐厅信息", Code.FAILURE);
 
+            promotion.setRestaurant(restaurant);
             Promotion savedPromotion = promotionDAO.saveAndFlush(promotion);
             return new ResultMsg<>("新增优惠成功", Code.SUCCESS, savedPromotion);
         } catch (Exception e) {

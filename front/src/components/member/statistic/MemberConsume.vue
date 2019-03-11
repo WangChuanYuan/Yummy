@@ -25,7 +25,7 @@
           <el-table-column prop="orderTime" label="下单时间" width="100"/>
           <el-table-column label="消费类型" width="60">
             <template slot-scope="scope">
-              <span>{{scope.row.status === status.FINISHED.value ? '点餐' : '退订'}}</span>
+              <span>{{scope.row.status === status.UNSUBSCRIBED.value ? '退订' : '点餐'}}</span>
             </template>
           </el-table-column>
           <el-table-column label="消费金额" width="50">
@@ -117,7 +117,7 @@ export default {
         if (data) {
           this.consumeOfOrderStatus = data.map(
             item => {
-              item.key = (item.key === this.status.FINISHED.value ? '点餐' : '退订');
+              item.key = (item.key === this.status.UNSUBSCRIBED.value ? '退订' : '点餐');
               return item;
             });
         }

@@ -7,12 +7,12 @@
         <el-table-column prop="time" label="申请日期"/>
         <el-table-column label="申请类型">
           <template slot-scope="scope">
-            <span>{{scope.row.restaurant ? '修改' : '注册'}}</span>
+            <span>{{scope.row.restaurant.accountState ===  'UNACTIVATED' ? '注册' : '修改'}}</span>
           </template>
         </el-table-column>
         <el-table-column label="申请人">
           <template slot-scope="scope">
-            <span>{{scope.row.restaurant ? scope.row.restaurant.id : '新用户'}}</span>
+            <span>{{scope.row.restaurant.id}}</span>
           </template>
         </el-table-column>
         <el-table-column label="状态">

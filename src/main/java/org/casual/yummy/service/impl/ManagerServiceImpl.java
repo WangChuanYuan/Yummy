@@ -66,16 +66,19 @@ public class ManagerServiceImpl implements ManagerService {
         registration.setStatus(status);
         registrationDAO.saveAndFlush(registration);
 
+        Restaurant applicant = registration.getRestaurant();
         if (status == RegStatus.ACCESS) {
-            Restaurant restaurant = registration.getRestaurant();
-            restaurant.setRegisterInfo(registration.getRegisterInfo());
-            restaurantDAO.saveAndFlush(restaurant);
+            if (applicant.getAccountState() == AccountState.UNACTIVATED) {
+                applicant.setAccountState(AccountState.ACTIVATED);
+            }
+            applicant.setRegisterInfo(registration.getRegisterInfo());
+            restaurantDAO.saveAndFlush(applicant);
         }
 
         String to = registration.getRegisterInfo().getEmail();
-        String subject = "Yummy! 门店注册信息修改申请结果";
+        String subject = "Yummy! 门店注册信息审核结果";
         String content = "注册码为" + registration.getRestaurant().getId() + "的门店" + registration.getRegisterInfo().getName()
-                + ": 您的注册信息修改审核" + (status == RegStatus.ACCESS ? "通过" : "未通过");
+                + ": 您的注册信息审核" + (status == RegStatus.ACCESS ? "通过" : "未通过");
         mailService.sendSimpleMail(to, subject, content);
 
         return new ResultMsg("审核成功，结果已通过邮件通知门店", Code.SUCCESS);

@@ -39,6 +39,10 @@ public class RestaurantServiceImpl implements RestaurantService {
         Restaurant restaurant = restaurantDAO.findById(rid).orElse(null);
         if (null == restaurant)
             return new ResultMsg<>("注册码不存在", Code.FAILURE);
+        else if (restaurant.getAccountState() == AccountState.UNACTIVATED)
+            return new ResultMsg<>("账号未激活", Code.FAILURE);
+        else if (restaurant.getAccountState() == AccountState.INVALID)
+            return new ResultMsg<>("账号已注销", Code.FAILURE);
         else if (!restaurant.getPassword().equals(password))
             return new ResultMsg<>("密码错误", Code.WRONG_PASS);
         else
@@ -52,22 +56,13 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurant.setId(id);
         try {
             Restaurant savedRestaurant = restaurantDAO.saveAndFlush(restaurant);
-            return new ResultMsg<>("注册餐厅成功", Code.SUCCESS, savedRestaurant);
+            Registration registration = new Registration();
+            registration.setRestaurant(savedRestaurant).setRegisterInfo(savedRestaurant.getRegisterInfo()).setTime(LocalDateTime.now()).setStatus(RegStatus.PENDING);
+            registrationDAO.saveAndFlush(registration);
+            return new ResultMsg<>("注册餐厅申请成功", Code.SUCCESS, savedRestaurant);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResultMsg<>("注册餐厅失败", Code.FAILURE);
-        }
-    }
-
-    @Override
-    @Transactional
-    public ResultMsg<Restaurant> modifyRestaurant(Restaurant restaurant) {
-        try {
-            Restaurant modifiedRestaurant = restaurantDAO.saveAndFlush(restaurant);
-            return new ResultMsg<>("修改餐厅信息成功", Code.SUCCESS, modifiedRestaurant);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResultMsg<>("修改餐厅信息失败", Code.FAILURE);
+            return new ResultMsg<>("注册餐厅申请失败", Code.FAILURE);
         }
     }
 
@@ -84,6 +79,18 @@ public class RestaurantServiceImpl implements RestaurantService {
         } catch (Exception e) {
             e.printStackTrace();
             return new ResultMsg<>("注册信息修改申请失败", Code.FAILURE);
+        }
+    }
+
+    @Override
+    @Transactional
+    public ResultMsg<Restaurant> modifyRestaurant(Restaurant restaurant) {
+        try {
+            Restaurant modifiedRestaurant = restaurantDAO.saveAndFlush(restaurant);
+            return new ResultMsg<>("修改餐厅信息成功", Code.SUCCESS, modifiedRestaurant);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultMsg<>("修改餐厅信息失败", Code.FAILURE);
         }
     }
 

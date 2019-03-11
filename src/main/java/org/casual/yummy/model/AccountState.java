@@ -1,5 +1,5 @@
 package org.casual.yummy.model;
 
 public enum AccountState {
-    VALID, INVALID
+    UNACTIVATED, ACTIVATED, VALID, INVALID
 }
