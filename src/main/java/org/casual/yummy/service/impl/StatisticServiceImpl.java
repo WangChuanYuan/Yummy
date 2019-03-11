@@ -44,7 +44,7 @@ public class StatisticServiceImpl implements StatisticService {
     @Override
     public List<LinearDataDTO<RestaurantType, Double>> consumeOfRestaurantType(ConditionDTO conditionDTO) {
         List<Order> orders = orderService.getOrders(conditionDTO);
-        Map<RestaurantType, List<Order>> consumedOrders = orders.parallelStream().collect(Collectors.groupingBy(o -> o.getRestaurant().getRegisterInfo().getType()));
+        Map<RestaurantType, List<Order>> consumedOrders = orders.parallelStream().filter(order -> order.getBill().getActualFee() > 0).collect(Collectors.groupingBy(o -> o.getRestaurant().getRegisterInfo().getType()));
 
         List<LinearDataDTO<RestaurantType, Double>> consumes = new ArrayList<>();
         for (Map.Entry<RestaurantType, List<Order>> entry : consumedOrders.entrySet()) {
