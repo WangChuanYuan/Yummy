@@ -29,5 +29,5 @@ public class MemberRule {
      */
     public static final int[] UNSUBSCRIBED_MINUTES_RANGE = new int[]{0, 10, 20, 30, 60};
 
-    public static final double[] UNSUBSCRIBED_MONEY_RATIO_RANGE = new double[]{0.9, 0.85, 0.8, 0.4, 0.2};
+    public static final double[] UNSUBSCRIBED_MONEY_RATIO_RANGE = new double[]{0.88, 0.83, 0.78, 0.5, 0.3};
 }
