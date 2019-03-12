@@ -1,6 +1,7 @@
 <template>
   <div>
     <h3>订单数统计</h3>
+    <span>合计: {{valueTotal(orderNumOfOrderStatus)}}单</span>
     <hr/>
     <el-date-picker
       v-model="dates"
@@ -77,6 +78,13 @@ export default {
     this.getData();
   },
   methods: {
+    valueTotal (data) {
+      let total = 0;
+      data.map(d => {
+        total += d.value;
+      });
+      return total;
+    },
     getParam () {
       let param = {mid: sessionStorage.getItem('id')};
       if (this.dates && this.dates[0]) {

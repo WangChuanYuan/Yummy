@@ -196,7 +196,7 @@ export default {
         series: [
           {
             type: 'pie',
-            radius: '65%',
+            radius: ['50%', '70%'],
             center: ['50%', '50%'],
             data: pieData.sort((a, b) => { return a.value - b.value; }),
             roseType: 'radius',
