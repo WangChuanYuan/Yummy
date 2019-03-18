@@ -112,7 +112,7 @@
     <el-dialog title="支付" :visible.sync="isPaying" width="30%">
       <el-form :model="payForm" ref="payForm" :rules="payRule">
         <el-form-item prop="cardNo" label="银行卡号">
-          <el-input v-model="payForm.cardNo" placeholder="银行卡号"></el-input>
+          <el-input v-model="payForm.cardNo" placeholder="银行卡号" :readonly="true"></el-input>
         </el-form-item>
         <el-form-item prop="password" label="密码">
           <el-input type="password" v-model="payForm.password" placeholder="密码"></el-input>

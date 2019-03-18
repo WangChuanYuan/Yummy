@@ -17,7 +17,7 @@ export const Role = {
   MANAGER: 'MANAGER'
 };
 
-export const ORDER_TAX = 0.08;
+export const ORDER_TAX = 0.07;
 
 export const ORDER_PAY_MINUTES_LIMIT = 2;
 

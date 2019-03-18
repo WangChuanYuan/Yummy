@@ -203,7 +203,6 @@ public class OrderServiceImpl implements OrderService {
                 if (promotion.getQuotaRequired() <= total)
                     favour = promotion.getQuotaOffered();
                 else break;
-                ;
             }
             total -= favour;
             double finalFee = total * LEVEL_FAVOUR[member.getLevel()];

@@ -40,10 +40,10 @@
       <el-main>
         <el-row>
           <el-col :span="12">
-            <LinearChart type="pie" :chart-data="orderNumOfOrderStatus" title-text="订单数-订单结果"/>
+            <LinearChart type="pie" :chart-data="orderNumOfOrderStatus" title-text="订单数-订单结果" :height="400"/>
           </el-col>
           <el-col :span="12">
-            <LinearChart type="pie" :chart-data="orderNumOfRestaurantType" title-text="订单数-门店类型"/>
+            <LinearChart type="pie" :chart-data="orderNumOfRestaurantType" title-text="订单数-门店类型" :height="400"/>
           </el-col>
         </el-row>
       </el-main>

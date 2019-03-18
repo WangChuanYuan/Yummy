@@ -6,5 +6,5 @@ public class RestaurantRule {
 
     public static final int AUTO_CONFIRM_MINUTES_AFTER_PREDICTED = 40;
 
-    public static final double ORDER_TAX = 0.08;
+    public static final double ORDER_TAX = 0.07;
 }

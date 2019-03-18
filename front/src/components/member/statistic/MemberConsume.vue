@@ -40,10 +40,10 @@
       <el-main>
         <el-row>
           <el-col :span="12">
-            <LinearChart type="pie" :chart-data="consumeOfOrderStatus" title-text="消费额-消费类型"/>
+            <LinearChart type="pie" :chart-data="consumeOfOrderStatus" title-text="消费额-消费类型" :height="400"/>
           </el-col>
           <el-col :span="12">
-            <LinearChart type="pie" :chart-data="consumeOfRestaurantType" title-text="消费额-门店类型"/>
+            <LinearChart type="pie" :chart-data="consumeOfRestaurantType" title-text="消费额-门店类型" :height="400"/>
           </el-col>
         </el-row>
       </el-main>
@@ -122,12 +122,16 @@ export default {
       Api.get('/consume_of_order_status', {
         condition: JSON.stringify(this.getParam())
       }).then((data) => {
+        let consumes = [];
+        consumes[0] = {key: '点餐', value: 0};
+        consumes[1] = {key: '退订', value: 0};
         if (data) {
-          this.consumeOfOrderStatus = data.map(
-            item => {
-              item.key = (item.key === this.status.UNSUBSCRIBED.value ? '退订' : '点餐');
-              return item;
-            });
+          data.map(item => {
+            if (item.key === this.status.UNSUBSCRIBED.value) {
+              consumes[1].value += item.value;
+            } else consumes[0].value += item.value;
+          });
+          this.consumeOfOrderStatus = consumes;
         }
       }).catch(() => {});
     },

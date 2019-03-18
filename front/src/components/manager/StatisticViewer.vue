@@ -42,7 +42,7 @@
           <br/>
           <span style="font-size: 20px; font-weight: bold">
             盈利&nbsp;
-            <span style="color: firebrick">{{valueTotal(incomeOfRestaurantType)}} </span>
+            <span style="color: firebrick">{{valueTotal(incomeOfRestaurantType).toFixed(2)}} </span>
             &nbsp;元
           </span>
         </div>
