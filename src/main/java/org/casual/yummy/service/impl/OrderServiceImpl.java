@@ -364,7 +364,7 @@ public class OrderServiceImpl implements OrderService {
         double ratio = 1.0;
         if (waitMinutes <= predictedMinutes + MAX_OVER_DELIVERY_MINUTES) { // 未超出规定延期最长时间，比例退还金额
             for (int i = 0; i < UNSUBSCRIBED_MINUTES_RANGE.length; i++) {
-                if (waitMinutes > UNSUBSCRIBED_MINUTES_RANGE[i])
+                if (waitMinutes >= UNSUBSCRIBED_MINUTES_RANGE[i])
                     ratio = UNSUBSCRIBED_MONEY_RATIO_RANGE[i];
                 else break;
             }

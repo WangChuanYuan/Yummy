@@ -122,15 +122,16 @@ export default {
       Api.get('/consume_of_order_status', {
         condition: JSON.stringify(this.getParam())
       }).then((data) => {
-        let consumes = [];
-        consumes[0] = {key: '点餐', value: 0};
-        consumes[1] = {key: '退订', value: 0};
+        let total = {'点餐': 0, '退订': 0};
         if (data) {
           data.map(item => {
             if (item.key === this.status.UNSUBSCRIBED.value) {
-              consumes[1].value += item.value;
-            } else consumes[0].value += item.value;
+              total['退订'] += item.value;
+            } else total['点餐'] += item.value;
           });
+          let consumes = [];
+          if (total['点餐'] !== 0) consumes.push({key: '点餐', value: Number(total['点餐'].toFixed(2))});
+          if (total['退订'] !== 0) consumes.push({key: '退订', value: Number(total['退订'].toFixed(2))});
           this.consumeOfOrderStatus = consumes;
         }
       }).catch(() => {});

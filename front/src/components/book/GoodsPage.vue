@@ -4,7 +4,7 @@
       <el-row class="banner">
         <el-col :span="12" class="banner-block-wrapper">
           <div class="banner-block">
-            <el-popover placement="right" trigger="hover" content="欢迎">
+            <el-popover placement="right" trigger="hover" :content="$route.params.id + ':欢迎您'">
               <img class="avatar" slot="reference" :src="restaurant.avatar"/>
             </el-popover>
           </div>
